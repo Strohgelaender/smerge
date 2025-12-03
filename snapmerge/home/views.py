@@ -731,6 +731,8 @@ def mergeExt(request, proj_id, resolutions):
                         )
                         right.save()
                     else:
+                        dataLeft = conf.leftElement if isinstance(conf.leftElement, str) else conf.leftElement.get("customData")
+                        dataRight = conf.rightElement if isinstance(conf.rightElement, str) else conf.rightElement.get("customData")
                         # Store conflict files in database
                         left = models.ConflictFile.create_and_save(
                             project=proj,
@@ -738,7 +740,7 @@ def mergeExt(request, proj_id, resolutions):
                             cx=conf.cxl,
                             cy=conf.cyl,
                             description=file1.description,
-                            tag_id=conf.leftElement.get("customData")
+                            tag_id=dataLeft
                         )
                         left.save()
                         right = models.ConflictFile.create_and_save(
@@ -747,7 +749,7 @@ def mergeExt(request, proj_id, resolutions):
                             cx=conf.cxr,
                             cy=conf.cyr,
                             description=file2.description,
-                            tag_id=conf.rightElement.get("customData")
+                            tag_id=dataRight
                         )
                         right.save()
 
