@@ -731,6 +731,11 @@ def mergeExt(request, proj_id, resolutions):
                         )
                         right.save()
                     else:
+                        logging.log(logging.INFO, "Conflict Elements:")
+                        logging.log(logging.INFO, conf.leftElement)
+                        logging.log(logging.INFO, conf.rightElement)
+                        logging.log(logging.INFO, f"Custom Data Left: {conf.leftElement.get('customData')}")
+                        logging.log(logging.INFO, f"Custom Data Right: {conf.rightElement.get('customData')}")
                         # Store conflict files in database
                         left = models.ConflictFile.create_and_save(
                             project=proj,
