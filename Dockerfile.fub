@@ -1,5 +1,5 @@
 FROM python:3.11.9
-RUN apt-get update || : && apt-get install nodejs npm make -y
+RUN apt-get update || : && apt-get install nodejs npm sqlite3 make -y
 
 RUN mkdir /app
 WORKDIR /app
