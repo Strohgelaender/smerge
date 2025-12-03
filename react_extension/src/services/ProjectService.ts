@@ -115,22 +115,25 @@ export const postDeleteProject = async (
         autoClose: 2000,
         hideProgressBar: false,
       });
-      return res;
+      return true;
     }
   } catch (err) {
     if (err.status < 400) {
+        // Redirect = Success
       onRedirect();
       toast.success(`Project Deleted!`, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
       });
+      return true;
     } else {
       toast.error(`Wrong Password.`, {
         position: "top-right",
         autoClose: 2000,
         hideProgressBar: false,
       });
+      return false;
     }
   }
 };

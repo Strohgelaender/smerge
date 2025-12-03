@@ -52,12 +52,20 @@ const TeacherView: React.FC = () => {
         setUpdateCounter(updateCounter => updateCounter +1); //state change in update counter triggert einen re-render, der dann auch den anderen State updatet
     }
 
+    function deleteProjectFromState(project: ProjectDto) {
+        const stateCopy = projectsOfSchoolclasses;
+        const schoolClassIndex = projectsOfSchoolclasses.findIndex(item => item.schoolclass.id == project.schoolclass);
+        stateCopy[schoolClassIndex].projects = stateCopy[schoolClassIndex].projects.filter(item => item.id != project.id);
+        setProjectsOfSchoolclasses(stateCopy);
+        setUpdateCounter(updateCounter => updateCounter +1); //state change in update counter triggert einen re-render, der dann auch den anderen State updatet
+    }
+
     return <div>
         {  
             isLoading ? (<div>Loading...</div>) : (
                 projectsOfSchoolclasses.length <= 0 ? (<div>You do not have any Schoolclasses yet, create one on the bottom right!</div>) : (
-                    projectsOfSchoolclasses.map((item: { schoolclass: SchoolclassDto, projects: ProjectDto[] }) => {
-                        return <Accordion>
+                    projectsOfSchoolclasses.map((item: { schoolclass: SchoolclassDto, projects: ProjectDto[] }, index: number) => {
+                        return <Accordion expanded={index === 0}>
                             <AccordionSummary
                                 expandIcon={<ExpandMoreIcon />}
                                 aria-controls="panel2-content"
@@ -70,7 +78,7 @@ const TeacherView: React.FC = () => {
                                     {
                                         item.projects.map((projectsItem: ProjectDto) => {
                                             return <Grid item key={projectsItem.id}>
-                                                <ProjectCard addProjectToState={addProjectToState} projectData={projectsItem}></ProjectCard>
+                                                <ProjectCard addProjectToState={addProjectToState} deleteProjectFromState={deleteProjectFromState} projectData={projectsItem}></ProjectCard>
                                             </Grid>
                                         })
                                     }

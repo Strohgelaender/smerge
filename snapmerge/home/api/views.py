@@ -490,9 +490,10 @@ class ProjectDeleteView(generics.DestroyAPIView):
         instance = self.get_object()
         if "password" not in request.data.keys():
             return Response(data="Missing Password!", status=400)
-        if instance.password == None or check_password(
-            request.data["password"], instance.password
-        ):
+        if instance.password is None or instance.password == "":
+            instance.delete()
+            return Response(data="Project Deleted!", status=300)
+        elif check_password(request.data["password"], instance.password):
             instance.delete()
             return Response(data="Project Deleted!", status=300)
         else:
