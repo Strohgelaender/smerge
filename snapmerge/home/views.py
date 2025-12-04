@@ -1020,7 +1020,7 @@ class RedirectView(View):
         # only allow react /ext/ redirects
         project = Project.objects.get(id=proj_id)
         if project:
-            if check_password("", project.password):
+            if project.password == "":
                 return render(
                     request,
                     "redirect.html",
