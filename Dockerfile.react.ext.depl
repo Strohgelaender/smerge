@@ -2,13 +2,14 @@
 # The first stage installs dependencies and builds the React app
 # The second stage copies the built React app into an Nginx container
 
-FROM node:21-alpine as build-stage
+FROM node:21-alpine AS build-stage
 WORKDIR /app
 COPY react_extension/package.json /app/
 RUN npm install
 
 COPY react_extension/ /app/
 
+RUN npm install
 RUN npx vite build
 
 

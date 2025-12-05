@@ -10,80 +10,135 @@ import ContentPaste from '@mui/icons-material/ContentPaste';
 import Cloud from '@mui/icons-material/Cloud';
 import Menu from '@mui/material/Menu';
 import ProjectDto from './models/ProjectDto';
-import { duplicateProject } from '../services/ProjectService';
+import {duplicateProject, postDeleteProject} from '../services/ProjectService';
+import Dialog from "@mui/material/Dialog";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import TextField from "@mui/material/TextField";
+import DialogActions from "@mui/material/DialogActions";
+import {Button} from "@mui/material";
 
-const ProjectCardContextMenu = (props: {projectData: ProjectDto, addProjectToState: (arg0: ProjectDto) => void;}) => {
+const ProjectCardContextMenu = (props: {
+    projectData: ProjectDto,
+    addProjectToState: (arg0: ProjectDto) => void,
+    deleteProjectFromState: (arg0: ProjectDto) => void
+}) => {
 
-  const ITEM_HEIGHT = 48;
+    const ITEM_HEIGHT = 48;
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
-  const handleImportButtonClick = () => {
-    duplicateProject(props.projectData.id).then((res) => {
-      if (!res) return;
-      props.addProjectToState(res);
-    });
-    handleClose();
-  }
+    const handleImportButtonClick = () => {
+        duplicateProject(props.projectData.id).then((res) => {
+            if (!res) return;
+            props.addProjectToState(res);
+        });
+        handleClose();
+    }
 
-  return (
-    <div>
-        <IconButton
-            aria-label="more"
-            id="project-card-context-menu-button"
-            aria-controls={open ? 'project-card-context-menu' : undefined}
-            aria-expanded={open ? 'true' : undefined}
-            aria-haspopup="true"
-            onClick={handleClick}
-        >
-            <MoreVertIcon />
-        </IconButton>
-        <Menu
-        id="project-card-context-menu"
-        MenuListProps={{
-          'aria-labelledby': 'project-card-context-menu-button',
-        }}
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        slotProps={{
-          paper: {
-            style: {
-              maxHeight: ITEM_HEIGHT * 4.5,
-              width: '20ch',
-            },
-          },
-        }}
-      >
-        <MenuItem>
-            <ListItemIcon>
-                <ContentCut fontSize="small" />
-            </ListItemIcon>
-            <ListItemText onClick={handleImportButtonClick}>Duplicate</ListItemText>
-        </MenuItem>
-        <MenuItem>
-            <ListItemIcon>
-                <ContentPaste fontSize="small" />
-            </ListItemIcon>
-            <ListItemText>Delete</ListItemText>
-        </MenuItem>
-        <Divider />
-        <MenuItem>
-            <ListItemIcon>
-                <Cloud fontSize="small" />
-        </ListItemIcon>
-        <ListItemText>Web Clipboard</ListItemText>
-        </MenuItem>
-      </Menu>
-    </div>
-  );
+    // Delete Dialog (password input)
+    const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false);
+    const [deletePassword, setDeletePassword] = React.useState('');
+
+
+    const handleDeleteButtonClick = () => {
+        setDeletePassword('');
+        setDeleteDialogOpen(true);
+        handleClose();
+    }
+
+    const confirmDelete = () => {
+        postDeleteProject(props.projectData.id, deletePassword).then((res) => {
+            if (!res) return;
+            props.deleteProjectFromState(props.projectData);
+        });
+        setDeleteDialogOpen(false);
+    }
+
+    return (
+        <div>
+            <IconButton
+                aria-label="more"
+                id="project-card-context-menu-button"
+                aria-controls={open ? 'project-card-context-menu' : undefined}
+                aria-expanded={open ? 'true' : undefined}
+                aria-haspopup="true"
+                onClick={handleClick}
+            >
+                <MoreVertIcon/>
+            </IconButton>
+            <Menu
+                id="project-card-context-menu"
+                MenuListProps={{
+                    'aria-labelledby': 'project-card-context-menu-button',
+                }}
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+                slotProps={{
+                    paper: {
+                        style: {
+                            maxHeight: ITEM_HEIGHT * 4.5,
+                            width: '20ch',
+                        },
+                    },
+                }}
+            >
+                <MenuItem onClick={handleImportButtonClick}>
+                    <ListItemIcon>
+                        <ContentCut fontSize="small"/>
+                    </ListItemIcon>
+                    <ListItemText>Duplicate</ListItemText>
+                </MenuItem>
+                <MenuItem onClick={handleDeleteButtonClick}>
+                    <ListItemIcon>
+                        <ContentPaste fontSize="small"/>
+                    </ListItemIcon>
+                    <ListItemText>Delete</ListItemText>
+                </MenuItem>
+                <Divider/>
+                <MenuItem>
+                    <ListItemIcon>
+                        <Cloud fontSize="small"/>
+                    </ListItemIcon>
+                    <ListItemText>Web Clipboard</ListItemText>
+                </MenuItem>
+            </Menu>
+
+            <Dialog open={deleteDialogOpen} aria-labelledby="delete-project-dialog-title">
+                <DialogTitle id="delete-project-dialog-title">Projekt löschen</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Bitte gib das Projekt-Passwort ein, um das Projekt dauerhaft zu löschen.
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="project-password"
+                        label="Passwort"
+                        type="password"
+                        fullWidth
+                        variant="standard"
+                        value={deletePassword}
+                        onChange={(e) => setDeletePassword(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={confirmDelete} color="error">
+                        Löschen
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </div>
+    );
 }
 
 export default ProjectCardContextMenu;
