@@ -367,7 +367,7 @@ msgid ""
 "To save the changes in <em>Snap!</em>, we have to &quot;post&quot; them to "
 "our badgers sett. "
 msgstr ""
-"Um unsere Änderungen zu speichern, müssen wir Sie in unserem Dachsbau &quot;"
+"Um unsere Änderungen zu speichern, müssen wir sie in unserem Dachsbau &quot;"
 "posten&quot;."
 
 #: snapmerge/templates/how_to.html:57
@@ -375,7 +375,7 @@ msgid ""
 "This is done via the corresponding block post to &quot;smerge...&quot; under "
 "Variables. "
 msgstr ""
-"Das erfolgt über den Block post to &quot;smerge...&quot; in der Kategorie "
+"Das erfolgt über den Block &quot;post to smerge...&quot; in der Kategorie "
 "Variablen."
 
 #: snapmerge/templates/how_to.html:58
@@ -388,7 +388,7 @@ msgstr ""
 
 #: snapmerge/templates/how_to.html:59
 msgid "Then we can find them in our badgers sett on smerge.org."
-msgstr "Außerdem finden wir sie dann auch in unserem Dachsbau auf smerge.org."
+msgstr "Die neue Version finden wir dann auch in unserem Dachsbau."
 
 #: snapmerge/templates/how_to.html:62
 msgid "Working alone is boring..."
@@ -468,6 +468,18 @@ msgstr ""
 "durch Doppelklick und arbeiten von dort aus weiter. Auf diese Weise erhalten "
 "wir einen neuen &quot;Tunnel&quot;."
 
+#: snapmerge/templates/how_to.html:75
+msgid "Kanban board"
+msgstr "Kanban-Board"
+
+#: snapmerge/templates/how_to.html:76
+msgid "Group work requires communication between participants, for this propose Smerge provides a Kanban board. It can be opened with a button on the top right hand corner below the setting button. Cards can be added by pressing the ADD button at the top of a column, and to edit them click on the pencil icon of a card, write some text and click on the save icon when done. Additionally, the color of a card can be changed by clicking on the palette icon of a card. They can be moved to a different column by dragging."
+msgstr "Gruppenarbeit erfordert Kommunikation. Zu diesem Zweck stellt Smerge ein Kanban-Board zur Verfügung. Es kann über eine Schaltfläche in der oberen rechten Ecke geöffnet werden. Karten können durch Klicken auf „Hinzufügen“ oben zu einer Spalte hinzugefügt werden. Um sie zu bearbeiten, klicke auf das Stiftsymbol einer Karte, gib einen Text ein und klicke anschließend auf das Speichersymbol. Außerdem kann die Farbe einer Karte durch das Palettensymbol geändert werden. Wenn sich der Status ändern, kann dies durch Ziehen in eine andere Spalte festgehalten werden."
+
+#: snapmerge/templates/how_to.html:81
+msgid "To change the column layout, first press the button at the top left hand corner and then add, remove, rename or drag columns. You can have up to five columns in total."
+msgstr "Das Spaltenlayout lässt sich durch die Schaltfläche in der oberen linken Ecke verändern. Hier können Sie Spalten hinzuzfügeb, entfernen , umbenennen, oder verschieben. Bis zu fünf Spalten sind möglich."
+
 #: snapmerge/templates/how_to.html:76
 msgid "Built for teachers and the classroom"
 msgstr "Entwickelt für Lehrpersonen und das Klassenzimmer"
@@ -541,6 +553,10 @@ msgstr ""
 msgid "Want to know more or need help?"
 msgstr "Möchtest du mehr erfahren oder benötigst du Hilfe?"
 
+#: snapmerge/templates/how_to.html:105
+msgid "Project Management View for teachers"
+msgstr "Projektmanagement-Ansicht für Lehrkräfte"
+
 #: snapmerge/templates/how_to.html:107
 msgid "To access the Teacher View for managing your students' projects, you need to create an account and log in."
 msgstr "Um die Lehrer View zu benutzen, muss ein Lehrer einen Account erstellen und sich dann damit einloggen."
@@ -555,7 +571,7 @@ msgstr "Um Projekte in eine Schulklasse hinzuzufügen kann man entweder neue Pro
 
 #: snapmerge/templates/how_to.html:113
 msgid "You can duplicate projects in our schoolclasses. The result is a copy of the project from the point of duplication. This enables for example sharing the starting point of an exercise with the whole class individually."
-msgstr "Man kann Projekte in einer Schulklasse klonen. Das ERgebnis ist eine Kopie des Projekts zum Zeitpunkt des Klonens. Dies ermöglicht es zum Beispiel eine vorbereitete Aufgabe an die ganze Klasse auszuhändigen."
+msgstr "Man kann Projekte in einer Schulklasse klonen. Das Ergebnis ist eine Kopie des Projekts zum Zeitpunkt des Klonens. Dies ermöglicht es zum Beispiel eine vorbereitete Aufgabe an die ganze Klasse auszuhändigen."
 
 #: snapmerge/templates/impressum.html:12
 msgid "About Smerge"
