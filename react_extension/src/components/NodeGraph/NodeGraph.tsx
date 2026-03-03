@@ -26,14 +26,14 @@ import ProjectDto from "../models/ProjectDto";
 import ProjectStats from "../ProjectStats";
 import NameDialog from "../shared/NameDialog";
 import { putLabelChange } from "../../services/ProjectService";
+import type cytoscape from "cytoscape";
+// @ts-expect-error the packe does not provide valid type definitions
 import nodeHtmlLabel from "cytoscape-node-html-label";
 Cytoscape.use(nodeHtmlLabel);
-import { Stack, Typography, Button } from '@mui/material';
 import "./CommitMessage.css";
 
 // TODO this file is way to convoluted => needs refactoring
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface NodeGraphProps {
   // projectId: string;
   projectData: ProjectDto;
@@ -51,7 +51,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   const { projectId } = useParams();
   const queryClient = useQueryClient();
 
-  const cy = useRef<Cytoscape.Core>();
+  const cy = useRef<Cytoscape.Core>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { mutate: positionMutate } = useUpdateNodePosition(
@@ -345,7 +345,6 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   );
 
   useEffectInit(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     pushService.open(projectId ?? "empty", handleMessage);
 
     // init context menu
@@ -356,7 +355,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     };
   }, []);
 
-  const editNodeRef = useRef<CytoscapeContextElement>();
+  const editNodeRef = useRef<CytoscapeContextElement>(null);
   const handleNodeEdit = (ele: CytoscapeContextElement) => {
     editNodeRef.current = ele;
     setNameDefaultValue(ele.data("label") ?? "");
@@ -489,10 +488,10 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       />
 
       <SettingsModal
-        projectDto={projectData ?? ""}
+        projectDto={projectData}
         changeLayout={changeLayout}
         initLayout={savedLayout.current}
-        cy={cy}
+        cy={cy as unknown as any}
         saveGraphPositions={saveGraphPositions}
         projectData={projectData}
         setProjectData={setProjectData}

@@ -24,12 +24,13 @@ import ConfirmButton from "./shared/ConfirmButton";
 import ProjectDto from "./models/ProjectDto";
 import ProjectColorMenu from "./ProjectColorMenu";
 import { getProjectUnhideAll } from "../services/ProjectService";
+import type cytoscape from "cytoscape";
 
 interface NewSettingControlsProps {
   projectDto: ProjectDto;
   changeLayout: (layoutName: string) => void;
   initLayout?: string;
-  cy: React.MutableRefObject<cytoscape.Core | undefined>;
+  cy: React.RefObject<cytoscape.Core | undefined>;
   saveGraphPositions: () => void;
   wheelSensitivity: number;
   setWheelSensitivity: (val: number) => void;
@@ -115,7 +116,13 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
       // Set the onload attribute to parse the JSON and restore the graph when the file is read
       reader.onload = function () {
         // Parse the JSON
-        const json = JSON.parse(reader.result);
+        let json;
+        if (typeof reader.result === "string") {
+          json = JSON.parse(reader.result);
+        } else {
+          const decoder = new TextDecoder();
+          json = JSON.parse(decoder.decode(reader.result));
+        }
 
         cy.current?.elements().remove();
 

@@ -1,9 +1,14 @@
+/// <reference types="vite/client" />
+
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import Backend from "i18next-http-backend";
 
 export const supportedLanguages = ["en", "de"];
+
+// Use a cast to any for import.meta to avoid type errors when vite types are not loaded
+const buildHash = (import.meta as any).env?.VITE_BUILD_HASH ?? "";
 
 i18n
   .use(Backend)
@@ -15,13 +20,13 @@ i18n
       lookupLocalStorage: "i18nextLng",
       caches: ["localStorage"],
     },
-    debug: process.env.NODE_ENV !== "production",
+    debug: (import.meta as any).env?.MODE !== "production",
     fallbackLng: "en",
     supportedLngs: supportedLanguages,
     backend: {
       loadPath:
-        process.env.NODE_ENV === "production"
-          ? `/ext/locales/{{lng}}/translation.json?v=${__BUILD_HASH__}`
+        (import.meta as any).env?.MODE === "production"
+          ? `/ext/locales/{{lng}}/translation.json?v=${buildHash}`
           : "/ext/locales/{{lng}}/translation.json",
     },
   });

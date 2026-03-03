@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import httpService from "../services/HttpService";
-import { useState } from "react";
+import React, { useState } from "react";
 
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
@@ -18,8 +18,10 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 // import "./SettingsModal.css";
 
+import type cytoscape from "cytoscape";
+
 interface MergeButtonsProps {
-  cyRef: React.MutableRefObject<cytoscape.Core | undefined>;
+  cyRef: React.RefObject<cytoscape.Core | undefined>;
   refresh: () => void;
   projectId: string;
 }
