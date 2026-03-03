@@ -27,15 +27,12 @@ import ProjectStats from "../ProjectStats";
 import NameDialog from "../shared/NameDialog";
 import { putLabelChange } from "../../services/ProjectService";
 // The packe does not provide valide type definitions
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const nodeHtmlLabel: any = require("cytoscape-node-html-label");
-
+import nodeHtmlLabel from "cytoscape-node-html-label";
 Cytoscape.use(nodeHtmlLabel);
 import "./CommitMessage.css";
 
 // TODO this file is way to convoluted => needs refactoring
 
- 
 interface NodeGraphProps {
   // projectId: string;
   projectData: ProjectDto;
