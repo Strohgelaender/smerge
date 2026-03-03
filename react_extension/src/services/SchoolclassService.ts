@@ -23,7 +23,7 @@ export const createSchoolclass = async (name: string) => {
 }
 
 export const getProjectsForSchoolclasses = async (schoolclassesOfUser: SchoolclassDto[]) => {
-    var temp: { schoolclass: SchoolclassDto; projects: ProjectDto[]; }[]= [];
+    const temp: { schoolclass: SchoolclassDto; projects: ProjectDto[]; }[]= [];
     for (let index = 0; index < schoolclassesOfUser.length; index++) {
         const item = schoolclassesOfUser[index];
         const projectsOfSchoolclass = await getProjectsOfSchoolclass(item);

@@ -1,5 +1,5 @@
-import { ControlledBoard, addCard, changeCard, removeCard, Card, moveCard, moveColumn, addColumn,
-  removeColumn, changeColumn, KanbanBoard as KB } from "@caldwell619/react-kanban"
+import { ControlledBoard, addCard, changeCard, removeCard, moveCard, moveColumn, addColumn,
+  removeColumn, changeColumn } from "@caldwell619/react-kanban"
 import React, { useState, useEffect, useRef } from "react";
 import {Typography, Button, Box, TextField, Backdrop, Fab, Fade, Stack, IconButton } from "@mui/material";
 import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
@@ -33,13 +33,13 @@ const predefinedCardColors = ["#FA9191", "#FAC591", "#F9F991", "#91FA91", "#91FA
 const defaultCardColor = "#90CAF9"
 const editCardColor = "#C4C4C4"
 
-const renderColumnHeader = (column, board, setBoard, configOpen) => {
+const ColumnHeader: React.FC<any> = ({ column, board, setBoard, configOpen }) => {
   const [editMode, setEditMode] = useState(false);
   const [title, setTitle] = useState('');
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
 
   const onAdd = () => {
-    var number_of_cards = 0
+    let number_of_cards = 0
     for (const col of board.columns) {
       number_of_cards = number_of_cards + col.cards.length
     }
@@ -109,8 +109,9 @@ const renderColumnHeader = (column, board, setBoard, configOpen) => {
           }}>
             {t("KanbanBoard.cancel")}
           </Button>
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           <Button onClick={() => {
-            setBoard(changeColumn(board, column, {title: title, titleChanged: true}))
+            setBoard(changeColumn(board, column, ({ title: title, titleChanged: true } as any)))
             setEditMode(false)
           }}>
             {t("KanbanBoard.save")}
@@ -121,7 +122,7 @@ const renderColumnHeader = (column, board, setBoard, configOpen) => {
   )
 }
 
-const renderCard = (card, board, setBoard) => {
+const CardComponent: React.FC<any> = ({ card, board, setBoard }) => {
   const [editMode, setEditMode] = useState(false);
   const [text, setText] = useState(card.description);
 
@@ -178,16 +179,16 @@ const renderCard = (card, board, setBoard) => {
   };
 
   return (
-    <Box spacing={2} sx={{
-      bgcolor: editMode ? editCardColor : color,
-      borderRadius: 3,
-      width: '308px',
-      my: '3px',
-      boxShadow: 1,
-      display: 'flex',
-      flexDirection: 'row'
-    }}>
-      <div style={{'pointer-events': editMode ? 'auto' : 'none'}}>
+    <Box sx={{
+       bgcolor: editMode ? editCardColor : color,
+       borderRadius: 3,
+       width: '308px',
+       my: '3px',
+       boxShadow: 1,
+       display: 'flex',
+       flexDirection: 'row'
+     }}>
+      <div style={{ pointerEvents: editMode ? 'auto' : 'none' }}>
         <TextField
           multiline
           minRows={2}
@@ -202,16 +203,9 @@ const renderCard = (card, board, setBoard) => {
           inputRef={inputRef}
           inputProps={{ maxLength: max_card_length }}
           sx={{
-            '& .MuiInputBase-input.Mui-disabled': {
-              WebkitTextFillColor: 'black',
-              color: 'black',
-            },
-            '& .MuiInputBase-input': {
-              color: '#323232',
-            },
-            '& .MuiOutlinedInput-notchedOutline': {
-              border: 'none',
-            },
+            '& .MuiInputBase-input.Mui-disabled': { WebkitTextFillColor: 'black', color: 'black' },
+            '& .MuiInputBase-input': { color: '#323232' },
+            '& .MuiOutlinedInput-notchedOutline': { border: 'none' },
           }}
         />
       </div>
@@ -233,17 +227,9 @@ const renderCard = (card, board, setBoard) => {
           <PaletteIcon/>
         </IconButton>
 
-        <Dialog
-          onClose={saveColor}
-          open={colorPickerOpen}
-        >
-          <div class = "card-color-picker">
-            <HexColorPicker
-              color={color}
-              onChange={(color) => {
-                setColor(color);
-              }}
-            />
+        <Dialog onClose={saveColor} open={colorPickerOpen}>
+          <div className="card-color-picker">
+            <HexColorPicker color={color} onChange={(c) => setColor(c)} />
           </div>
           <Box>
           {predefinedCardColors.map((pColor) => (
@@ -295,7 +281,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectData, setProjec
     //]
   //}
 
-  const [board, setBoard] = useState<KB>({columns: []})
+  const [board, setBoard] = useState<any>({columns: []})
 
   // Sets the board and sync with backend
   const updateBoard = (b) => {
@@ -309,7 +295,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectData, setProjec
 
   useEffect(() => {
     if (projectData && projectData.kanban_board) {
-      let new_board = JSON.parse(projectData.kanban_board)
+      const new_board = JSON.parse(projectData.kanban_board)
       if (!('version' in board) || new_board.version > board.version) {
         setBoard(new_board)
       }
@@ -363,8 +349,8 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectData, setProjec
               {configOpen && <AddBoxIcon fontSize="large" sx={{ opacity: 0, m: "8px"}}/>}
               <ControlledBoard
                 disableColumnDrag={!configOpen}
-                renderCard={(p) => renderCard(p, board, updateBoard)}
-                renderColumnHeader={(p) => renderColumnHeader(p, board, updateBoard, configOpen)}
+                renderCard={(p:any) => <CardComponent card={p} board={board} setBoard={updateBoard} />}
+                renderColumnHeader={(p:any) => <ColumnHeader column={p} board={board} setBoard={updateBoard} configOpen={configOpen} />}
                 onCardDragEnd={(card, source, destination) => {
                   return updateBoard(moveCard(board, source, destination))
                 }}
@@ -376,8 +362,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({ projectData, setProjec
               {board}
               </ControlledBoard>
               {configOpen && <IconButton
-                  variant="contained"
-                  sx={{ backgroundColor: '#076AAB', color: '#white', my: '10px'}}
+                  sx={{ backgroundColor: '#076AAB', color: 'white', my: '10px'}}
                   onClick={onAddColumn}
                 >
                 <AddBoxIcon fontSize="large"/>

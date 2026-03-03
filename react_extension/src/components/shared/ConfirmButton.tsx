@@ -5,7 +5,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import {ReactNode, useState} from "react";
 import { OverridableStringUnion } from "@mui/types";
 import React from "react";
 
@@ -94,7 +94,8 @@ const ConfirmButton: React.FC<ConfirmButtonProps> = ({
   return (
     <>
       {children ? (
-        React.Children.map(children, (child) => {
+        React.Children.map(children, (child: ReactNode) => {
+          if (!React.isValidElement(child)) return child;
           return React.cloneElement(child, {
             onChange: handleClick,
           });

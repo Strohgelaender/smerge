@@ -93,10 +93,7 @@ function Layout() {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  const reactInternLinks = 
-  navItems.push()
-
+  navItems.push();
   const container = window.document.body;
 
   const drawer = (

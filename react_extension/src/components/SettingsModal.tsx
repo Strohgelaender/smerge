@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState } from "react";
+import React, { useState } from "react";
 import "./SettingsModal.css";
 import OldSettingControls from "./OldSettingControls";
 import ProjectDto from "./models/ProjectDto";

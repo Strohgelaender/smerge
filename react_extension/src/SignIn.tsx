@@ -59,6 +59,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
   const [emailErrorMessage, setEmailErrorMessage] = React.useState('');
   const [passwordError, setPasswordError] = React.useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = React.useState('');
+  // TODO missing forgot password functionality
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {

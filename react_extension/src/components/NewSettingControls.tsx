@@ -115,7 +115,13 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
       // Set the onload attribute to parse the JSON and restore the graph when the file is read
       reader.onload = function () {
         // Parse the JSON
-        const json = JSON.parse(reader.result);
+        let json;
+        if (typeof reader.result === "string") {
+          json = JSON.parse(reader.result);
+        } else {
+          const decoder = new TextDecoder();
+          json = JSON.parse(decoder.decode(reader.result));
+        }
 
         cy.current?.elements().remove();
 

@@ -6,6 +6,7 @@ import {
 } from "@tanstack/react-query";
 import axios from "axios";
 import httpService from "./HttpService";
+import type cytoscape from "cytoscape";
 
 async function getFiles(projectId: string) {
   const url = "api/project/" + projectId + "/files";
@@ -83,6 +84,7 @@ const onMutateFile = async (
   projectId: string,
   queryClient: QueryClient
 ) => {
+  // @ts-expect-error TODO check usage and correct types
   const { successCb, errorCb } = variables;
 
   // // get the cached values of 'get-planets'

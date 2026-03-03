@@ -26,14 +26,16 @@ import ProjectDto from "../models/ProjectDto";
 import ProjectStats from "../ProjectStats";
 import NameDialog from "../shared/NameDialog";
 import { putLabelChange } from "../../services/ProjectService";
-import nodeHtmlLabel from "cytoscape-node-html-label";
+// The packe does not provide valide type definitions
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const nodeHtmlLabel: any = require("cytoscape-node-html-label");
+
 Cytoscape.use(nodeHtmlLabel);
-import { Stack, Typography, Button } from '@mui/material';
 import "./CommitMessage.css";
 
 // TODO this file is way to convoluted => needs refactoring
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 interface NodeGraphProps {
   // projectId: string;
   projectData: ProjectDto;
@@ -345,7 +347,6 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   );
 
   useEffectInit(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     pushService.open(projectId ?? "empty", handleMessage);
 
     // init context menu
@@ -489,10 +490,10 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       />
 
       <SettingsModal
-        projectDto={projectData ?? ""}
+        projectDto={projectData}
         changeLayout={changeLayout}
         initLayout={savedLayout.current}
-        cy={cy}
+        cy={cy as unknown as any}
         saveGraphPositions={saveGraphPositions}
         projectData={projectData}
         setProjectData={setProjectData}

@@ -1,4 +1,6 @@
-const stylesheet: cytoscape.Stylesheet[] = [
+import type cytoscape from "cytoscape";
+
+const stylesheet: cytoscape.StylesheetStyle[] = [
   {
     selector: "node",
     style: {
