@@ -104,13 +104,6 @@ const ProjectCardContextMenu = (props: {
                     </ListItemIcon>
                     <ListItemText>Delete</ListItemText>
                 </MenuItem>
-                <Divider/>
-                <MenuItem>
-                    <ListItemIcon>
-                        <Cloud fontSize="small"/>
-                    </ListItemIcon>
-                    <ListItemText>Web Clipboard</ListItemText>
-                </MenuItem>
             </Menu>
 
             <Dialog open={deleteDialogOpen} aria-labelledby="delete-project-dialog-title">

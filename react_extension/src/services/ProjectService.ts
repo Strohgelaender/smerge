@@ -296,6 +296,33 @@ export const putLabelChange = async (fileId: string, label: string) => {
     }
 };
 
+export const putProjectNameChange = async (projectId: string, name: string) => {
+    try {
+        const res = await httpService.postAsync<ProjectDto>(
+            `api/update/project/${projectId}`,
+            { name: name },
+            "PUT",
+            true,
+            true
+        );
+
+        if (res) {
+            toast.success(`Project name updated.`, {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return res;
+        }
+    } catch (err) {
+        toast.error(`Failed to update project name.`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+        });
+    }
+};
+
 export const getToggleCollapse = async (nodeId: string) => {
     try {
         const res = await httpService.getAsyncText<string>(

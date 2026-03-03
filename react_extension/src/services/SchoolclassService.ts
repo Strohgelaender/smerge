@@ -31,3 +31,25 @@ export const getProjectsForSchoolclasses = async (schoolclassesOfUser: Schoolcla
     }
     return temp ?? null;
 }
+
+export const updateSchoolclassName = async (schoolclassId: string, name: string) => {
+    const result = await httpService.postAsync<SchoolclassDto>(
+        API_URL + `schoolclasses/${schoolclassId}`,
+        { name: name },
+        "PUT",
+        true,
+        true
+    );
+    return result ?? null;
+}
+
+export const deleteSchoolclass = async (schoolclassId: string) => {
+    const result = await httpService.postAsync<string>(
+        API_URL + `schoolclasses/${schoolclassId}`,
+        {},
+        "DELETE",
+        true,
+        true
+    );
+    return result ?? null;
+}

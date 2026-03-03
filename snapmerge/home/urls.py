@@ -27,6 +27,7 @@ urlpatterns = [
     path("api/teacher_login_token", api_views.CustomAuthToken.as_view()),
     path("api/teacher_registration_token", api_views.RegisterTeacherView.as_view()),
     path("api/schoolclasses", api_views.SchoolClassesView.as_view()),
+    path("api/schoolclasses/<str:id>", api_views.SchoolClassUpdateView.as_view()),
     path("api/teachers/<str:id>/schoolclasses", api_views.SchoolClassesForTeacherView.as_view()),
     path("api/schoolclasses/<str:id>/projects", api_views.ProjectsForSchoolClassesView.as_view()),
     path("api/projects", api_views.ProjectCreationFromTeacherView.as_view()),
