@@ -50,7 +50,7 @@ function UploadZone(props: UploadZoneProps) {
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const toastId = useRef<any>();
+  const toastId = useRef<any>(null);
 
   const uploadFile = (files: File[]) => {
     setModalOpen(false);
@@ -98,7 +98,7 @@ function UploadZone(props: UploadZoneProps) {
             position: "top-right",
             autoClose: 2000,
             isLoading: false,
-            type: toast.TYPE.SUCCESS,
+            type: 'success',
             hideProgressBar: false,
           });
         }
@@ -109,7 +109,7 @@ function UploadZone(props: UploadZoneProps) {
             position: "top-right",
             autoClose: 2000,
             isLoading: false,
-            type: toast.TYPE.ERROR,
+            type: 'error',
             hideProgressBar: false,
           });
         }

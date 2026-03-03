@@ -15,12 +15,13 @@ import OldSettingControls from "./OldSettingControls";
 import ProjectDto from "./models/ProjectDto";
 import NewSettingControls from "./NewSettingControls";
 import { useTranslation } from "react-i18next";
+import type cytoscape from "cytoscape";
 
 interface SettingsModalProps {
   projectDto: ProjectDto;
   changeLayout: (layoutName: string) => void;
   initLayout?: string;
-  cy: React.MutableRefObject<cytoscape.Core | undefined>;
+  cy: React.RefObject<cytoscape.Core | undefined>;
   saveGraphPositions: () => void;
   projectData: ProjectDto;
   setProjectData: React.Dispatch<React.SetStateAction<ProjectDto>>;

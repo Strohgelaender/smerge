@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next";
 import type cytoscape from "cytoscape";
 
 interface MergeButtonsProps {
-  cyRef: React.MutableRefObject<cytoscape.Core | undefined>;
+  cyRef: React.RefObject<cytoscape.Core | undefined>;
   refresh: () => void;
   projectId: string;
 }

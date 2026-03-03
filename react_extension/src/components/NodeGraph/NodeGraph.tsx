@@ -26,7 +26,8 @@ import ProjectDto from "../models/ProjectDto";
 import ProjectStats from "../ProjectStats";
 import NameDialog from "../shared/NameDialog";
 import { putLabelChange } from "../../services/ProjectService";
-// The packe does not provide valide type definitions
+import type cytoscape from "cytoscape";
+// @ts-expect-error the packe does not provide valid type definitions
 import nodeHtmlLabel from "cytoscape-node-html-label";
 Cytoscape.use(nodeHtmlLabel);
 import "./CommitMessage.css";
@@ -50,7 +51,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   const { projectId } = useParams();
   const queryClient = useQueryClient();
 
-  const cy = useRef<Cytoscape.Core>();
+  const cy = useRef<Cytoscape.Core>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { mutate: positionMutate } = useUpdateNodePosition(
@@ -354,7 +355,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     };
   }, []);
 
-  const editNodeRef = useRef<CytoscapeContextElement>();
+  const editNodeRef = useRef<CytoscapeContextElement>(null);
   const handleNodeEdit = (ele: CytoscapeContextElement) => {
     editNodeRef.current = ele;
     setNameDefaultValue(ele.data("label") ?? "");
