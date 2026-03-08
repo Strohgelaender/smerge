@@ -4,7 +4,9 @@
     "nav_back": "Back",
     "nav_impressum": "Impressum",
     "nav_howto": "How To Smerge",
-    "nav_teacherlogin": "Teacher-Login"
+    "nav_teacherlogin": "Teacher-Login",
+    "nav_teacher_view": "Teacher-View",
+    "nav_logout": "Logout"
   },
   "home": {
     "open_existing": "Open existing",
