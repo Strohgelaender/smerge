@@ -507,11 +507,13 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       <NameDialog
         open={nameDialogOpen}
         setOpen={setNameDialogOpen}
-        onClose={(res) => {
-          //   console.log("Input: ", res);
-          //   console.log("And node ref is: ", editNodeRef.current?.data("label")); //label
-          res = res.trim().substring(0, 200);
-          putLabelChange(editNodeRef.current?.data("id"), res);
+        onClose={(newLabel) => {
+          newLabel = newLabel.trim().substring(0, 200);
+          putLabelChange(editNodeRef.current?.data("id"), newLabel).then(r => {
+            if (r) {
+              editNodeRef.current?.data("label", newLabel);
+            }
+          });
         }}
         def={nameDefaultValue}
       ></NameDialog>
