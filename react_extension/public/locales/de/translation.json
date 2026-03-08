@@ -107,6 +107,15 @@
     "pin_label": "PIN:",
     "password_label": "Passwort:"
   },
+  "restore_info": {
+    "title": "Passwort oder PIN wiederherstellen",
+    "description": "Gib deine E-Mail-Adresse ein, um alle Passwörter oder PINs deiner Projekte wiederherzustellen",
+    "email": "E-Mail",
+    "back": "Zurück",
+    "submit": "Absenden",
+    "success": "E-Mail versendet! Weiterleitung...",
+    "error_generic": "Etwas ist schiefgelaufen, bitte versuche es erneut oder kontaktiere uns."
+  },
   "SettingsModal": {
     "old_title": "Projekt Einstellungen",
     "graph_title": "Graph Einstellungen"

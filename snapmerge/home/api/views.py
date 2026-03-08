@@ -12,8 +12,12 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from shutil import copyfile
 from uuid import uuid4
 from django.conf import settings
+from django.core.files.uploadedfile import UploadedFile
+from django.utils.translation import gettext as _
+import xml.etree.ElementTree as ET
+import secrets
 
-from ..models import File, SnapFile, Project, MergeConflict, SchoolClass
+from ..models import File, SnapFile, Project, MergeConflict, SchoolClass, PasswordResetToken
 from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSerializer, RegistrationSerializer, SchoolClassSerializer
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django_eventstream import send_event
@@ -656,3 +660,145 @@ class SchoolClassUpdateView(generics.UpdateAPIView):
 
         instance.delete()
         return Response(data="Schoolclass deleted", status=200)
+
+class PublicProjectOpenView(APIView):
+    """Open project by PIN and optional password for public (non-teacher) flow."""
+
+    permission_classes = [permissions.AllowAny]
+
+
+    def post(self, request, *args, **kwargs):
+        pin = request.data.get("pin", "").strip()
+        password = request.data.get("password", "")
+
+        if not pin:
+            return Response({"detail": _("PIN is required.")}, status=400)
+
+        try:
+            project = Project.objects.get(pin=pin)
+        except Project.DoesNotExist:
+            return Response({"detail": _("No such project or wrong password")}, status=403)
+
+        if project.password and not check_password(password, project.password):
+            return Response({"detail": _("No such project or wrong password")}, status=403)
+
+        return Response({"project_id": str(project.id)}, status=200)
+
+
+class PublicProjectCreateView(APIView):
+    """Create public project with optional starting Snap file."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        name = (request.data.get("name") or "").strip()
+        description = request.data.get("description") or ""
+        password_plain = request.data.get("password") or ""
+        email = request.data.get("email") or ""
+        start_description = request.data.get("start_description") or ""
+
+        if not name:
+            return Response({"detail": _("Project name is required.")}, status=400)
+
+        project = Project.objects.create(
+            name=name,
+            description=description,
+            email=email,
+            pin=generate_unique_PIN(),
+            password=hashPassword(password_plain) if password_plain else "",
+        )
+
+        uploaded_file = request.FILES.get("file")
+        if uploaded_file:
+            try:
+                assert isinstance(uploaded_file, UploadedFile)
+                ET.fromstring(uploaded_file.read())
+                uploaded_file.seek(0)
+            except ET.ParseError:
+                project.delete()
+                return Response({"detail": _("No valid xml.")}, status=400)
+
+            snap_file = SnapFile.create_and_save(
+                file=uploaded_file,
+                project=project,
+                description=start_description or uploaded_file.name,
+            )
+        else:
+            snap_file = SnapFile.create_and_save(
+                project=project,
+                description="blank project",
+                file="",
+            )
+            snap_file.file = str(uuid4()) + ".xml"
+            copyfile(
+                settings.BASE_DIR + "/static/snap/blank_proj.xml",
+                settings.BASE_DIR + snap_file.get_media_path(),
+            )
+            snap_file.save()
+
+        snap_file.xml_job()
+
+        return Response(
+            {
+                "project_id": str(project.id),
+                "pin": project.pin,
+                "password": password_plain,
+            },
+            status=201,
+        )
+
+
+class PublicRestoreInfoView(APIView):
+    """Request password/PIN restore email for public users."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email", "").strip()
+
+        if not email:
+            return Response({"detail": _("Email is required.")}, status=400)
+
+        try:
+            from email_validator import validate_email, EmailNotValidError
+            emailinfo = validate_email(email, check_deliverability=False)
+            email = emailinfo.normalized
+        except EmailNotValidError as e:
+            return Response({"detail": _("Invalid Email.") + " " + str(e)}, status=400)
+
+        projects = Project.objects.filter(email=email)
+
+        if not projects.exists():
+            # Don't reveal whether email exists - return success anyway
+            return Response({"detail": _("Mail sent")}, status=200)
+
+        base_url = request.scheme + "://" + request.get_host()
+
+        for project in projects:
+            token = secrets.token_urlsafe(None)
+            PasswordResetToken.objects.create(project=project, token=token)
+            project.reset_url = base_url + "/reset_password/" + token
+
+        from django.template.loader import render_to_string
+        from django.core.mail import send_mail
+
+        content_text = render_to_string("mail/mail.txt", {"projects": projects})
+        content_html = render_to_string("mail/mail.html", {"projects": projects})
+
+        try:
+            send_mail(
+                _("Your smerge.org projects"),
+                content_text,
+                settings.EMAIL_SENDER,
+                [email],
+                fail_silently=False,
+                html_message=content_html,
+            )
+        except Exception as e:
+            print(e)
+            return Response(
+                {"detail": _("Something went wrong, please try again or contact us")},
+                status=500,
+            )
+
+        return Response({"detail": _("Mail sent")}, status=200)

@@ -15,6 +15,9 @@ import "./shared/i18n.ts";
 import HomePage from "./pages/HomePage.tsx";
 import HowToPage from "./pages/HowToPage.tsx";
 import ImpressumPage from "./pages/ImpressumPage.tsx";
+import OpenProjectPage from "./pages/OpenProjectPage.tsx";
+import CreateProjectPage from "./pages/CreateProjectPage.tsx";
+import RestoreInfoPage from "./pages/RestoreInfoPage.tsx";
 import { ThemeProvider, createTheme } from "@mui/material";
 import CsfrMissing from "./CsfrMissing.tsx";
 import SignIn from "./SignIn.tsx";
@@ -51,9 +54,16 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
 
             <Routes>
+              {/* Public pages */}
               <Route path="/" element={<HomePage />} />
               <Route path="/howto" element={<HowToPage />} />
               <Route path="/impressum" element={<ImpressumPage />} />
+              <Route path="/open" element={<OpenProjectPage />} />
+              <Route path="/create" element={<CreateProjectPage />} />
+              <Route path="/restore_info" element={<RestoreInfoPage />} />
+
+              <Route path="ext/open_project" element={<OpenProjectPage />} />
+              <Route path="ext/create_project" element={<CreateProjectPage />} />
               <Route
                 path="ext/project_view/:projectId"
                 element={<ProjectView />}
@@ -80,6 +90,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               ></Route>
               <Route path="ext/csfr_missing/" element={<CsfrMissing />}></Route>
               <Route path="ext/*" element={<h1>404</h1>}></Route>
+              {/* Fallback 404 */}
+              <Route path="*" element={<h1>404 - Page Not Found</h1>} />
             </Routes>
           </QueryClientProvider>
         </div>

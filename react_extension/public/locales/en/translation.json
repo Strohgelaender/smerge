@@ -107,6 +107,15 @@
     "pin_label": "PIN:",
     "password_label": "Password:"
   },
+  "restore_info": {
+    "title": "Restore Password or PIN",
+    "description": "Enter your email to restore all your projects' passwords or PINs",
+    "email": "Email",
+    "back": "Back",
+    "submit": "Submit",
+    "success": "Mail sent! Redirecting...",
+    "error_generic": "Something went wrong, please try again or contact us."
+  },
   "SettingsModal": {
     "old_title": "Project Settings",
     "graph_title": "Graph Settings"
