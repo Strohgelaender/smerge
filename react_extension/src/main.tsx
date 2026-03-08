@@ -12,6 +12,9 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "react-toastify/dist/ReactToastify.css";
 import "./shared/i18n.ts";
 
+import HomePage from "./pages/HomePage.tsx";
+import HowToPage from "./pages/HowToPage.tsx";
+import ImpressumPage from "./pages/ImpressumPage.tsx";
 import { ThemeProvider, createTheme } from "@mui/material";
 import CsfrMissing from "./CsfrMissing.tsx";
 import SignIn from "./SignIn.tsx";
@@ -48,6 +51,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
             {/* <ReactQueryDevtools initialIsOpen={false} /> */}
 
             <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/howto" element={<HowToPage />} />
+              <Route path="/impressum" element={<ImpressumPage />} />
               <Route
                 path="ext/project_view/:projectId"
                 element={<ProjectView />}

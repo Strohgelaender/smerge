@@ -26,8 +26,8 @@ i18n
     backend: {
       loadPath:
         (import.meta as any).env?.MODE === "production"
-          ? `/ext/locales/{{lng}}/translation.json?v=${buildHash}`
-          : "/ext/locales/{{lng}}/translation.json",
+          ? `/locales/{{lng}}/translation.json?v=${buildHash}`
+          : "/locales/{{lng}}/translation.json",
     },
   });
 export default i18n;

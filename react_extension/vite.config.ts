@@ -22,7 +22,7 @@ export default defineConfig({
     react(),
     tsconfigPaths(),
   ],
-  base: "/ext/",
+  base: "/",
   server: {
     port: 5069,
     strictPort: true,

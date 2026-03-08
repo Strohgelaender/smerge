@@ -25,13 +25,13 @@ const navItems = [
   {
     name: "main.nav_howto",
     foo: () => {
-      location.href = "/howto/";
+      window.location.href = "/howto";
     },
   },
   {
     name: "main.nav_impressum",
     foo: () => {
-      location.href = "/impressum/";
+      window.location.href = "/impressum";
     },
   },
   {
@@ -43,21 +43,22 @@ const navItems = [
   {
     name: getCurrentUser()? "Teacher-View" : "main.nav_teacherlogin",
     foo: () => {
-      const destination = getCurrentUser()? "ext/teacher_view" : "ext/teacher_login/";
-      if(location.href.includes("/ext")){
-        location.href = location.href.split("ext")[0] + destination;
+        // TODO remove /ext once migration is finished
+      const destination = getCurrentUser()? "ext/teacher_view" : "ext/teacher_login";
+      if(window.location.href.includes("/ext")){
+        window.location.href = window.location.href.split("ext")[0] + destination;
       }
       else {
-        location.href = destination
+        window.location.href = destination
       }
     }
   },
   {
     name: getCurrentUser()? "Logout" : "",
     foo: () => {
-      if(location.href.includes("/ext") && getCurrentUser()){
+      if(window.location.href.includes("/ext") && getCurrentUser()){
         logout();
-        location.href = location.href.split("ext")[0] + "ext/teacher_login/";
+        window.location.href = window.location.href.split("ext")[0] + "ext/teacher_login";
       }
     }
   }
@@ -74,7 +75,10 @@ function Layout() {
 
   // check if csfr token was set and redirect to missing page if not
   const navigate = useNavigate();
-  useEffect(() => {
+
+  // TODO: New mechnaism to enuse security when full client is in react (no token)
+
+  /*useEffect(() => {
     if (
       httpService.csrftoken === "" &&
       !location.href.includes("csfr_missing")
@@ -92,7 +96,7 @@ function Layout() {
       }
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []);*/
   navItems.push();
   const container = window.document.body;
 
@@ -111,7 +115,6 @@ function Layout() {
   );
 
   return (
-    // <div>test</div>
     <Box sx={{ display: "flex", paddingLeft: "0px", height: "64px" }}>
       <CssBaseline />
       <AppBar
@@ -200,22 +203,6 @@ function Layout() {
       </nav>
     </Box>
   );
-
-  // return (
-  //   // <nav>
-  //   //     <a href="/" className="logo">
-  //   //         SMERGE
-  //   //     </a>
-  //   //     <ul>
-  //   //         <div className="navlinks">
-  //   //             <li><a href="/howto/">How To Smerge</a> </li>
-  //   //             <li><a href="/impressum/">Impressum</a> </li>
-  //   //             <li><a onClick={() => window.history.back()}>Back</a> </li>
-  //   //         </div>
-  //   //     </ul>
-  //   // </nav>
-
-  // )
 }
 
 export default Layout;
