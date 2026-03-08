@@ -233,6 +233,34 @@ class HttpService {
       }
     };
   }
+
+  postFormAsync<T>(
+    endpoint: string,
+    formData: FormData,
+    method: string = "POST",
+  ): Promise<T> {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.open(method, this.baseURL + endpoint, true);
+      xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
+      addAuthHeader(xhttp);
+
+      xhttp.onreadystatechange = function () {
+        if (xhttp.readyState === 4 && xhttp.status <= 299) {
+          resolve(JSON.parse(xhttp.responseText) as T);
+        } else if (xhttp.readyState === 4) {
+          try {
+            const payload = JSON.parse(xhttp.responseText);
+            reject(new Error(payload.detail ?? `Request failed (${xhttp.status})`));
+          } catch {
+            reject(new Error(`Request failed (${xhttp.status})`));
+          }
+        }
+      };
+
+      xhttp.send(formData);
+    });
+  }
 }
 
 function addAuthHeader(xhttp: XMLHttpRequest) : void {
