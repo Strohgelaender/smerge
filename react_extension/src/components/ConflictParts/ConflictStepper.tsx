@@ -83,7 +83,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
 
   const loadData = () => {
     const xhttp = new XMLHttpRequest();
-    xhttp.open("GET", `/getConflict/${code}`, true);
+    xhttp.open("GET", `/action/getConflict/${code}`, true);
     const csrftoken = getCookie("csrftoken");
     xhttp.setRequestHeader("X-CSRFToken", csrftoken ?? "");
     xhttp.send();
@@ -113,7 +113,7 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
   };
 
   const sendChoices = () => {
-    const url = `/new_merge/${projectId.current}?file=${leftId.current}&file=${rightId.current}`;
+    const url = `/action/new_merge/${projectId.current}?file=${leftId.current}&file=${rightId.current}`;
     // return url;
     const xhttp = new XMLHttpRequest();
     xhttp.open("POST", url, true);

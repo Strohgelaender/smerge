@@ -9,7 +9,8 @@ RUN npm install
 
 COPY react_extension/ /app/
 
-# Material Icons dependency causes issues due to react 19
+# Material Icons dependency causes issues due to react 19.
+# We need to use --legacy-peer-deps to bypass the peer dependency conflict.
 RUN npm install --legacy-peer-deps
 RUN npx vite build
 

@@ -9,7 +9,7 @@ import httpService from "./HttpService";
 import type cytoscape from "cytoscape";
 
 async function getFiles(projectId: string) {
-  const url = "api/project/" + projectId + "/files";
+  const url = "/api/project/" + projectId + "/files";
   const data = await httpService.getAsync<File[]>(url);
   return data;
 }

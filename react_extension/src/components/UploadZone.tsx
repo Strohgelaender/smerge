@@ -72,7 +72,7 @@ function UploadZone(props: UploadZoneProps) {
     const formData = new FormData();
     formData.append("file", files[0]);
     const xhttp = new XMLHttpRequest();
-    xhttp.open("POST", "/add/" + projectId, true);
+    xhttp.open("POST", "/action/add/" + projectId, true);
     xhttp.setRequestHeader("X-CSRFToken", httpService.csrftoken);
 
     xhttp.upload.addEventListener(

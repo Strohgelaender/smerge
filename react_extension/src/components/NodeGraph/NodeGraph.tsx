@@ -208,7 +208,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     } else {
       // Open a new tab with a set link
       openTab(
-        `https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}blockerXML/` +
+        `https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}/action/blockerXML/` +
           node.data("file_url").replace("/media/", "")
       );
     }

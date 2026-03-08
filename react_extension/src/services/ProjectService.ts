@@ -5,7 +5,7 @@ import httpService from "./HttpService";
 
 export const getProjectData = async (projectId: string) => {
     const res = await httpService.getAsync<Promise<ProjectDto>>(
-        `api/project/${projectId}`
+        `/api/project/${projectId}`
     );
 
     if (res) {
@@ -15,7 +15,7 @@ export const getProjectData = async (projectId: string) => {
 
 export const duplicateProject = async (projectId: string, ) => {
     const res = await httpService.postAsync<Promise<ProjectDto>>(
-        `api/project/${projectId}/duplicate`, null
+        `/api/project/${projectId}/duplicate`, null
     );
     if (res) {
         return res;
@@ -24,7 +24,7 @@ export const duplicateProject = async (projectId: string, ) => {
 
 export const getProjectDataWithPin = async (projectPin: string) => {
     const res = await httpService.getAsync<Promise<ProjectDto>>(
-        `api/projects/with_pin/${projectPin}`
+        `/api/projects/with_pin/${projectPin}`
     );
     if (res) {
         return res;
@@ -33,7 +33,7 @@ export const getProjectDataWithPin = async (projectPin: string) => {
 
 export const getProjectUnhideAll = async (projectId: string) => {
     const res = await httpService.getAsync<Promise<unknown>>(
-        `api/project/${projectId}/unhide_all`
+        `/api/project/${projectId}/unhide_all`
     );
 
     if (res) {
@@ -48,7 +48,7 @@ export const getProjectUnhideAll = async (projectId: string) => {
 
 export const createProject = async (name: string, schoolclassId: string | null) => {
     const res = await httpService.postAsync<ProjectDto>(
-        `api/projects`, {name: name, schoolclass: schoolclassId}
+        `/api/projects`, {name: name, schoolclass: schoolclassId}
     );
     if (res) {
         toast.success(`Creation successful.`, {
@@ -69,7 +69,7 @@ export const createProject = async (name: string, schoolclassId: string | null) 
 
 export const importProjectToSchoolclass = async (projectId: string, project: ProjectDto) => {
     const res = await httpService.postAsync<ProjectDto>(
-        `api/update/project/${projectId}/import`,
+        `/api/update/project/${projectId}/import`,
         { ...project},
         "PUT",
         true,
@@ -99,7 +99,7 @@ export const postDeleteProject = async (
 ) => {
     try {
         const res = await httpService.postAsync<string>(
-            `api/delete/project/${projectId}`,
+            `/api/delete/project/${projectId}`,
             { password: password },
             "DELETE",
             true,
@@ -150,7 +150,7 @@ export const postPasswordChange = async (
 
     try {
         const res = await httpService.postAsync<string>(
-            `api/update/password/${projectId}`,
+            `/api/update/password/${projectId}`,
             passObj,
             "PUT",
             true,
@@ -181,7 +181,7 @@ export const postProjectSettingsChange = async (
 ) => {
     try {
         const res = await httpService.postAsync<ProjectDto>(
-            `api/update/project/${projectId}`,
+            `/api/update/project/${projectId}`,
             { ...project, password: password },
             "PUT",
             true,
@@ -213,7 +213,7 @@ export const putKanbanChange = async (
 ) => {
     try {
         const res = await httpService.postAsync<ProjectDto>(
-            `api/update/kanban/${projectId}`,
+            `/api/update/kanban/${projectId}`,
             { kanban_board: JSON.stringify(board) },
             "PUT",
             true,
@@ -247,7 +247,7 @@ export const putColorChange = async (
 
     try {
         const res = await httpService.postAsync<string>(
-            `api/update/project_colors/${projectId}`,
+            `/api/update/project_colors/${projectId}`,
             colorObject,
             "PUT",
             true,
@@ -275,7 +275,7 @@ export const putLabelChange = async (fileId: string, label: string) => {
 
     try {
         const res = await httpService.postAsync<string>(
-            `api/update/node_desc/${fileId}`,
+            `/api/update/node_desc/${fileId}`,
             labelObject,
             "PUT",
             true,
@@ -299,7 +299,7 @@ export const putLabelChange = async (fileId: string, label: string) => {
 export const putProjectNameChange = async (projectId: string, name: string) => {
     try {
         const res = await httpService.postAsync<ProjectDto>(
-            `api/update/project/${projectId}`,
+            `/api/update/project/${projectId}`,
             { name: name },
             "PUT",
             true,
@@ -326,7 +326,7 @@ export const putProjectNameChange = async (projectId: string, name: string) => {
 export const getToggleCollapse = async (nodeId: string) => {
     try {
         const res = await httpService.getAsyncText<string>(
-            `collapse_node/${nodeId}`
+            `/action/collapse_node/${nodeId}`
         );
 
         if (res) {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import "./components/NodeGraph/NodeGraph";
 import NodeGraph from "./components/NodeGraph/NodeGraph";

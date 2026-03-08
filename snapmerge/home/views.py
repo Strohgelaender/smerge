@@ -146,10 +146,6 @@ class ProjectView(View):
         }
         return render(request, "proj.html", context)
 
-class OpenTeacherLogin(View):
-    def get(self, request):
-        return redirect(f"/ext/teacher_login/")
-
 class MergeView(View):
     def get(self, request, proj_id):
         file_ids = request.GET.getlist("file")
@@ -537,14 +533,6 @@ class ToggleColorView(View):
         file.save()
         send_event(proj_id, "message", {"text": "update"})
         return HttpResponse(new_color)
-
-
-class ReactMergeView(View):
-    def get(self, request):
-        context = {
-            **baseContext,
-        }
-        return render(request, "merge_react.html", context)
 
 
 class GetConflictsView(View):

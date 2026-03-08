@@ -7,7 +7,7 @@ class HttpService {
 
   constructor() {
     this.csrftoken = this.getCookie("csrftoken") ?? "";
-    this.baseURL = window.location.href.split("ext")[0];
+    this.baseURL = window.location.origin;
 
     //     this.instance = axios.create({
     //     baseURL: 'http://127.0.0.1/api', // Replace with your API base URL

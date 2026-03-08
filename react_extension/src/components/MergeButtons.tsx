@@ -119,7 +119,7 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
   };
 
   const mergeNew = (selected: { id: string }[]) => {
-    const url = `new_merge/${projectId}?file=${selected[0].id}&file=${selected[1].id}`;
+    const url = `/action/new_merge/${projectId}?file=${selected[0].id}&file=${selected[1].id}`;
     httpService.get(
       url,
       (req) => {
@@ -155,7 +155,7 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
 
   const mergeOld = (selected: { id: string }[]) => {
     const fileParams = selected.map((item) => `file=${item.id}`).join("&");
-    const url = `merge/${projectId}?${fileParams}`;
+    const url = `/action/merge/${projectId}?${fileParams}`;
 
     httpService.get(
       url,

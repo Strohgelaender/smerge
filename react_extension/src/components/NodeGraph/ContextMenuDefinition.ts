@@ -59,7 +59,7 @@ const generateContextMenuSettings: any = (
         fillColor: "rgba(200, 200, 200, 0.75)",
         content: `<img src="${colorIcon}" alt="Edit" />`,
         select: function (ele: CytoscapeContextElement) {
-          const toggle_color_url = "toggle_color/" + projectId + "/" + ele.id();
+          const toggle_color_url = "/action/toggle_color/" + projectId + "/" + ele.id();
           // console.log(httpService.baseURL);
           httpService.get(
             toggle_color_url,
