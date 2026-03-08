@@ -18,6 +18,7 @@ import ImpressumPage from "./pages/ImpressumPage.tsx";
 import OpenProjectPage from "./pages/OpenProjectPage.tsx";
 import CreateProjectPage from "./pages/CreateProjectPage.tsx";
 import RestoreInfoPage from "./pages/RestoreInfoPage.tsx";
+import NotFoundPage from "./pages/NotFoundPage.tsx";
 import { ThemeProvider, createTheme } from "@mui/material";
 import CsfrMissing from "./CsfrMissing.tsx";
 import SignIn from "./SignIn.tsx";
@@ -67,31 +68,28 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route
                 path="ext/project_view/:projectId"
                 element={<ProjectView />}
-              ></Route>
+              />
               <Route
                 path="ext/teacher_login"
-                element={<SignIn/>}>
-              </Route>
+                element={<SignIn/>}/>
               <Route
                 path="ext/teacher_signup"
-                element={<SignUp/>}>
-              </Route>
+                element={<SignUp/>}/>
               <Route
                 path="ext/teacher_view"
                 element={<TeacherView />}
-              ></Route>
+              />
               <Route
                 path="ext/merge/:code"
                 element={<ConflictStepper />}
-              ></Route>
+              />
               <Route
                 path="ext/csfr_missing/:projectId"
                 element={<CsfrMissing />}
-              ></Route>
-              <Route path="ext/csfr_missing/" element={<CsfrMissing />}></Route>
-              <Route path="ext/*" element={<h1>404</h1>}></Route>
-              {/* Fallback 404 */}
-              <Route path="*" element={<h1>404 - Page Not Found</h1>} />
+              />
+              <Route path="ext/csfr_missing/" element={<CsfrMissing />} />
+              <Route path="ext/*" element={<NotFoundPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </QueryClientProvider>
         </div>

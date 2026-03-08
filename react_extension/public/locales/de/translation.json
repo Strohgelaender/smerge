@@ -116,6 +116,18 @@
     "success": "E-Mail versendet! Weiterleitung...",
     "error_generic": "Etwas ist schiefgelaufen, bitte versuche es erneut oder kontaktiere uns."
   },
+  "error_404": {
+    "title": "Hier hat noch nie ein Dachs gegraben!",
+    "description": "Deine Seite konnte nicht gefunden werden. Das kann mehrere Gründe haben:",
+    "reason_1": "Deine Seite existiert nicht oder",
+    "reason_2": "deine Seite wurde verschoben oder",
+    "reason_3": "deine Seite wurde gelöscht",
+    "help_text": "Vielleicht helfen dir diese Links:",
+    "home": "Startseite",
+    "open_existing": "Projekt öffnen",
+    "create_new": "Projekt erstellen",
+    "back": "Zurück"
+  },
   "SettingsModal": {
     "old_title": "Projekt Einstellungen",
     "graph_title": "Graph Einstellungen"
@@ -145,7 +157,7 @@
     "cose": "Kraft (Cose)",
     "grid": "Gitter",
     "random": "Zufällig",
-    "save_graph_pos_tooltip": "Aktuelles Layout auf dem Server speichern (als \"Servergespeichert\" Layout)",
+    "save_graph_pos_tooltip": "Aktuelles Layout auf dem Server speichern (als \"Servergespeichertes\" Layout)",
     "save_current_layout_tooltip": "Laden Sie den aktuellen Graph in einer JSON-Datei herunter",
     "load_layout_tooltip": "Laden Sie das zuvor gespeicherte Diagramm (.json) in das aktuelle Panel (klicken Sie auf \"Graphposition speichern\", wenn Sie möchten, dass das geladene Diagramm als Serverlayout gespeichert wird).",
     "scroll_speed": "Zoomgeschwindigkeit ändern:",
@@ -204,7 +216,7 @@
     "page2": {
       "item0": {
         "header": "Knoten mergen",
-        "footer": "**__Zwei Knoten mergen:\n -Zwei Knoten können ausgewählt und mit einem Klick auf den \"New Smerge\" Button im rechten unteren Eck nach Bestätigung verbunden (gemerged) werden.\n -ACHTUNG: Wenn Sie ein Projekt verwenden, welches vor dem 18.04.24 erstellt wurde, nutzen Sie nur den originalen Merger bis alle zu Mergenden Knoten mindestens einmal neu \"Commited\" wurden. Andernfalls wird der Merger nicht richtig funktionieren!"
+        "footer": "**__Zwei Knoten mergen:\n -Zwei Knoten können ausgewählt und mit einem Klick auf den \"New Smerge\" Button im rechten unteren Eck nach Bestätigung verbunden (gemerged) werden.\n -ACHTUNG: Wenn Sie ein Projekt verwenden, welches vor dem 18.04.24 erstellt wurde, nutzen Sie nur den originalen Merger bis alle zu Mergenden Knoten mindestens einmal neu "Commited" wurden. Andernfalls wird der Merger nicht richtig funktionieren!"
       },
       "item1": {
         "header": "Mergekonflikte",

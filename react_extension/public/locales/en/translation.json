@@ -116,6 +116,18 @@
     "success": "Mail sent! Redirecting...",
     "error_generic": "Something went wrong, please try again or contact us."
   },
+  "error_404": {
+    "title": "No badger has ever dug here!",
+    "description": "Your page could not be found. This can have several reasons:",
+    "reason_1": "Your page doesn't exist or",
+    "reason_2": "your page has moved or",
+    "reason_3": "your page was deleted",
+    "help_text": "Maybe these links will help you:",
+    "home": "Home",
+    "open_existing": "Open existing",
+    "create_new": "Create new",
+    "back": "Back"
+  },
   "SettingsModal": {
     "old_title": "Project Settings",
     "graph_title": "Graph Settings"

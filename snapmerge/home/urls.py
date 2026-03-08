@@ -51,11 +51,6 @@ urlpatterns = [
     path("api/file/<int:id>/position", api_views.SnapFilePositionView.as_view()),
     path("api/file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
     path("file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
-    re_path(
-        r"^redirect/(?P<proj_id>[-\w]*)$",
-        views.RedirectView.as_view(),
-        name="redirect_ext",
-    ),
     re_path(r"^test/event/", views.index, name="index"),
     re_path(r"^nav/$", views.NavView.as_view(), name="nav"),
     re_path(r"^restore_info/$", views.RestoreInfoView.as_view(), name="restore_info"),
@@ -64,7 +59,6 @@ urlpatterns = [
         views.ResetPasswordView.as_view(),
         name="reset_passwd",
     ),
-    re_path(r"^(?P<proj_id>[-\w]+)$", views.ProjectView.as_view(), name="proj"),
     re_path(r"^action/merge/(?P<proj_id>[-\w]+)$", views.MergeView.as_view(), name="merge"),
     re_path(r"^action/sync/(?P<proj_id>[-\w]+)$", views.SyncView.as_view(), name="sync"),
     re_path(
