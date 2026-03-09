@@ -321,9 +321,13 @@
       "title": "Willkommen zum interatkiven Smerge Tutorial!",
       "description": "Lerne, wie du Smerge kollaborativ arbeiten kannst."
     },
+    "overview": {
+      "title": "Der Dachsbau",
+      "description": "Dieser Graph zeigt die verschiedenen Versionen des Projekts. Du kannst sehen, wie sich das Projekt im Laufe der Zeit entwickelt hat."
+    },
     "open_snap": {
       "title": "Öffne dein Projekt in Snap!",
-      "description": "Doppelklicke auf den Knoten im Grafen, um dein Snap!-Projekt zu öffnen."
+      "description": "Um das Projekt zu bearbeiten, doppelklicke auf den Knoten, um dein Snap!-Projekt zu öffnen."
     },
   }
 }

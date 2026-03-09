@@ -99,7 +99,18 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   const { data, error, isLoading, refresh } = useFiles(String(resolvedProjectId ?? ""));
   if (error) console.log("error: ", error);
 
-  const nodes: NodeDefinition[] | undefined = data?.map((file: File) => {
+  // Verhindern, dass der Graph im Tutorial herumspringt (freeze auf initialTutorialData)
+  // TODO: etwas hacky, geht das besser?
+  const [initialTutorialData, setInitialTutorialData] = useState<File[] | null>(null);
+  useEffect(() => {
+    if (isTutorialProject && !initialTutorialData && data && data.length > 0) {
+      setInitialTutorialData(data);
+    }
+  }, [isTutorialProject, initialTutorialData, data]);
+
+  const graphData = isTutorialProject ? (initialTutorialData ?? data) : data;
+
+  const nodes: NodeDefinition[] | undefined = graphData?.map((file: File) => {
     const nodeDefinition: NodeDefinition = {
       data: {
         id: file.id.toString(),
@@ -126,7 +137,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   const edges: EdgeDefinition[] | undefined = (():
     | EdgeDefinition[]
     | undefined => {
-    let edgeList = data?.flatMap((file: File) => {
+    let edgeList = graphData?.flatMap((file: File) => {
       return file.ancestors.map((ancestor: number) => {
         const edgeDefinition = {
           data: { source: ancestor.toString(), target: file.id.toString() },
@@ -289,7 +300,8 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         ranFirstAgain.current = true;
       }
 
-      if (resize.current) {
+      // Im Tutorial soll der graph nicht springen und neu angeordnet werden.
+      if (resize.current && !embedded) {
         setTimeout(() => {
           cy.current?.fit();
           cy.current?.layout({ name: savedLayout.current }).run();

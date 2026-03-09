@@ -321,6 +321,10 @@
       "title": "Welcome to the interactive Smerge Tutorial!",
       "description": "You will learn how to collaboratively work in Smerge."
     },
+    "overview": {
+        "title": "The Badger's sett",
+        "description": "This Graph shows different versions of the project. You can see how it evolved over time."
+    },
     "open_snap": {
       "title": "Open your project in Snap!",
       "description": "Double-click on the node in the graph to open your Snap! project."
