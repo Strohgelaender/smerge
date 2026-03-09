@@ -52,6 +52,32 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             },
         },
         {
+            id: 'activate_js_instructions',
+            title: 'tutorial.activate_js.title',
+            description: 'tutorial.activate_js.description',
+            view: 'snap',
+            target: {
+                type: 'none',
+                selector: ''
+            },
+            actions: {
+                modal: true
+            }
+        },
+        {
+            id: 'import_data_instructions',
+            title: 'tutorial.import_data.title',
+            description: 'tutorial.import_data.description',
+            view: 'snap',
+            target: {
+                type: 'none',
+                selector: ''
+            },
+            actions: {
+                modal: true
+            }
+        },
+        {
             id: 'edit_snap',
             title: 'tutorial.edit_snap.title',
             description: 'tutorial.edit_snap.description',
@@ -62,6 +88,63 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             },
             actions: {
                 modal: true
+            }
+        },
+        {
+            id: 'post_to_smerge',
+            title: 'tutorial.post_to_smerge.title',
+            description: 'tutorial.post_to_smerge.description',
+            view: 'snap',
+            target: {
+                type: 'none',
+                selector: ''
+            },
+            actions: {
+                modal: true
+            }
+        }, {
+            id: 'back_to_project',
+            title: 'tutorial.back_to_project.title',
+            description: 'tutorial.back_to_project.description',
+            view: 'snap',
+            target: {
+                type: 'none',
+                selector: ''
+            }, actions: {
+                modal: true
+            }
+        }, {
+            id: 'view_new_node',
+            title: 'tutorial.view_new_node.title',
+            description: 'tutorial.view_new_node.description',
+            view: 'graph',
+            target: {
+                type: 'dom',
+                // Wieder die Commitmessage daneben, da die neue Node ja noch nicht existiert.
+                selector: '.__________cytoscape_container > div:nth-child(2) .commitmessage',
+                position: 'top'
+            }
+        }, {
+            id: 'merge_intro',
+            title: 'tutorial.merge_intro.title',
+            description: 'tutorial.merge_intro.description',
+            view: 'graph',
+            target: {
+                type: 'none',
+                selector: ''
+            },
+            actions: {
+                modal: true
+            }
+        }, {
+            id: 'merge_select',
+            title: 'tutorial.merge_select.title',
+            description: 'tutorial.merge_select.description',
+            view: 'graph',
+            target: {
+                // TODO sinvoller Selector!
+                type: 'dom',
+                selector: '.__________cytoscape_container > div:nth-child(2) .commitmessage'
             }
         }
     ]

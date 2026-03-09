@@ -329,5 +329,37 @@
       "title": "Öffne dein Projekt in Snap!",
       "description": "Um das Projekt zu bearbeiten, doppelklicke auf den Knoten, um dein Snap!-Projekt zu öffnen."
     },
+    "activate_js": {
+      "title": "Aktiviere JavaScript in Snap!",
+      "description": "Klicke auf das Zahnrad-Symbol ⚙️ oben rechts in Snap!, um die Einstellungen zu öffnen. Aktiviere dort die Option 'JavaScript extensions'."
+    },
+    "import_data": {
+      "title": "Importiere deine Daten in Snap!",
+      "description": "Klicke doppelt auf den Block 'Activate JS and Import Data' um das Projekt zu laden."
+    },
+    "edit_snap": {
+      "title": "Bearbeite dein Projekt",
+      "description": "Jetzt kannst du dein Projekt in Snap! bearbeiten. Mache eine kleine Änderung. TODO Tutorial Projekt und Änderung vorgeben."
+    },
+    "post_to_smerge": {
+      "title": "Poste deine Änderungen zu Smerge!",
+      "description": "Klicke auf den Block 'Post to Smerge...' im Tab 'Variables', um deine Änderungen zu speichern. Vergiss nicht, eine kurze Beschreibung deiner Änderungen einzugeben!"
+    },
+    "back_to_poject": {
+      "title": "Zurück zum Projekt",
+      "description": "Deine Änderungen werden nun im Projekt angezeigt. Klicke auf weiter, um die neue Version zu sehen, die du gerade erstellt hast!"
+    },
+    "view_new_node": {
+      "title": "Sieh dir deinen neuen Knoten an!",
+      "description": "Deine Änderungen sind im Dachsbau angekommen. Von hier kannst du jederzeit an dem Projekt weiterarbeiten."
+    },
+    "merge_intro": {
+        "title": "Lass uns mergen!",
+        "description": "Mergen ist der Prozess, bei dem zwei Versionen eines Projekts kombiniert werden, um eine neue Version zu erstellen. Es ist ein wichtiger Teil der Zusammenarbeit in SmergeEs ist ein wichtiger Teil der Zusammenarbeit in Smerge."
+    },
+    "merge_select": {
+        "title": "Versionen auswählen",
+        "description": "Eine weitere Person hat an dem Projekt gearbeitet und eine neue Version erstellt. Lass uns diese beiden Versionen mergen, um eine neue Version zu erstellen, die die Änderungen von beiden enthält. Wähle die beiden Versionen aus, die du mergen möchtest, und klicke auf 'Merge'."
+    }
   }
 }
