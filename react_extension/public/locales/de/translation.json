@@ -10,7 +10,8 @@
   },
   "home": {
     "open_existing": "Projekt öffnen",
-    "create_new": "Projekt erstellen"
+    "create_new": "Projekt erstellen",
+    "start_tutorial": "Tutorial starten"
   },
   "footer": {
     "github": "GitHub",
@@ -307,5 +308,22 @@
     "cancel": "Abbrechen",
     "deleteColumn": "Spalte Löschen",
     "save": "Speichern"
+  },
+  "tutorial": {
+    "step": "Schritt",
+    "back": "Zurück",
+    "next": "Weiter",
+    "finish": "Fertig",
+    "skip": "Überspringen",
+    "start": "Tutorial starten",
+    "name": "Smerge Tutorial",
+    "welcome": {
+      "title": "Willkommen zum interatkiven Smerge Tutorial!",
+      "description": "Lerne, wie du Smerge kollaborativ arbeiten kannst."
+    },
+    "open_snap": {
+      "title": "Öffne dein Projekt in Snap!",
+      "description": "Doppelklicke auf den Knoten im Grafen, um dein Snap!-Projekt zu öffnen."
+    },
   }
 }

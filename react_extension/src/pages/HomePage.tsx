@@ -7,6 +7,7 @@ import homeIcon from "../assets/home-icon.svg";
 import homeIconDebug from "../assets/home-icon-debug.svg";
 import "./Base.css";
 import "./Home.css";
+import {primaryButtonSx} from "./publicPageStyles.ts";
 
 interface SettingsData {
     inBeta: boolean;
@@ -45,6 +46,10 @@ const HomePage: React.FC = () => {
     const handleCreateProject = () => {
         navigate("/create");
     };
+
+    const handleStartTutorial = () => {
+        navigate("/tutorial");
+    }
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -98,12 +103,9 @@ const HomePage: React.FC = () => {
                         className="btn"
                         variant="contained"
                         sx={{
+                            ...primaryButtonSx,
                             margin: "1.5em",
-                            backgroundColor: "rgb(15, 3, 3)",
-                            "&:hover": {
-                                backgroundColor: "rgb(7, 106, 171)",
-                            },
-                            color: "white",
+                            fontSize: "15px",
                         }}
                     >
                         {t("home.open_existing")}
@@ -115,16 +117,26 @@ const HomePage: React.FC = () => {
                         className="btn"
                         variant="contained"
                         sx={{
+                            ...primaryButtonSx,
                             margin: "1.5em",
-                            backgroundColor: "rgb(15, 3, 3)",
-                            "&:hover": {
-                                backgroundColor: "rgb(7, 106, 171)",
-                            },
-                            color: "white",
                             fontSize: "15px",
                         }}
                     >
                         {t("home.create_new")}
+                    </Button>
+
+                    <Button
+                        onClick={handleStartTutorial}
+                        id="tutorial-btn"
+                        className="btn"
+                        variant="outlined"
+                        sx={{
+                            ...primaryButtonSx,
+                            margin: "1.5em",
+                            fontSize: "15px",
+                        }}
+                    >
+                        {t("home.start_tutorial")}
                     </Button>
                 </Box>
             </Box>

@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import ConflictStepper from "./components/ConflictParts/ConflictStepper.tsx";
 import ProjectView from "./ProjectView.tsx";
 import TeacherView from "./TeacherView.tsx";
+import TutorialView from "./TutorialView.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import "react-toastify/dist/ReactToastify.css";
@@ -62,6 +63,8 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/open" element={<OpenProjectPage />} />
               <Route path="/create" element={<CreateProjectPage />} />
               <Route path="/restore_info" element={<RestoreInfoPage />} />
+
+              <Route path="/tutorial" element={<TutorialView />} />
 
               <Route path="ext/open_project" element={<OpenProjectPage />} />
               <Route path="ext/create_project" element={<CreateProjectPage />} />

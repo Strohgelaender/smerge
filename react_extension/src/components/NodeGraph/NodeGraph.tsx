@@ -35,10 +35,12 @@ import "./CommitMessage.css";
 // TODO this file is way to convoluted => needs refactoring
 
 interface NodeGraphProps {
-  // projectId: string;
   projectData: ProjectDto;
   setProjectData: React.Dispatch<React.SetStateAction<ProjectDto>>;
   gatherProjectData: () => Promise<void>;
+  projectId?: string;
+  embedded?: boolean;
+  onNodeDoubleClick?: (nodeId: string) => void;
 }
 
 Cytoscape.use(dagre);
@@ -47,15 +49,19 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   projectData,
   setProjectData,
   gatherProjectData,
+  projectId: propProjectId,
+  embedded = false,
+  onNodeDoubleClick,
 }) => {
-  const { projectId } = useParams();
+  const { projectId: paramProjectId } = useParams();
+  const resolvedProjectId = propProjectId || paramProjectId;
   const queryClient = useQueryClient();
 
   const cy = useRef<Cytoscape.Core>(null);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { mutate: positionMutate } = useUpdateNodePosition(
-    projectId ?? "",
+    resolvedProjectId ?? "",
     queryClient
   );
 
@@ -88,7 +94,9 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   // keeps track for eventListener...
   const layoutRef = useRef(layout);
 
-  const { data, error, isLoading, refresh } = useFiles(String(projectId));
+  const isTutorialProject = projectData?.is_tutorial;
+
+  const { data, error, isLoading, refresh } = useFiles(String(resolvedProjectId ?? ""));
   if (error) console.log("error: ", error);
 
   const nodes: NodeDefinition[] | undefined = data?.map((file: File) => {
@@ -197,6 +205,13 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
 
   const handleFileOpen = (evt: Cytoscape.EventObject) => {
     const node = evt.target;
+    const nodeId = node.data("id");
+
+    // Tutorial: Klick auf Node erkennen und zum nächsten Schritt gehen.
+    if (embedded && onNodeDoubleClick) {
+      onNodeDoubleClick(nodeId);
+      return;
+    }
 
     if (node.data("file_url").includes(".conflict")) {
       openTab(
@@ -217,6 +232,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   const ranFirstAgain = useRef(false);
   // changed by eventUpdate if whole layout was pushed by others
   const resize = useRef(false);
+
   useEffect(() => {
     if (cy.current) {
       // the HTML label that is used to display the commit message when hovering over it
@@ -239,7 +255,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         enablePointerEvents: true
       });
     }
-    if (cy.current && !isLoading) {
+    if (cy.current && !isLoading && graphData) {
       setElements([...(nodes ?? []), ...(edges ?? [])]);
 
       cy.current?.on("dblclick", "node", handleFileOpen);
@@ -284,14 +300,13 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       }
 
       return () => {
-        // console.log("removeListener");
         cy.current?.removeListener("dblclick", "node");
         cy.current?.removeListener("dragfree", "node");
         cy.current?.removeListener("taphold", "node");
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, layout]);
+  }, [graphData, layout, isLoading, embedded]);
 
   // const getSelectedNodes = () => {
   //     const selectedNodes = cy.current?.$('node:selected');
@@ -345,13 +360,13 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   );
 
   useEffectInit(() => {
-    pushService.open(projectId ?? "empty", handleMessage);
+    pushService.open(resolvedProjectId ?? "empty", handleMessage);
 
     // init context menu
     Cytoscape.use(cxtmenu);
 
     return () => {
-      pushService.close(projectId ?? "empty");
+      pushService.close(resolvedProjectId ?? "empty");
     };
   }, []);
 
@@ -367,7 +382,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     const menu = cy.current?.cxtmenu(
-      generateContextMenuSettings(projectId ?? "", refresh, handleNodeEdit)
+      generateContextMenuSettings(resolvedProjectId ?? "", refresh, handleNodeEdit)
     );
 
     // const canvasMenu = cy.current?.cxtmenu(
@@ -379,7 +394,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
 
     // change layout after loading to saved if available
     let toClean: NodeJS.Timeout;
-    if (savedLayout.current != "preset") {
+    if (savedLayout.current != "preset" && !isTutorialProject) {
       toClean = setTimeout(() => {
         changeLayout(savedLayout.current);
       }, 150);
@@ -413,6 +428,10 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   };
 
   const changeLayout = (layoutName: string) => {
+    if (isTutorialProject && ranFirstAgain.current) {
+      return;
+    }
+
     // save selected layout in storage for next loading
     localStorage.setItem(savedLayoutKey, layoutName);
     savedLayout.current = layoutName;
@@ -503,7 +522,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         projectData={projectData}
         setProjectData={setProjectData}
       />
-      <MergeButtons cyRef={cy} refresh={refresh} projectId={projectId ?? ""} />
+      <MergeButtons cyRef={cy} refresh={refresh} projectId={resolvedProjectId ?? ""} />
       <NameDialog
         open={nameDialogOpen}
         setOpen={setNameDialogOpen}

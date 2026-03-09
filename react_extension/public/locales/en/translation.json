@@ -10,7 +10,8 @@
   },
   "home": {
     "open_existing": "Open existing",
-    "create_new": "Create new"
+    "create_new": "Create new",
+    "start_tutorial": "Start Tutorial"
   },
   "footer": {
     "github": "GitHub",
@@ -307,5 +308,22 @@
     "cancel": "Cancel",
     "deleteColumn": "Delete Column",
     "save": "Save"
+  },
+  "tutorial": {
+    "step": "Step",
+    "back": "Back",
+    "next": "Next",
+    "finish": "Finish",
+    "skip": "Skip",
+    "start": "Start Tutorial",
+    "name": "Smerge Tutorial",
+    "welcome": {
+      "title": "Welcome to the interactive Smerge Tutorial!",
+      "description": "You will learn how to collaboratively work in Smerge."
+    },
+    "open_snap": {
+      "title": "Open your project in Snap!",
+      "description": "Double-click on the node in the graph to open your Snap! project."
+    }
   }
 }
