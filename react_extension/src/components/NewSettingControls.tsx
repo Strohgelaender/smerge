@@ -16,7 +16,6 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useState } from "react";
-import httpService from "../services/HttpService";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -291,16 +290,6 @@ const NewSettingControls: React.FC<NewSettingControlsProps> = ({
           </AccordionDetails>
         </Accordion>
 
-        <Divider></Divider>
-
-        <Button
-          variant="contained"
-          onClick={() => {
-            window.open(`${httpService.baseURL}${projectDto.id}`, "_self");
-          }}
-        >
-          {t("NewSettingControls.old_projectview")}
-        </Button>
         <ConfirmButton
           handleConfirm={() => {
             getProjectUnhideAll(projectDto.id);

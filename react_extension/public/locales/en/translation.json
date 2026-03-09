@@ -162,7 +162,6 @@
       "text": "Be careful! This setting will RELOAD the page and is SAVED on the pc. (Default is 1)",
       "button": "Open"
     },
-    "old_projectview": "Old Project View",
     "scroll_speed": "Change Scroll Speed:",
     "save_graph_pos_tooltip": "Save the current layout on the server (as \"Server-Saved\" layout)",
     "save_current_layout_tooltip": "Download the current graph, as is into a json file",
