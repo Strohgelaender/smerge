@@ -7,7 +7,7 @@ from rest_framework import permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, JsonResponse
 from rest_framework.authtoken.views import ObtainAuthToken
 from shutil import copyfile
 from uuid import uuid4
@@ -802,3 +802,48 @@ class PublicRestoreInfoView(APIView):
             )
 
         return Response({"detail": _("Mail sent")}, status=200)
+
+# Tutorial Project Creation
+class CreateTutorialProjectView(APIView):
+
+    def post(self, request):
+        try:
+            project = Project()
+            project.name = "Smerge Tutorial"
+            project.description = "Interaktives Smerge Tutorial"
+            project.pin = generate_unique_PIN()
+            project.password = ""
+            project.email = None
+            project.is_tutorial = True
+            project.save()
+
+            # Create initial snap file from template
+            snap_description = "Tutorial Start"
+            snap_file = SnapFile.create_and_save(
+                project=project,
+                description=snap_description,
+                file=""
+            )
+            snap_file.file = str(uuid4()) + ".xml"
+
+            # TODO: Ein sinnvolles Tutorial-Projekt erstellen und hier dann einbinden
+            copyfile(
+                settings.BASE_DIR + "/static/snap/blank_proj.xml",
+                settings.BASE_DIR + snap_file.get_media_path(),
+                )
+            snap_file.save()
+            snap_file.xml_job()
+
+            return JsonResponse({
+                "project_id": str(project.id),
+                "pin": project.pin,
+                "file_id": snap_file.id,
+                "success": True
+            })
+
+        except Exception as e:
+            return JsonResponse({
+                "success": False,
+                "error": str(e)
+            }, status=500)
+

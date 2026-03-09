@@ -95,6 +95,12 @@ class Project(models.Model):
     kanban_board = models.TextField(
         _("kanban_board"), default=default_kanban_board()
     )
+    is_tutorial = models.BooleanField(
+        _("is_tutorial"), default=False
+    )
+    created_at = models.DateTimeField(
+        _("created_at"), auto_now_add=True, null=True
+    )
 
     @classmethod
     def create_and_save(cls, name, picture, description, schoolclass, password=""):

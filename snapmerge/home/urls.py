@@ -21,9 +21,23 @@ def setup_token_invalidator_job():
 def run_token_invalidator():
     management.call_command("resettokencleanup", W=1)
 
+def setup_tutorial_cleanup_job():
+    scheduler = BackgroundScheduler()
+    # Execute the job immediately
+    scheduler.add_job(run_tutorial_cleanup)
+    # Execute the job every 24 hours
+    scheduler.add_job(run_tutorial_cleanup, "interval", hours=24)
+    scheduler.start()
+
+def run_tutorial_cleanup():
+    # Delete tutorial projects older than 24 hours
+    management.call_command("tutorialcleanup")
+
 router = routers.DefaultRouter()
 
 urlpatterns = [
+    path("api/tutorial/create", api_views.CreateTutorialProjectView.as_view()),
+
     path("api/teacher_login_token", api_views.CustomAuthToken.as_view()),
     path("api/teacher_registration_token", api_views.RegisterTeacherView.as_view()),
     path("api/public/open_project", api_views.PublicProjectOpenView.as_view()),
@@ -52,7 +66,6 @@ urlpatterns = [
     path("api/file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
     path("file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
     re_path(r"^test/event/", views.index, name="index"),
-    re_path(r"^nav/$", views.NavView.as_view(), name="nav"),
     # TODO migrate to API
     path(
         "reset_password/<str:token>",
@@ -120,3 +133,11 @@ if (
     or not settings.DISABLE_TOKEN_INVALIDATION
 ):
     setup_token_invalidator_job()
+
+# schedule a job that deletes tutorial projects older than 24 hours
+if (
+    not hasattr(settings, "DISABLE_TUTORIAL_CLEANUP")
+    or not settings.DISABLE_TUTORIAL_CLEANUP
+):
+    setup_tutorial_cleanup_job()
+
