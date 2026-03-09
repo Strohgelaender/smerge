@@ -12,6 +12,7 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             id: 'welcome',
             title: 'tutorial.welcome.title',
             description: 'tutorial.welcome.description',
+            view: 'graph',
             target: {
                 type: 'none',
                 selector: ''
@@ -24,6 +25,7 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             id: 'explain_overview',
             title: 'tutorial.overview.title',
             description: 'tutorial.overview.description',
+            view: 'graph',
             target: {
                 type: 'none',
                 selector: ''
@@ -36,6 +38,7 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             id: 'open_snap',
             title: 'tutorial.open_snap.title',
             description: 'tutorial.open_snap.description',
+            view: 'graph',
             target: {
                 type: 'dom',
                 // Wir wollen die Node im Graphen hervorheben.
@@ -52,17 +55,13 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             id: 'edit_snap',
             title: 'tutorial.edit_snap.title',
             description: 'tutorial.edit_snap.description',
+            view: 'snap',
             target: {
-                type: 'dom',
-                selector: '.snap-editor .editor-container',
-                position: 'top'
+                type: 'none',
+                selector: ''
             },
-            validation: {
-                type: 'custom',
-                condition: () => {
-                    // TODO hier
-                    return false;
-                }
+            actions: {
+                modal: true
             }
         }
     ]

@@ -186,10 +186,11 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
         </Typography>
 
         {/* Navigation */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'end' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
           <Button
             variant="contained"
             size="small"
+            disabled={!!step.validation}
             endIcon={<ArrowForwardIcon />}
             onClick={onNext}
             sx={{

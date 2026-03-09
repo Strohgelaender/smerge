@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { TutorialManager } from "./components/Tutorial/TutorialManager";
 import { lightPageContainer } from "./pages/publicPageStyles.ts";
@@ -6,52 +6,72 @@ import { createTutorialProject } from "./services/TutorialService";
 import { useNavigate } from "react-router-dom";
 import ProjectView from "./ProjectView.tsx";
 import { TUTORIAL_SEQUENCES } from "./config/tutorialSequences";
+import { File } from "./services/ApiService";
+import httpService from "./services/HttpService";
 
 const TUTORIAL_SEQUENCE_ID = "smerge-tutorial";
 
 const TutorialView: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
-  const [currentSequenceId, setCurrentSequenceId] = useState<string | null>(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
 
   const [projectId, setProjectId] = useState<string | null>(null);
   const [fileId, setFileId] = useState<number | null>(null);
+
+  // Snap-State
+  const [snapFileName, setSnapFileName] = useState<string | null>(null);
+  const [snapReady, setSnapReady] = useState(false);
+  const snapFrameRef = useRef<HTMLIFrameElement | null>(null);
+  const snapTaskHookedRef = useRef(false);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
-  const currentSequence = useMemo(() => {
-    if (!currentSequenceId) return null;
-    return TUTORIAL_SEQUENCES[currentSequenceId] ?? null;
-  }, [currentSequenceId]);
+  const tutorialSequence = TUTORIAL_SEQUENCES[TUTORIAL_SEQUENCE_ID];
 
-  const currentStep = currentSequence?.steps[currentStepIndex] ?? null;
-  const isLastStep = currentSequence
-    ? currentStepIndex >= currentSequence.steps.length - 1
-    : false;
+  const currentStep = isActive
+    ? tutorialSequence?.steps[currentStepIndex] ?? null
+    : null;
+  const isLastStep = isActive && !!tutorialSequence && currentStepIndex >= tutorialSequence.steps.length - 1;
+
   const progress = {
-    current: currentSequence ? currentStepIndex + 1 : 0,
-    total: currentSequence ? currentSequence.steps.length : 0,
+    current: isActive && tutorialSequence ? currentStepIndex + 1 : 0,
+    total: tutorialSequence?.steps.length ?? 0,
   };
 
-  const startTutorial = (sequenceId: string) => {
-    const sequence = TUTORIAL_SEQUENCES[sequenceId];
-    if (!sequence) return;
-    setCurrentSequenceId(sequenceId);
+  const viewMode = isActive ? (currentStep?.view ?? "graph") : "graph";
+
+  // TODO reduce duplication (url constant)!
+  const snapSrc = useMemo(() => {
+    if (!snapFileName) return null;
+    return `https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}/action/blockerXML/${snapFileName}`;
+  }, [snapFileName]);
+
+  const startTutorial = () => {
+    if (!tutorialSequence) {
+      console.error(`Tutorial sequence not found: ${TUTORIAL_SEQUENCE_ID}`);
+      return;
+    }
+
     setCurrentStepIndex(0);
     setIsActive(true);
   };
 
   const completeTutorial = () => {
     setIsActive(false);
-    setCurrentSequenceId(null);
     setCurrentStepIndex(0);
+    setSnapReady(false);
+    snapTaskHookedRef.current = false;
+    // Zurück zur Homepage
+    navigate("/");
   };
 
   const nextStep = () => {
-    if (!currentSequence) return;
+    if (!tutorialSequence) return;
+
     const nextIndex = currentStepIndex + 1;
-    if (nextIndex >= currentSequence.steps.length) {
+    if (nextIndex >= tutorialSequence.steps.length) {
       completeTutorial();
       return;
     }
@@ -67,12 +87,21 @@ const TutorialView: React.FC = () => {
         if (result && result.success) {
           setProjectId(result.project_id);
           setFileId(result.file_id);
+
+          const files = await httpService.getAsync<File[]>(
+            `/api/project/${result.project_id}/files`
+          );
+          const tutorialFile = files.find((f) => f.id === result.file_id) ?? files[0];
+          if (tutorialFile?.file_url) {
+            setSnapFileName(tutorialFile.file_url.replace('/media/', ''));
+          }
+
           setLoading(false);
 
           // Start tutorial after a short delay to ensure ProjectView loads
           setTimeout(() => {
-            startTutorial(TUTORIAL_SEQUENCE_ID);
-          }, 1500);
+            startTutorial();
+          }, 500);
         } else {
           setError("Failed to create tutorial project");
           setLoading(false);
@@ -88,14 +117,17 @@ const TutorialView: React.FC = () => {
   }, []);
 
   // Klick auf Projekt-Node intercepten und im Tutorial weiter machen
-  const handleNodeDoubleClick = (nodeId: string) => {
-    console.log("Tutorial: Node double-clicked:", nodeId);
+  function handleNodeDoubleClick(nodeId: string) {
+    console.log("Tutorial: Node double-clicked:", nodeId, currentStep);
 
-    // TODO auch das sollte objekt-orientiert Teil der Sequence sein (handler function?)
-    if (currentStep?.id === "open_snap") {
-      nextStep();
-    }
-  };
+    // TODO TODD TODO
+    // if (currentStep?.id === "open_snap") {
+      snapTaskHookedRef.current = false;
+      setSnapReady(false);
+      // setViewMode("snap");
+      setCurrentStepIndex(3);
+      // }
+  }
 
   if (loading) {
     return (
@@ -151,12 +183,51 @@ const TutorialView: React.FC = () => {
           position: "relative",
         }}
       >
-        <ProjectView
-          projectId={projectId}
-          fileId={fileId}
-          embedded={true}
-          onNodeDoubleClick={handleNodeDoubleClick}
-        />
+        {viewMode === "graph" && (
+          <ProjectView
+            projectId={projectId}
+            fileId={fileId}
+            embedded={true}
+            onNodeDoubleClick={handleNodeDoubleClick}
+          />
+        )}
+
+        {viewMode === "snap" && snapSrc && (
+          <>
+            {!snapReady && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  inset: 0,
+                  zIndex: 10002,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 2,
+                  backgroundColor: "rgba(255, 255, 255, 0.8)",
+                }}
+              >
+                <CircularProgress size={48} />
+                <Typography variant="body1" sx={{ color: "black" }}>
+                  Loading Snap editor...
+                </Typography>
+              </Box>
+            )}
+            <iframe
+              ref={snapFrameRef}
+              src={snapSrc}
+              title="Tutorial Snap Editor"
+              onLoad={() => setSnapReady(true)}
+              style={{
+                width: "100%",
+                height: "100%",
+                border: "none",
+                backgroundColor: "white",
+              }}
+            />
+          </>
+        )}
       </Box>
     </Box>
   );

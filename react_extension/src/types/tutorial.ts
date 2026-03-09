@@ -5,6 +5,7 @@ export interface TutorialStep {
   id: string;
   title: string;
   description: string;
+  view: 'graph' | 'snap';
   target: {
     type: 'dom' | 'none';
     selector: string;
