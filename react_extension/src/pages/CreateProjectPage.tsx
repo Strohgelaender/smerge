@@ -89,7 +89,7 @@ const CreateProjectPage: React.FC = () => {
             <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
               <Button
                 variant="contained"
-                onClick={() => navigate(`/ext/project_view/${createdProject.projectId}`)}
+                onClick={() => navigate(`/project_view/${createdProject.projectId}`)}
                 sx={primaryButtonSx}
               >
                 OK

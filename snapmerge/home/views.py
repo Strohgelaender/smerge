@@ -545,15 +545,15 @@ def mergeExt(request, proj_id, resolutions):
                 new_file.save()
 
                 send_event(str(proj_id), "message", {"text": "Update_added_resize"})
-                # response = HttpResponseRedirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
+                # response = HttpResponseRedirect(f"http://127.0.0.1/merge/{merge_conflict.id}")
                 # response.status_code = 303
                 # return response
                 return HttpResponse(
-                    f"{request._current_scheme_host}/ext/merge/{merge_conflict.id}",
+                    f"{request._current_scheme_host}/merge/{merge_conflict.id}",
                     status=303,
                 )
-                # return HttpResponseRedirect(f'/ext/merge/{merge_conflict.id}')
-                # return redirect(f"http://127.0.0.1/ext/merge/{merge_conflict.id}")
+                # return HttpResponseRedirect(f'/merge/{merge_conflict.id}')
+                # return redirect(f"http://127.0.0.1/merge/{merge_conflict.id}")
 
             new_file.xml_job()
             # print(new_file.as_dict())
@@ -764,5 +764,5 @@ class ResetPasswordView(View):
         proj.password = hashPassword(request.POST.get("new_password"))
         proj.save()
         messages.success(request, _("Password changed"))
-        return HttpResponseRedirect(f"/ext/project_view/{proj.id}")
+        return HttpResponseRedirect(f"/project_view/{proj.id}")
 

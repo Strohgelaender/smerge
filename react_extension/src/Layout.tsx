@@ -59,7 +59,7 @@ const navItems = [
         foo: () => {
             if (window.location.href.includes("/ext") && getCurrentUser()) {
                 logout();
-                window.location.href = window.location.href.split("ext")[0] + "ext/teacher_login";
+                window.location.href = window.location.origin + "/teacher_login";
             }
         }
     }

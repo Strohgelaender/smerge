@@ -84,7 +84,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
       (response) => {
         console.log(response.message);
         //navigate("/ext/teacher_view/");
-        location.href = "/ext/teacher_view/";
+        location.href = "/teacher_view/";
       },
       (error) => {
         console.log(error);
@@ -204,7 +204,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
               Don&apos;t have an account?{' '}
               <span>
                 <Link
-                  href="/ext/teacher_signup/"
+                  href="/teacher_signup/"
                   variant="body2"
                   sx={{ alignSelf: 'center' }}
                 >

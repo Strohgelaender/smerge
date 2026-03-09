@@ -305,7 +305,7 @@ const OldSettingControls: React.FC<OldSettingControlsProps> = ({
                       i18n.changeLanguage(lang);
                     }}
                     height={44}
-                    src={`/ext/${lang.replace("en", "gb")}.svg`}
+                    src={`/${lang.replace("en", "gb")}.svg`}
                   ></ImageButton>
                 ))}
               </Stack>

@@ -25,7 +25,7 @@ const OpenProjectPage: React.FC = () => {
                 pin: pin.trim(),
                 password,
             });
-            navigate(`/ext/project_view/${result.project_id}`);
+            navigate(`/project_view/${result.project_id}`);
         } catch (err) {
             setError(err instanceof Error ? err.message : t("open_project.error_generic"));
         } finally {

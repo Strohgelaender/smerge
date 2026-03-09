@@ -41,7 +41,6 @@ const stylesheet: cytoscape.StylesheetStyle[] = [
       "background-blacken": 0.25,
       // 'width': '32px',
       // 'height': '32px',
-      // 'background-image': '/ext/logo.svg',
     },
   },
   {

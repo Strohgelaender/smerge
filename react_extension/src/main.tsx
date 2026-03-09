@@ -67,30 +67,31 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/tutorial" element={<TutorialView />} />
 
               <Route path="ext/open_project" element={<OpenProjectPage />} />
+              <Route path="open_project" element={<OpenProjectPage />} />
+
               <Route path="ext/create_project" element={<CreateProjectPage />} />
-              <Route
-                path="ext/project_view/:projectId"
-                element={<ProjectView />}
-              />
-              <Route
-                path="ext/teacher_login"
-                element={<SignIn/>}/>
-              <Route
-                path="ext/teacher_signup"
-                element={<SignUp/>}/>
-              <Route
-                path="ext/teacher_view"
-                element={<TeacherView />}
-              />
-              <Route
-                path="ext/merge/:code"
-                element={<ConflictStepper />}
-              />
-              <Route
-                path="ext/csfr_missing/:projectId"
-                element={<CsfrMissing />}
-              />
-              <Route path="ext/csfr_missing/" element={<CsfrMissing />} />
+              <Route path="create_project" element={<CreateProjectPage />} />
+
+              <Route path="ext/project_view/:projectId" element={<ProjectView />}/>
+              <Route path="project_view/:projectId" element={<ProjectView />}/>
+
+              <Route path="ext/teacher_login" element={<SignIn/>}/>
+              <Route path="teacher_login" element={<SignIn/>}/>
+
+              <Route path="teacher_signup" element={<SignUp/>}/>
+              <Route path="ext/teacher_signup" element={<SignUp/>}/>
+
+              <Route path="ext/teacher_view" element={<TeacherView />}/>
+              <Route path="teacher_view" element={<TeacherView />}/>
+
+              <Route path="ext/merge/:code" element={<ConflictStepper />}/>
+              <Route path="merge/:code" element={<ConflictStepper />}/>
+
+              <Route path="ext/csfr_missing/:projectId" element={<CsfrMissing />}/>
+              <Route path="csfr_missing/:projectId" element={<CsfrMissing />}/>
+              <Route path="ext/csfr_missing/:projectId" element={<CsfrMissing />}/>
+              <Route path="csfr_missing/" element={<CsfrMissing />} />
+
               <Route path="ext/*" element={<NotFoundPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>

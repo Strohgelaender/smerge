@@ -20,7 +20,7 @@ const ProjectCard = (props: {
     }, [props.projectData.name]);
 
     const handleButtonClick = () => {
-        location.href = location.href.replace('ext/teacher_view', `ext/project_view/${props.projectData.id}`);
+        location.href = location.href.replace('teacher_view', `project_view/${props.projectData.id}`);
     };
 
     const startEditingName = () => {

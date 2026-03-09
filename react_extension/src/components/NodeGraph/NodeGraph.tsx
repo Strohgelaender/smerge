@@ -213,7 +213,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
 
     if (node.data("file_url").includes(".conflict")) {
       openTab(
-        `${window.location.origin}/ext/merge/${node
+        `${window.location.origin}/merge/${node
           .data("file_url")
           .replace("/media/", "")
           .replace(".conflict", "")}`
