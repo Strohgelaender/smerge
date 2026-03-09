@@ -345,7 +345,7 @@
       "title": "Post your changes to Smerge",
       "description": "Click on the block 'Post to Smerge...' in the tab 'Variables' to save your changes. Don't forget to enter a short description of your changes!",
     },
-    "back_to_poject": {
+    "back_to_project": {
       "title": "Back to the project",
       "description": "Your changes are now visible in the project. Click next to see the new version you just created."
     },

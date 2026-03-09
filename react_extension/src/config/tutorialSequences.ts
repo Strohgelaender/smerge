@@ -119,10 +119,10 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             description: 'tutorial.view_new_node.description',
             view: 'graph',
             target: {
-                type: 'dom',
-                // Wieder die Commitmessage daneben, da die neue Node ja noch nicht existiert.
-                selector: '.__________cytoscape_container > div:nth-child(2) .commitmessage',
-                position: 'top'
+                type: 'none',
+                selector: ''
+            }, actions: {
+                modal: true
             }
         }, {
             id: 'merge_intro',

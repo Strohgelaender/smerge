@@ -345,7 +345,7 @@
       "title": "Poste deine Änderungen zu Smerge!",
       "description": "Klicke auf den Block 'Post to Smerge...' im Tab 'Variables', um deine Änderungen zu speichern. Vergiss nicht, eine kurze Beschreibung deiner Änderungen einzugeben!"
     },
-    "back_to_poject": {
+    "back_to_project": {
       "title": "Zurück zum Projekt",
       "description": "Deine Änderungen werden nun im Projekt angezeigt. Klicke auf weiter, um die neue Version zu sehen, die du gerade erstellt hast!"
     },
@@ -355,7 +355,7 @@
     },
     "merge_intro": {
         "title": "Lass uns mergen!",
-        "description": "Mergen ist der Prozess, bei dem zwei Versionen eines Projekts kombiniert werden, um eine neue Version zu erstellen. Es ist ein wichtiger Teil der Zusammenarbeit in SmergeEs ist ein wichtiger Teil der Zusammenarbeit in Smerge."
+        "description": "Mergen ist der Prozess, bei dem zwei Versionen eines Projekts kombiniert werden, um eine neue Version zu erstellen. Es ist ein wichtiger Teil der Zusammenarbeit in Smerge."
     },
     "merge_select": {
         "title": "Versionen auswählen",
