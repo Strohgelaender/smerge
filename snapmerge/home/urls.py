@@ -53,6 +53,7 @@ urlpatterns = [
     path("file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
     re_path(r"^test/event/", views.index, name="index"),
     re_path(r"^nav/$", views.NavView.as_view(), name="nav"),
+    # TODO migrate to API
     path(
         "reset_password/<str:token>",
         views.ResetPasswordView.as_view(),

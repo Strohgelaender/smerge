@@ -90,62 +90,6 @@ baseContext = {
     "inBeta": settings.BETA,
 }
 
-
-# Create your views here.
-class HomeView(View):
-    def get(self, request):
-        context = {
-            **baseContext,
-            "notification_visible": Settings.objects.get(
-                name="info_header_visible"
-            ).value
-            == "true",
-            "notification_text": Settings.objects.get(name="info_header_text").value,
-        }
-        return render(request, "home.html", context)
-
-
-class NavView(View):
-    def get(self, request):
-        context = {
-            **baseContext,
-        }
-        return render(request, "nav.html", context)
-
-
-class HowToView(View):
-    def get(self, request):
-        context = {
-            **baseContext,
-        }
-        return render(request, "how_to.html", context)
-
-
-class ImpressumView(View):
-    def get(self, request):
-        context = {
-            **baseContext,
-        }
-        return render(request, "impressum.html", context)
-
-
-class ProjectView(View):
-    def get(self, request, proj_id):
-        try:
-            proj = Project.objects.get(id=proj_id)
-        except Project.DoesNotExist:
-            raise Http404
-        files = [obj.as_dict() for obj in SnapFile.objects.filter(project=proj_id)]
-        context = {
-            **baseContext,
-            "proj_name": proj.name,
-            "proj_description": proj.description,
-            "proj_id": proj.id,
-            "proj_pin": proj.pin,
-            "files": files,
-        }
-        return render(request, "proj.html", context)
-
 class MergeView(View):
     def get(self, request, proj_id):
         file_ids = request.GET.getlist("file")
@@ -782,15 +726,6 @@ def sanitize_token(token):
 
 
 class ResetPasswordView(View):
-    def get(self, request, token):
-        # check if token was really base64 encoded to prevent injections
-        sanitized_token = sanitize_token(token)
-        if sanitized_token is None:
-            return HttpResponseBadRequest("Invalid token")
-
-        form = ResetPasswordForm()
-        context = {**baseContext, "form": form, "token": sanitized_token}
-        return render(request, "reset_password.html", context)
 
     def post(self, request, token):
         base_url = request.scheme + "://" + request.get_host()
@@ -831,27 +766,3 @@ class ResetPasswordView(View):
         messages.success(request, _("Password changed"))
         return HttpResponseRedirect(f"/ext/project_view/{proj.id}")
 
-
-class RedirectView(View):
-    def get(self, request, proj_id):
-        # only allow react /ext/ redirects
-        project = Project.objects.get(id=proj_id)
-        if project:
-            if project.password == "":
-                return render(
-                    request,
-                    "redirect.html",
-                    {
-                        "project_id": proj_id,
-                    },
-                )
-            else:
-                form = OpenProjectForm(initial={"pin": project.pin})
-                context = {
-                    **baseContext,
-                    "form": form,
-                }
-                return render(request, "open_proj.html", context)
-        else:
-            # return django 404
-            raise Http404
