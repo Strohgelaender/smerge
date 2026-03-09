@@ -13,26 +13,14 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             title: 'tutorial.welcome.title',
             description: 'tutorial.welcome.description',
             view: 'graph',
-            target: {
-                type: 'none',
-                selector: ''
-            },
-            actions: {
-                modal: true
-            }
+            modal: true
         },
         {
             id: 'explain_overview',
             title: 'tutorial.overview.title',
             description: 'tutorial.overview.description',
             view: 'graph',
-            target: {
-                type: 'none',
-                selector: ''
-            },
-            actions: {
-                modal: true
-            }
+            modal: true
         },
         {
             id: 'open_snap',
@@ -56,87 +44,49 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             title: 'tutorial.activate_js.title',
             description: 'tutorial.activate_js.description',
             view: 'snap',
-            target: {
-                type: 'none',
-                selector: ''
-            },
-            actions: {
-                modal: true
-            }
+            modal: true
         },
         {
             id: 'import_data_instructions',
             title: 'tutorial.import_data.title',
             description: 'tutorial.import_data.description',
             view: 'snap',
-            target: {
-                type: 'none',
-                selector: ''
-            },
-            actions: {
-                modal: true
-            }
+            modal: true
+
         },
         {
             id: 'edit_snap',
             title: 'tutorial.edit_snap.title',
             description: 'tutorial.edit_snap.description',
             view: 'snap',
-            target: {
-                type: 'none',
-                selector: ''
-            },
-            actions: {
-                modal: true
-            }
+            modal: true
         },
         {
             id: 'post_to_smerge',
             title: 'tutorial.post_to_smerge.title',
             description: 'tutorial.post_to_smerge.description',
             view: 'snap',
-            target: {
-                type: 'none',
-                selector: ''
-            },
-            actions: {
-                modal: true
-            }
+            modal: true
         }, {
             id: 'back_to_project',
             title: 'tutorial.back_to_project.title',
             description: 'tutorial.back_to_project.description',
             view: 'snap',
-            target: {
-                type: 'none',
-                selector: ''
-            }, actions: {
-                modal: true
-            }
+            modal: true
         }, {
             id: 'view_new_node',
             title: 'tutorial.view_new_node.title',
             description: 'tutorial.view_new_node.description',
             view: 'graph',
-            target: {
-                type: 'none',
-                selector: ''
-            }, actions: {
-                modal: true
-            }
+            modal: true
         }, {
             id: 'merge_intro',
             title: 'tutorial.merge_intro.title',
             description: 'tutorial.merge_intro.description',
             view: 'graph',
-            target: {
-                type: 'none',
-                selector: ''
-            },
-            actions: {
-                modal: true
-            }
-        }, {
+            modal: true
+        },
+        {
             id: 'merge_select',
             title: 'tutorial.merge_select.title',
             description: 'tutorial.merge_select.description',

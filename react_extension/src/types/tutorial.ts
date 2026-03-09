@@ -6,8 +6,8 @@ export interface TutorialStep {
   title: string;
   description: string;
   view: 'graph' | 'snap';
-  target: {
-    type: 'dom' | 'none';
+  target?: {
+    type: 'dom';
     selector: string;
     position?: 'top' | 'bottom' | 'left' | 'right';
   };
@@ -15,9 +15,10 @@ export interface TutorialStep {
     type: 'click' | 'custom';
     condition?: () => boolean;
   };
+  modal?: boolean;
   actions?: {
     highlight?: boolean;
-    modal?: boolean;
+
   };
 }
 

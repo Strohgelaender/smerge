@@ -30,7 +30,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
     const findTarget = () => {
       let target: HTMLElement | null = null;
 
-      if (step.target.type === 'dom') {
+      if (step.target?.type === 'dom') {
         target = document.querySelector(step.target.selector);
       } // TODO weitere selectors
 
@@ -80,7 +80,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
       zIndex: 10000,
     };
 
-    if (step.actions?.modal) {
+    if (step?.modal) {
       // Centered modal
       return {
         ...baseStyle,
@@ -91,7 +91,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
     }
 
     // Relative position der Tutorial-Box zum Target
-    const position = step.target.position || 'top';
+    const position = step.target?.position || 'top';
     const style = { ...baseStyle, top: coords.top, left: coords.left };
     switch (position) {
       case 'bottom':
@@ -130,7 +130,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
 
   const content = (
     <>
-      {!step.actions?.modal && (
+      {!step?.modal && (
         <>
           {step.actions?.highlight && coords.width > 0 && coords.height > 0 && (
             <Box
