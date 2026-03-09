@@ -4,7 +4,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useTranslation } from 'react-i18next';
 import { TutorialStep } from '../../types/tutorial';
-import { createPortal } from 'react-dom';
 
 interface TutorialOverlayProps {
   step: TutorialStep;
@@ -77,7 +76,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
   const getTooltipStyle = () => {
     const baseStyle: React.CSSProperties = {
       position: 'fixed',
-      zIndex: 10000,
+      zIndex: 10_000,
     };
 
     if (step?.modal) {
@@ -121,12 +120,6 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
         };
     }
   };
-
-  const modalRoot = document.getElementById('tutorial-root');
-
-  if (!modalRoot) {
-    return null;
-  }
 
   const content = (
     <>
@@ -205,10 +198,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
     </>
   );
 
-  // Render via Portal in das separate tutorial-root Element
-  // Dies verhindert, dass das Modal das DOM der Haupt-App beeinflusst
-  return createPortal(content, modalRoot);
+  return content;
 };
 
 export default TutorialOverlay;
-

@@ -94,23 +94,10 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   // keeps track for eventListener...
   const layoutRef = useRef(layout);
 
-  const isTutorialProject = projectData?.is_tutorial;
-
   const { data, error, isLoading, refresh } = useFiles(String(resolvedProjectId ?? ""));
   if (error) console.log("error: ", error);
 
-  // Verhindern, dass der Graph im Tutorial herumspringt (freeze auf initialTutorialData)
-  // TODO: etwas hacky, geht das besser?
-  const [initialTutorialData, setInitialTutorialData] = useState<File[] | null>(null);
-  useEffect(() => {
-    if (isTutorialProject && !initialTutorialData && data && data.length > 0) {
-      setInitialTutorialData(data);
-    }
-  }, [isTutorialProject, initialTutorialData, data]);
-
-  const graphData = isTutorialProject ? (initialTutorialData ?? data) : data;
-
-  const nodes: NodeDefinition[] | undefined = graphData?.map((file: File) => {
+  const nodes: NodeDefinition[] | undefined = data?.map((file: File) => {
     const nodeDefinition: NodeDefinition = {
       data: {
         id: file.id.toString(),
@@ -137,7 +124,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   const edges: EdgeDefinition[] | undefined = (():
     | EdgeDefinition[]
     | undefined => {
-    let edgeList = graphData?.flatMap((file: File) => {
+    let edgeList = data?.flatMap((file: File) => {
       return file.ancestors.map((ancestor: number) => {
         const edgeDefinition = {
           data: { source: ancestor.toString(), target: file.id.toString() },
@@ -266,7 +253,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         enablePointerEvents: true
       });
     }
-    if (cy.current && !isLoading && graphData) {
+    if (cy.current && !isLoading && data) {
       setElements([...(nodes ?? []), ...(edges ?? [])]);
 
       cy.current?.on("dblclick", "node", handleFileOpen);
@@ -300,8 +287,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         ranFirstAgain.current = true;
       }
 
-      // Im Tutorial soll der graph nicht springen und neu angeordnet werden.
-      if (resize.current && !embedded) {
+      if (resize.current) {
         setTimeout(() => {
           cy.current?.fit();
           cy.current?.layout({ name: savedLayout.current }).run();
@@ -318,7 +304,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [graphData, layout, isLoading, embedded]);
+  }, [data, layout, isLoading, embedded]);
 
   // const getSelectedNodes = () => {
   //     const selectedNodes = cy.current?.$('node:selected');
@@ -406,7 +392,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
 
     // change layout after loading to saved if available
     let toClean: NodeJS.Timeout;
-    if (savedLayout.current != "preset" && !isTutorialProject) {
+    if (savedLayout.current != "preset") {
       toClean = setTimeout(() => {
         changeLayout(savedLayout.current);
       }, 150);
@@ -440,9 +426,6 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   };
 
   const changeLayout = (layoutName: string) => {
-    if (isTutorialProject && ranFirstAgain.current) {
-      return;
-    }
 
     // save selected layout in storage for next loading
     localStorage.setItem(savedLayoutKey, layoutName);

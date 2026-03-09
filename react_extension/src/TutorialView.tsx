@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { TutorialManager } from "./components/Tutorial/TutorialManager";
 import { lightPageContainer } from "./pages/publicPageStyles.ts";
@@ -164,17 +165,24 @@ const TutorialView: React.FC = () => {
     );
   }
 
+  const tutorialRoot = document.getElementById("tutorial-root");
+
+  // Render via Portal in das separate tutorial-root Element
+  // Dies verhindert, dass das Modal das Layout der Haupt-App beeinflusst
   return projectId && (
     <Box sx={{ position: "relative", width: "100%", height: "100vh" }}>
-      <TutorialManager
-        isActive={isActive}
-        currentStep={currentStep}
-        progress={progress}
-        isLastStep={isLastStep}
-        onNextStep={nextStep}
-        onCloseTutorial={completeTutorial}
-        onNodeDoubleClick={handleNodeDoubleClick}
-      />
+      {tutorialRoot && createPortal(
+        <TutorialManager
+          isActive={isActive}
+          currentStep={currentStep}
+          progress={progress}
+          isLastStep={isLastStep}
+          onNextStep={nextStep}
+          onCloseTutorial={completeTutorial}
+          onNodeDoubleClick={handleNodeDoubleClick}
+        />,
+        tutorialRoot
+      )}
 
       <Box
         sx={{
