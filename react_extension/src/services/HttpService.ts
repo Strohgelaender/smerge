@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import authHeader, { getCurrentUser } from "./TeacherAuthService";
+import { getCurrentUser } from "./TeacherAuthService";
 
 class HttpService {
   public csrftoken: string;
@@ -68,7 +68,7 @@ class HttpService {
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, this.baseURL + endpoint, true);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
+    this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
     xhttp.send(JSON.stringify(data));
 
@@ -140,7 +140,7 @@ class HttpService {
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, this.baseURL + endpoint, true);
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-    xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
+    this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
     xhttp.send(JSON.stringify(data));
 
@@ -205,7 +205,7 @@ class HttpService {
   ) {
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", this.baseURL + endpoint, true);
-    xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
+    this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
     xhttp.send();
 
@@ -234,6 +234,41 @@ class HttpService {
     };
   }
 
+  // Holt einen neuen CSRF-Token vom Server, falls der aktuelle ungültig ist oder nicht existiert.
+  ensureCsrfToken(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const xhttp = new XMLHttpRequest();
+      xhttp.open("GET", this.baseURL + "/api/public/csrf", true);
+      addAuthHeader(xhttp);
+      xhttp.send();
+
+      xhttp.onreadystatechange = () => {
+        // 4 = DONE
+        if (xhttp.readyState !== 4) {
+          return;
+        }
+        if (xhttp.status >= 200 && xhttp.status <= 299) {
+          this.refreshCsrfToken();
+          resolve();
+          return;
+        }
+        reject(new Error(`Failed to initialize CSRF token (${xhttp.status}).`));
+      };
+    });
+  }
+
+  private refreshCsrfToken() {
+    this.csrftoken = this.getCookie("csrftoken") ?? "";
+    return this.csrftoken;
+  }
+
+  private setCsrfHeader(xhttp: XMLHttpRequest) {
+    const token = this.refreshCsrfToken();
+    if (token) {
+      xhttp.setRequestHeader("X-CSRFToken", token);
+    }
+  }
+
   postFormAsync<T>(
     endpoint: string,
     formData: FormData,
@@ -242,7 +277,7 @@ class HttpService {
     return new Promise((resolve, reject) => {
       const xhttp = new XMLHttpRequest();
       xhttp.open(method, this.baseURL + endpoint, true);
-      xhttp.setRequestHeader("X-CSRFToken", this.csrftoken);
+      this.setCsrfHeader(xhttp);
       addAuthHeader(xhttp);
 
       xhttp.onreadystatechange = function () {

@@ -31,6 +31,7 @@ export interface RestoreInfoRequest {
 export const openProjectPublic = async (
   payload: OpenProjectRequest,
 ): Promise<OpenProjectResponse> => {
+  await httpService.ensureCsrfToken();
   return httpService.postAsync<OpenProjectResponse>(
     "/api/public/open_project",
     payload,
@@ -43,6 +44,7 @@ export const openProjectPublic = async (
 export const createProjectPublic = async (
   payload: CreateProjectPayload,
 ): Promise<CreateProjectResponse> => {
+  await httpService.ensureCsrfToken();
   const formData = new FormData();
   formData.append("name", payload.name);
   formData.append("description", payload.description);

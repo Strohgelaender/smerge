@@ -18,6 +18,8 @@ import React, {useEffect, useState} from "react";
 import "./Layout.css";
 import {useTranslation} from "react-i18next";
 import {getCurrentUser, logout} from "./services/TeacherAuthService";
+import httpService from "./services/HttpService.ts";
+import {useNavigate} from "react-router-dom";
 
 // function Layout() {
 
@@ -44,13 +46,8 @@ const navItems = [
     {
         name: getCurrentUser() ? "main.nav_teacher_view" : "main.nav_teacherlogin",
         foo: () => {
-            // TODO remove /ext once migration is finished
-            const destination = getCurrentUser() ? "ext/teacher_view" : "ext/teacher_login";
-            if (window.location.href.includes("/ext")) {
-                window.location.href = window.location.href.split("ext")[0] + destination;
-            } else {
-                window.location.href = destination
-            }
+            const destination = getCurrentUser() ? "/teacher_view" : "/teacher_login";
+            window.location.href = destination;
         }
     },
     {
@@ -93,28 +90,28 @@ function Layout() {
 
     // check if csfr token was set and redirect to missing page if not
 
-    // TODO: New mechnaism to enuse security when full client is in react (no token)
-
-    // const navigate = useNavigate();
-    /*useEffect(() => {
-      if (
-        httpService.csrftoken === "" &&
-        !location.href.includes("csfr_missing")
-      ) {
-        // react router to missing page
-        console.log(
-          location.href.split("/")[location.href.split("/").length - 1]
-        );
-        const lastPart =
-          location.href.split("/")[location.href.split("/").length - 1];
-        if (lastPart.includes("csfr_missing")) {
-          navigate("/ext/csfr_missing");
-        } else {
-          navigate("/ext/csfr_missing/" + lastPart);
+    // Pages to skip csrf check for
+    const publicPages = ["/", "/howto", "/impressum", "/open", "/create", "/tutorial", "/restore_info", "/csfr_missing"];
+    const navigate = useNavigate();
+    useEffect(() => {
+        if (
+            httpService.csrftoken === "" &&
+            !publicPages.includes(window.location.pathname)
+        ) {
+            // react router to missing page
+            console.log(
+                location.href.split("/")[location.href.split("/").length - 1]
+            );
+            const lastPart =
+                location.href.split("/")[location.href.split("/").length - 1];
+            if (lastPart.includes("csfr_missing")) {
+                navigate("/csfr_missing");
+            } else {
+                navigate("/csfr_missing/" + lastPart);
+            }
         }
-      }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);*/
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     navItems.push();
     const container = window.document.body;
 

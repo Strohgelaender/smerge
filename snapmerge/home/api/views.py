@@ -22,7 +22,8 @@ from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSeri
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django_eventstream import send_event
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
+from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 
 from ..views import check_password, generate_unique_PIN, hashPassword
@@ -660,6 +661,16 @@ class SchoolClassUpdateView(generics.UpdateAPIView):
 
         instance.delete()
         return Response(data="Schoolclass deleted", status=200)
+
+""" Gibt dem React-Client ein CSRF-Token mit. """
+class PublicCsrfTokenView(APIView):
+
+    permission_classes = [permissions.AllowAny]
+
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request, *args, **kwargs):
+        return Response({"csrfToken": get_token(request)}, status=200)
+
 
 class PublicProjectOpenView(APIView):
     """Open project by PIN and optional password for public (non-teacher) flow."""

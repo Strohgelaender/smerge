@@ -25,11 +25,7 @@ function CsfrMissing() {
 
   useEffect(() => {
     if (countdown <= 0) {
-      if ((projectId?.length ?? 0) >= 30) {
-        location.href = "/redirect/" + projectId;
-      } else {
-        location.href = "/open_project/";
-      }
+        location.href = "/open";
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdown]);
