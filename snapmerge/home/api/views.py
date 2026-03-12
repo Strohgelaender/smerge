@@ -22,8 +22,7 @@ from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSeri
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django_eventstream import send_event
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie
-from django.middleware.csrf import get_token
+from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie, csrf_exempt
 from django.utils.decorators import method_decorator
 
 from ..views import check_password, generate_unique_PIN, hashPassword
@@ -662,22 +661,14 @@ class SchoolClassUpdateView(generics.UpdateAPIView):
         instance.delete()
         return Response(data="Schoolclass deleted", status=200)
 
-""" Gibt dem React-Client ein CSRF-Token mit. """
-class PublicCsrfTokenView(APIView):
 
-    permission_classes = [permissions.AllowAny]
-
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request, *args, **kwargs):
-        return Response({"csrfToken": get_token(request)}, status=200)
-
-
+@method_decorator(csrf_exempt, name="dispatch")
 class PublicProjectOpenView(APIView):
     """Open project by PIN and optional password for public (non-teacher) flow."""
 
     permission_classes = [permissions.AllowAny]
 
-
+    @method_decorator(ensure_csrf_cookie)
     def post(self, request, *args, **kwargs):
         pin = request.data.get("pin", "").strip()
         password = request.data.get("password", "")
@@ -696,11 +687,13 @@ class PublicProjectOpenView(APIView):
         return Response({"project_id": str(project.id)}, status=200)
 
 
+@method_decorator(csrf_exempt, name="dispatch")
 class PublicProjectCreateView(APIView):
     """Create public project with optional starting Snap file."""
 
     permission_classes = [permissions.AllowAny]
 
+    @method_decorator(ensure_csrf_cookie)
     def post(self, request, *args, **kwargs):
         name = (request.data.get("name") or "").strip()
         description = request.data.get("description") or ""

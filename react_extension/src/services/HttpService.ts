@@ -234,28 +234,6 @@ class HttpService {
     };
   }
 
-  // Holt einen neuen CSRF-Token vom Server, falls der aktuelle ungültig ist oder nicht existiert.
-  ensureCsrfToken(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const xhttp = new XMLHttpRequest();
-      xhttp.open("GET", this.baseURL + "/api/public/csrf", true);
-      addAuthHeader(xhttp);
-      xhttp.send();
-
-      xhttp.onreadystatechange = () => {
-        // 4 = DONE
-        if (xhttp.readyState !== 4) {
-          return;
-        }
-        if (xhttp.status >= 200 && xhttp.status <= 299) {
-          this.refreshCsrfToken();
-          resolve();
-          return;
-        }
-        reject(new Error(`Failed to initialize CSRF token (${xhttp.status}).`));
-      };
-    });
-  }
 
   private refreshCsrfToken() {
     this.csrftoken = this.getCookie("csrftoken") ?? "";

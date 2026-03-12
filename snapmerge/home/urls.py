@@ -40,7 +40,6 @@ urlpatterns = [
 
     path("api/teacher_login_token", api_views.CustomAuthToken.as_view()),
     path("api/teacher_registration_token", api_views.RegisterTeacherView.as_view()),
-    path("api/public/csrf", api_views.PublicCsrfTokenView.as_view()),
     path("api/public/open_project", api_views.PublicProjectOpenView.as_view()),
     path("api/public/create_project", api_views.PublicProjectCreateView.as_view()),
     path("api/public/restore_info", api_views.PublicRestoreInfoView.as_view()),
