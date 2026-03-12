@@ -42,6 +42,7 @@ const CreateProjectPage: React.FC = () => {
     pin: string;
     password: string;
   } | null>(null);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setError("");

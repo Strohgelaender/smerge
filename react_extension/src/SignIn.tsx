@@ -83,7 +83,7 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     TeacherAuthService.login(String(username), String(password)).then(
       (response) => {
         console.log(response.message);
-        //navigate("/ext/teacher_view/");
+        //navigate("/teacher_view/");
         location.href = "/teacher_view/";
       },
       (error) => {
