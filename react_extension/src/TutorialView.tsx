@@ -167,10 +167,16 @@ const TutorialView: React.FC = () => {
 
   const tutorialRoot = document.getElementById("tutorial-root");
 
-  // Render via Portal in das separate tutorial-root Element
+  // Render des Tutorial-Overlays als Portal in das separate tutorial-root Element
   // Dies verhindert, dass das Modal das Layout der Haupt-App beeinflusst
   return projectId && (
-    <Box sx={{ position: "relative", width: "100%", height: "100vh" }}>
+    <Box
+      sx={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+      }}
+    >
       {tutorialRoot && createPortal(
         <TutorialManager
           isActive={isActive}
@@ -228,6 +234,7 @@ const TutorialView: React.FC = () => {
               title="Tutorial Snap Editor"
               onLoad={() => setSnapReady(true)}
               style={{
+                display: "block",
                 width: "100%",
                 height: "100%",
                 border: "none",
