@@ -156,15 +156,6 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           border: '2px solid #076AAB',
         }}
       >
-        {/* Close button */}
-        <IconButton
-          size="small"
-          onClick={onClose}
-          sx={{ position: 'absolute', top: 8, right: 8, color: "black"}}
-        >
-          <CloseIcon />
-        </IconButton>
-
         {/* Progress indicator */}
         <Typography variant="caption" color="textSecondary" sx={{ mb: 1, display: 'block', color: "black" }}>
           {t('tutorial.step')} {progress.current} / {progress.total}
@@ -179,7 +170,20 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
         </Typography>
 
         {/* Navigation */}
-        <Box sx={{ display: 'flex', justifyContent: 'end', alignItems: 'end' }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Button
+              variant="contained"
+              size="small"
+              endIcon={<CloseIcon />}
+              onClick={onClose}
+              sx={{
+                backgroundColor: '#076AAB',
+                color: 'white',
+                '&:hover': { backgroundColor: '#055a8c' },
+              }}
+          >
+            { t('tutorial.skip')}
+          </Button>
           <Button
             variant="contained"
             size="small"
@@ -188,6 +192,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
             onClick={onNext}
             sx={{
               backgroundColor: '#076AAB',
+              color: 'white',
               '&:hover': { backgroundColor: '#055a8c' },
             }}
           >
