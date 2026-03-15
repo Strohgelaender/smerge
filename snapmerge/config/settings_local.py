@@ -4,6 +4,8 @@ import json
 URL = "http://127.0.0.1:8000"
 POST_BACK_URL = "http://127.0.0.1"
 
+SITE_ID = 1
+
 # SECRET_KEY = '...'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
