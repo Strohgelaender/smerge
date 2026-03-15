@@ -21,7 +21,7 @@ i18n
       caches: ["localStorage"],
     },
     debug: (import.meta as any).env?.MODE !== "production",
-    fallbackLng: "en",
+    fallbackLng: "de",
     supportedLngs: supportedLanguages,
     backend: {
       loadPath:
