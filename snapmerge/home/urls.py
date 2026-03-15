@@ -43,6 +43,7 @@ urlpatterns = [
     path("api/public/open_project", api_views.PublicProjectOpenView.as_view()),
     path("api/public/create_project", api_views.PublicProjectCreateView.as_view()),
     path("api/public/restore_info", api_views.PublicRestoreInfoView.as_view()),
+    path("api/public/reset_password/<str:token>", api_views.PublicResetPasswordView.as_view(), name="reset_passwd"),
     path("api/schoolclasses", api_views.SchoolClassesView.as_view()),
     path("api/schoolclasses/<str:id>", api_views.SchoolClassUpdateView.as_view()),
     path("api/teachers/<str:id>/schoolclasses", api_views.SchoolClassesForTeacherView.as_view()),
@@ -65,13 +66,7 @@ urlpatterns = [
     path("api/file/<int:id>/position", api_views.SnapFilePositionView.as_view()),
     path("api/file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
     path("file/<int:id>/positions", api_views.SnapFilePositionsView.as_view()),
-    re_path(r"^test/event/", views.index, name="index"),
-    # TODO migrate to API
-    path(
-        "reset_password/<str:token>",
-        views.ResetPasswordView.as_view(),
-        name="reset_passwd",
-    ),
+    re_path(r"^admin/test/event/", views.index, name="index"),
     re_path(r"^action/merge/(?P<proj_id>[-\w]+)$", views.MergeView.as_view(), name="merge"),
     re_path(r"^action/sync/(?P<proj_id>[-\w]+)$", views.SyncView.as_view(), name="sync"),
     re_path(

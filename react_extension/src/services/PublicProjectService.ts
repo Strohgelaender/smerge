@@ -28,6 +28,16 @@ export interface RestoreInfoRequest {
   email: string;
 }
 
+export interface ResetPasswordRequest {
+  new_password: string;
+  new_password_repeated: string;
+}
+
+export interface ResetPasswordResponse {
+  detail: string;
+  project_id: string;
+}
+
 export const openProjectPublic = async (
   payload: OpenProjectRequest,
 ): Promise<OpenProjectResponse> => {
@@ -71,3 +81,26 @@ export const restorePasswordInfo = async (
     true,
   );
 };
+
+export const validateResetPasswordToken = async (
+  token: string,
+): Promise<{ detail: string }> => {
+  return httpService.getAsync<{ detail: string }>(
+    `/api/public/reset_password/${token}`,
+      true, true
+  );
+};
+
+export const resetPasswordPublic = async (
+  token: string,
+  payload: ResetPasswordRequest,
+): Promise<ResetPasswordResponse> => {
+  return httpService.postAsync<ResetPasswordResponse>(
+    `/api/public/reset_password/${token}`,
+    payload,
+    "POST",
+    true,
+    true,
+  );
+};
+

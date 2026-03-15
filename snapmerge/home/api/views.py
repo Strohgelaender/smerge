@@ -16,6 +16,8 @@ from django.core.files.uploadedfile import UploadedFile
 from django.utils.translation import gettext as _
 import xml.etree.ElementTree as ET
 import secrets
+import base64
+import logging
 
 from ..models import File, SnapFile, Project, MergeConflict, SchoolClass, PasswordResetToken
 from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSerializer, RegistrationSerializer, SchoolClassSerializer
@@ -26,6 +28,25 @@ from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie, csrf_
 from django.utils.decorators import method_decorator
 
 from ..views import check_password, generate_unique_PIN, hashPassword
+
+
+def sanitize_token(token):
+    # Ensure token is valid URL-safe base64 to prevent token injection edge cases.
+    try:
+        sanitized_token = (
+            base64.urlsafe_b64encode(base64.urlsafe_b64decode(token + "=="))
+            .strip(b"=")
+            .decode("utf-8")
+        )
+        if str(sanitized_token) != token:
+            logging.log(
+                logging.WARNING, f"Received token is not base64 encoded: {token}"
+            )
+            return None
+    except Exception as e:
+        logging.log(logging.INFO, f"Invalid token: {e}")
+        return None
+    return sanitized_token
 
 
 # class ListSnapFilesView(generics.ListAPIView):
@@ -806,6 +827,60 @@ class PublicRestoreInfoView(APIView):
             )
 
         return Response({"detail": _("Mail sent")}, status=200)
+
+class PublicResetPasswordView(APIView):
+    """Reset project password via API token."""
+
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, token, *args, **kwargs):
+        sanitized_token = sanitize_token(token)
+        if sanitized_token is None:
+            return Response({"detail": _("Invalid token")}, status=400)
+
+        exists = PasswordResetToken.objects.filter(token=sanitized_token).exists()
+        if not exists:
+            return Response(
+                {"detail": _("Invalid token, token does not exist please request a new one!")},
+                status=404,
+            )
+
+        return Response({"detail": _("Valid token")}, status=200)
+
+    def post(self, request, token, *args, **kwargs):
+        sanitized_token = sanitize_token(token)
+        if sanitized_token is None:
+            return Response({"detail": _("Invalid token")}, status=400)
+
+        new_password = request.data.get("new_password")
+        new_password_repeated = request.data.get("new_password_repeated")
+
+        if not new_password or not new_password_repeated:
+            return Response({"detail": _("Please fill in both fields")}, status=400)
+
+        if new_password != new_password_repeated:
+            return Response({"detail": _("Passwords do not match")}, status=400)
+
+        try:
+            token_object = PasswordResetToken.objects.get(token=sanitized_token)
+        except PasswordResetToken.DoesNotExist:
+            return Response(
+                {"detail": _("Invalid token, token does not exist please request a new one!")},
+                status=404,
+            )
+        except Exception as e:
+            logging.log(logging.WARNING, f"Something went wrong retrieving token: {e}")
+            return Response({"detail": _("Something went wrong.")}, status=500)
+
+        project = token_object.project
+        token_object.delete()
+        project.password = hashPassword(new_password)
+        project.save()
+
+        return Response(
+            {"detail": _("Password changed"), "project_id": str(project.id)},
+            status=200,
+        )
 
 # Tutorial Project Creation
 class CreateTutorialProjectView(APIView):

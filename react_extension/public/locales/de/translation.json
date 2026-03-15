@@ -119,6 +119,20 @@
     "success": "E-Mail versendet! Weiterleitung...",
     "error_generic": "Etwas ist schiefgelaufen, bitte versuche es erneut oder kontaktiere uns."
   },
+  "reset_password": {
+    "title": "Passwort zurücksetzen",
+    "description": "Setze ein neues Passwort für dein Projekt.",
+    "checking_token": "Token wird geprüft...",
+    "invalid_token": "Ungültiger oder abgelaufener Token. Bitte fordere einen neuen Link an.",
+    "new_password": "Neues Passwort",
+    "new_password_repeated": "Neues Passwort wiederholen",
+    "fill_both": "Bitte beide Felder ausfüllen.",
+    "passwords_no_match": "Passwörter stimmen nicht überein.",
+    "submit": "Absenden",
+    "back": "Zurück",
+    "success": "Passwort geändert! Weiterleitung...",
+    "error_generic": "Etwas ist schiefgelaufen, bitte versuche es erneut."
+  },
   "error_404": {
     "title": "Hier hat noch nie ein Dachs gegraben!",
     "description": "Deine Seite konnte nicht gefunden werden. Das kann mehrere Gründe haben:",

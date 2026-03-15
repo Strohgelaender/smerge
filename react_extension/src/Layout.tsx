@@ -91,12 +91,13 @@ function Layout() {
     // check if csfr token was set and redirect to missing page if not
 
     // Pages to skip csrf check for
-    const publicPages = ["/", "/howto", "/impressum", "/open", "/create", "/tutorial", "/restore_info", "/csfr_missing"];
+    const publicPages = ["/", "/howto", "/impressum", "/open", "/create", "/tutorial", "/restore_info", "/reset_password", "/csfr_missing"];
     const navigate = useNavigate();
     useEffect(() => {
+        const publicPage = !!publicPages.find((page) => window.location.pathname.startsWith(page));
         if (
             httpService.csrftoken === "" &&
-            !publicPages.includes(window.location.pathname)
+            !publicPage
         ) {
             // react router to missing page
             console.log(

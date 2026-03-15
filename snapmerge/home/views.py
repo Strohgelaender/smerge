@@ -37,11 +37,6 @@ from django.utils.decorators import method_decorator
 from django.conf import settings
 from django.contrib import messages
 from django.urls import reverse
-from django.core.mail import send_mail
-from email_validator import validate_email, EmailNotValidError
-from shutil import copyfile
-import random
-import string
 import os
 from .ancestors import gca
 from asgiref.sync import async_to_sync
@@ -704,65 +699,3 @@ class SendEventPing(View):
 
 def index(request):
     return render(request, "sse.html")
-
-
-def sanitize_token(token):
-    # check if token was really base64 encoded to prevent injections
-    try:
-        sanitized_token = (
-            base64.urlsafe_b64encode(base64.urlsafe_b64decode(token + "=="))
-            .strip(b"=")
-            .decode("utf-8")
-        )
-        if str(sanitized_token) != token:
-            logging.log(
-                logging.WARNING, f"Received token is not base64 encoded: {token}"
-            )
-            return None
-    except Exception as e:
-        logging.log(logging.INFO, f"Invalid token: {e}")
-        return None
-    return sanitized_token
-
-
-class ResetPasswordView(View):
-
-    def post(self, request, token):
-        base_url = request.scheme + "://" + request.get_host()
-
-        sanitized_token = sanitize_token(token)
-        if sanitized_token is None:
-            messages.warning(request, _("Invalid token"))
-            return HttpResponseRedirect(reverse("reset_passwd", args=[token]))
-        if not request.POST.get("new_password") or not request.POST.get(
-            "new_password_repeated"
-        ):
-            messages.warning(request, _("Please fill in both fields"))
-            return HttpResponseRedirect(reverse("reset_passwd", args=[token]))
-
-        if request.POST.get("new_password") != request.POST.get(
-            "new_password_repeated"
-        ):
-            messages.warning(request, _("Passwords do not match"))
-            return HttpResponseRedirect(reverse("reset_passwd", args=[token]))
-
-        try:
-            token_object = PasswordResetToken.objects.get(token=sanitized_token)
-        except PasswordResetToken.DoesNotExist:
-            messages.warning(
-                request,
-                _("Invalid token, token does not exist please request a new one!"),
-            )
-            return HttpResponseRedirect("/restore_info/")
-        except Exception as e:
-            messages.warning(request, _("Something went wrong."))
-            logging.log(logging.WARNING, f"Something went wrong retrieving token: {e}")
-            return HttpResponseRedirect(reverse("reset_passwd", args=token))
-
-        proj = token_object.project
-        token_object.delete()
-        proj.password = hashPassword(request.POST.get("new_password"))
-        proj.save()
-        messages.success(request, _("Password changed"))
-        return HttpResponseRedirect(f"/project_view/{proj.id}")
-

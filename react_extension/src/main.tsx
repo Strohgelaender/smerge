@@ -19,6 +19,7 @@ import ImpressumPage from "./pages/ImpressumPage.tsx";
 import OpenProjectPage from "./pages/OpenProjectPage.tsx";
 import CreateProjectPage from "./pages/CreateProjectPage.tsx";
 import RestoreInfoPage from "./pages/RestoreInfoPage.tsx";
+import ResetPasswordPage from "./pages/ResetPasswordPage.tsx";
 import NotFoundPage from "./pages/NotFoundPage.tsx";
 import { ThemeProvider, createTheme } from "@mui/material";
 import CsfrMissing from "./CsfrMissing.tsx";
@@ -63,6 +64,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
               <Route path="/open" element={<OpenProjectPage />} />
               <Route path="/create" element={<CreateProjectPage />} />
               <Route path="/restore_info" element={<RestoreInfoPage />} />
+              <Route path="/reset_password/:token" element={<ResetPasswordPage />} />
 
               <Route path="/tutorial" element={<TutorialView />} />
 

@@ -119,6 +119,20 @@
     "success": "Mail sent! Redirecting...",
     "error_generic": "Something went wrong, please try again or contact us."
   },
+  "reset_password": {
+    "title": "Reset password",
+    "description": "Set a new password for your project.",
+    "checking_token": "Checking token...",
+    "invalid_token": "Invalid or expired token. Please request a new link.",
+    "new_password": "New password",
+    "new_password_repeated": "Repeat new password",
+    "fill_both": "Please fill in both fields.",
+    "passwords_no_match": "Passwords do not match.",
+    "submit": "Submit",
+    "back": "Back",
+    "success": "Password changed! Redirecting...",
+    "error_generic": "Something went wrong, please try again."
+  },
   "error_404": {
     "title": "No badger has ever dug here!",
     "description": "Your page could not be found. This can have several reasons:",

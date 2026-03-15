@@ -169,15 +169,15 @@ class HttpService {
     };
   }
 
-  getAsync<T>(endpoint: string): Promise<T> {
+  getAsync<T>(endpoint: string, suppressNotificationSuccess = false, suppressNotificationFail = false): Promise<T> {
     return new Promise((resolve, reject) => {
       this.get(
         endpoint,
         (xHttp) => resolve(JSON.parse(xHttp.responseText) as T),
         reject,
         reject,
-        true,
-        false
+        suppressNotificationSuccess,
+        suppressNotificationFail
       );
     });
   }
