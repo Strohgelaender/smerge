@@ -268,7 +268,6 @@ const SnapDiv: React.FC<SnapDivProps> = ({ linkLeft, linkRight, desc1, desc2, li
         if (lpane) lRec.current?.removeChild(lpane);
 
         const canvas = document.createElement("canvas");
-        // TODO check this usage of ref! Does this work? It has a type error.
         (canvas as any).ref = leRef;
         canvas.style.height = "100%";
         canvas.style.width = "100%";
