@@ -4,7 +4,7 @@ Smerge is a basic version management system for the block-based programming lang
 It is based on a lot of open source projects including cytoscape.js and Django. It is intended to be simple, beautiful, fast, and easy to use in school environments. A live demo can be found at [smerge.org](https://smerge.org)
 
 ## History lesson
-The project was first written purely with Django and due to access limitations could only merge different scripts via cartesian location. This worked well for a less interactive page in the beginning, but with new features the project part was migrated to a React frontend. Due to time constraints and simplicity reasons, project creation and a few other static pages are still using Django and Django templates as base.
+The project was first written purely with Django and due to access limitations could only merge different scripts via cartesian location. This worked well for a less interactive page in the beginning, but with new features the project was migrated to a React frontend.
 
 The Docker "production" setup was therefore also made with only a simple Django setup in mind, but with some hefty roundabout constraints due to the deployment on the FU Berlin servers and their restrictions. (This includes  [Dockerfile](/Dockerfile), [docker-compose.yml](/docker-compose.yml), [docker-compose.fub.yml](/docker-compose.fub.yml) and [entrypoint.sh](/entrypoint.sh))
 
@@ -12,9 +12,13 @@ The database was and still is an sqlite3 file (/snapmerge/database/db.sqlite3). 
 
 ## Basic Project Structure
 ### Django:
-As mentioned above, the project currently uses Django as "static" page host and API. The API part is mostly contained in the "snapmerge/home/api" folder and uses Django Rest API as base. During production Django is not ran with its internal server anymore (`python manage.py runserver...`); instead it relies on Daphne, a separate asgi server for Django, designed to handle the whole communication process and Django instantiation.
+Django plays the server part in this client-server architecture.
 
-The main configuration is located in the "snapmerge/home/config" folder and contains different settings for different launch situations. For example, settings_production.py disable debug and beta mode in addition to enforcing some security measures and changing the base URLs to the correct server locations. For most of the configuration to work, some secrets need to be set in advance inside the "snapmerge/secrets" folder. More details in the the secret section below.
+It mainly offers an API for the React frontend contained in the "snapmerge/home/api" and action-endpoints for the communication with Snap! (e.g. /action/merge, /action/sync, etc.).
+
+During production Django is not ran with its internal server anymore (`python manage.py runserver...`); instead it relies on Daphne, a separate asgi server for Django, designed to handle the whole communication process and Django instantiation.
+
+The main configuration is located in the "snapmerge/home/config" folder and contains different settings for different launch situations. For example, settings_production.py disable debug and beta mode in addition to enforcing some security measures and changing the base URLs to the correct server locations. For most of the configuration to work, some secrets need to be set in advance inside the "snapmerge/secrets" folder. More details in the setup section below.
 
 The home folder and "views.py" contain most of the logic for the Django part, the merger and API as mentioned above. The old merger is also contained in the "views.py" with more parts inside "ancestors.py" and "xmltools.py". These can still be accessed from the project page by switching the merge mode, but were not modified from the old state. The new merger is contained inside the directory "Merger_Two_ElectricBoogaloo".
 
@@ -22,19 +26,24 @@ The basic premise of the old merger was to combine all scripts / blocks of a Sna
 
 When a user opens a project node, a dummy is loaded with a single button that in turn loads the real file after JS was activated and the button pressed. In the same step we have overwritten the serialize and deserialize logic of Django to enable an extra value inside the XML tags. This "customData" value is in turn filled with a uuid4 when the file is posted back to the server. With this addition, the new merger can differentiate most cases better then a simple x / y comparison. (Be careful since Snap! can and will delete script nodes from time to time internally, resulting in a loss of uuid... pre / post pass might be necessary in the future.) The merger itself steps structured through the given XML files, determines the node type and then uses a specific merger for each case. More information can be found inside the merger comments. This approach is longer than a generalized merger but at least a bit easier to understand, extend and is better workable.
 
-If you want to set a message of the day on the main page, use the admin panel of Django and change the bool and text inside the settings table. The admin panel can be reached by the default / admin route of Django or by hovering the mouse in the bottom left corner of the Smerge homepage and then pressing the appearing shield icon (after 10 seconds) while holding ctrl + shift + alt combined.
+If you want to set a message of the day on the main page, use the admin panel of Django and change the bool and text inside the settings table. The admin panel can be reached by the default /admin route of Django.
 
 ### Secrets:
 The secrets folder is excluded from git for the most part to remove a potential leak of secret information like the public Django key or certificates. The basic structure can be seen in the index and more information on the creation of each part can be found in the setup step. Since most of these steps have an abundance of tutorials online, only general guidance was written down.
 
-### React extension
-The React extension currently holds the main project view panel and the conflict stepper. Most parts are the same as the old view, just more *reactive* :P. The graph is still created using cytoscape, just in a TypeScript wrapper package. The sync was changed to a server sent event approach (instead of websocket) and should be extendable by changing the "consumer.py" logic. The language package of the React app is i18next and currently separate from the Django translation parts due to some format inconsistencies of Django.
+### React client
+The React client handles the frontend part of the project.
+
+It consists of the static public pages (like the homepage, impressum, open project, etc.) and the more interactive project view and conflict stepper.
+
+The graph is created by cytoscape in a TypeScript wrapper package. The client communicates with the server using a server sent event approach (instead of websocket) and should be extendable by changing the "consumer.py" logic.
 
 The conflict stepper is reached on a merge conflict and lists each problem in a separate step.
 
 
 ### Access Portal:
 #### Flask:
+The Access Portal can help you when hosting your own Smerge server.
 A quick list of what the Flask server does:
 - Runs with an sqlite3 DB to manage users and settings
 - exposes the API for the React frontend to manage user / ip access and some (git) commands
@@ -47,27 +56,30 @@ A quick list of what the Flask server does:
 # Setup
 Each setup kind of the project has a few differences, but overall a lot of similar steps are involved. We would advise to use Linux or Mac as the development environment since Windows can get a bit complicated, with wsl as a probable must have for the project to build under it.
 
-In addition, look through some of the settings files used in the following and change local paths or URLs to yours. Local paths should hopefully not be used anymore but we have surely missed some. Inside the Django settings you definitely have to add your domains to the allowed addresses and co. to be able to use it.
+
+When hosting an Smerge-Instance, make sure your domain name is set in the following places:
+
+- Django settings (config/settings_*.py): POST_BACK_URL, CSRF_TRUSTED_ORIGINS, and ALLOWED_HOSTS.
+- Nginx configs (data/nginx_deploy/nginx.conf): server_name and a correct path to the SSL certificates.
+
+In addition, look through some of the settings files used in the following and change local paths or URLs to yours. Local paths should hopefully not be used anymore but we have surely missed some.
 
 ## Local
-To run Smerge and all parts on your local machine, first make sure python3 is on your system and install all Django requirements contained in the requirements.txt inside the main folder. (The use of conda or venv make your life a lot easier during development for this step...).
-Next, you need to have node.js (we have v18.13.0 and v20.12.1 tested) installed on your system and install all npm modules for Django. This can also be done with the package.json inside the main folder.
+To run Smerge and all parts on your local machine, first make sure python3 is on your system.
 
-```sh
-# inside ./
-pip install -r requirements.txt
+We recommend using a virtual environment for python to keep all dependencies clean and separated. You can use venv or conda for this. You can find a venv tutorial for example [here](https://python.land/virtual-environments/virtualenv).
 
-npm install
-```
+Once the environment is activated, use `pip install -r requirements.txt` to install all needed python packages for the Django part of the project.
 
-Since npm should already work in this step, also install all npm modules for the React part of the project. They are contained inside the *react_extension* 📁.
+Next install Node.JS from [here](https://nodejs.org/en/download/). We currently use v22.
+To install the dependencies for the React part of the project, navigate to the React folder (`./react_extension`) and run `npm install ---legacy-peer-deps`.
+The `legacy-peer-deps` flag is currently needed since the material ui package does not yet fully support React 19.
+You should check if this has changed by now and update the dependencies if possible. The command `npm run update` helps you in finding new versions of the packages and updating them.
 
-```sh
-# inside ./react_extension also run
-npm install
-```
+### Secrets
 
-After this, make sure you have the right folder structure and files inside the *secrets* 📁, like listed in the index. For this, rename the sample.secrets.json to secrets.smerge.json and fill in the needed values. *SECRET_KEY* can be any string you want, and Django even has a built-in utility to create one.
+After this, make sure you have the right folder structure and files inside the *secrets* 📁, like listed in the index. For this, rename the `sample.secrets.json` to `secrets.smerge.json` and fill in the needed values.
+*SECRET_KEY* can be any string you want, and Django even has a built-in utility to create one.
 
 ```sh
 python ./snapmerge/manage.py shell -c "from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())" --settings=config.settings_local
@@ -82,19 +94,23 @@ To handle communication / security and routing between all parts, the project us
 
 The `./data/nginx_access/ext_nginx.conf` config works as configuration for the project alone or with the Access Portal. If you want to ignore the Access Portal, comment the /access/ and /acapi/ routes out. Also make sure to create the file `/etc/nginx/allowed_ips.conf` otherwise the Nginx config won't work. This is due to the mechanism the Access Portal uses to restrict IPs. This can also be disabled by commenting out the parts in the config that include the file (which is a simple block / allow list managed by the Access Portal).
 
+## Launch all
+The script file `launch.sh` can be used to start up both the Django server and React client.
+But if you want to use more specific settings, follow the instructions for both parts below and start them separately.
 
 ## Django
-The Django part can be started via the makefile and `make run` or if you want a different settings file, you can use the direct command `python ./snapmerge/manage.py runserver --setting=config.settings_local`. Make sure to run the command from inside the top folder (where all compose and the makefile reside), since Django currently still needs the node dependencies we installed before and can only find them if the launch folder is in the top and not in the snapmerge directory. (If everything is converted to React, the needed packages could be removed).
+The Django part can be started via the makefile and `make run`.
+To specify a settings file, use the command `python ./snapmerge/manage.py runserver --setting=config.settings_local`.
+Make sure to run the command from inside the top folder (where all compose and the makefile reside).
+
+If you want to use a Django admin user and access the /admin panel, first create a new admin using `python ./snapmerge/manage.py createsuperuser --setting=config.settings_local` and then follow the instructions.
 
 
 ## React
-In theory you could use the `launch.sh` file in the top directory to start both Django and the Vite server in the same terminal, but if you want to launch them separately, just navigate to the React folder (`./react_extension`) and run the command `npx vite`. This will start the Vite dev server and handle all reload or serving during development (don't use in prod!).
-
-Currently only the main project page and the conflict stepper are converted to the React app, but the rest should be portable with relative ease if needed. (Would reduce routing complexity by a bit... unfortunately time was not on our side :D)
-
+Navigate to the React folder (`./react_extension`) and run the command `npx vite`. This will start the Vite dev server and handle all reload or serving during development (don't use in prod!).
 
 ## Access Portal
-The Access Portal was created as a wrapper for the Django instance in the beginning to test a public available Smerge version, but restrict the access to only verified users without changing the core Django project. From there it evolved from simple Nginx IP allow list to a test server with "git" integration-ish features. If you have no problem with exposing a test server like a Raspberry Pi from your local network your can just ignore the extra wrapper, but we had significant spam problems from Middle Eastern and Asian bots trying to find vulnerabilities in our open server and therefore wanted some extra protection without each of our team needing access to the physical server itself. Of course, deployment and commit updates could be handled with github action, but our local situation and repo uncertainties brought us to this approach.
+The Access Portal was created as a wrapper for the Django instance to test a public available Smerge version, but restrict the access to only verified users without changing the core Django project. From there it evolved from simple Nginx IP allow list to a test server with "git" integration-ish features. If you have no problem with exposing a test server like a Raspberry Pi from your local network your can just ignore the extra wrapper, but we had significant spam problems from Middle Eastern and Asian bots trying to find vulnerabilities in our open server and therefore wanted some extra protection without each of our team needing access to the physical server itself. Of course, deployment and commit updates could be handled with github action, but our local situation and repo uncertainties brought us to this approach.
 
 The portal itself is built in two parts, once a simple Flask api server and then a React app built with Vite.
 
@@ -108,9 +124,13 @@ The API uses a Flask server (more or less a smaller version of Django for all AP
 
 
 ## Docker (Prod)
-For a production ready version of Smerge we need to change a few things. First, the Django dev. server should not be used in an open setting, since it has some possible vulnerabilities and performance problems. Therefore, the Django part of the app will be started with Daphne (a specialized async gateway server for Django). In addition, another settings file is needed to disable more Django-specific settings. Next, the React app will no longer run in dev mode on the Vite server, instead it needs to be compiled and then the static files are served via Nginx. In theory, the main Nginx proxy server can be set up to handle everything, but for some local reasons (a protesting Raspberry Pi...), this part was split into separate lightweight Nginx containers.
+For a production ready version of Smerge we need to change a few things
+First, the Django dev-server should not be used in an open setting, since it has some possible vulnerabilities and performance problems. Therefore, the Django part of the app will be started with Daphne (a specialized async gateway server for Django). In addition, another settings file is needed to disable more Django-specific settings.
 
-It is advised to use only docker-compose for container since it makes it easier to include the `/media` and `/database` folders as volumes to make all data persistent.
+For the client, the React app will no longer run in dev mode on the Vite server, instead it needs to be compiled and then the static files are served via Nginx.
+
+The easiest way to handle this is to use the `docker-compose-prod.yml` file, which includes all needed steps for the production setup. It will configure and start three containers (Django, Nginx, React) and connect them together using the configured network.
+This setup also makes it easier to include the `/media` and `/database` folders as volumes to make all data persistent.
 
 ### Lets Encrypt
 If you have a public DNS available (for example using a local Raspberry Pi and then DuckDNS), you are able to use Let's Encrypt and Certbot to get a certificate for your server. The production container and the rest will both need one and a self signed is often more trouble if you have access from public already.
