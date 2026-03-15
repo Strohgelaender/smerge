@@ -157,7 +157,6 @@
     "change": "Ändern",
     "change_project_name": "Projektnamen ändern:",
     "change_project_desc": "Projektbeschreibung ändern:",
-    "language": "Sprache:",
     "delete_project": "Projekt löschen"
   },
   "NewSettingControls": {
