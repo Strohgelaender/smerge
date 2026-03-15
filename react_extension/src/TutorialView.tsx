@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { TutorialManager } from "./components/Tutorial/TutorialManager";
 import { lightPageContainer } from "./pages/publicPageStyles.ts";
 import { createTutorialProject } from "./services/TutorialService";
 import { useNavigate } from "react-router-dom";
@@ -9,6 +8,7 @@ import ProjectView from "./ProjectView.tsx";
 import { TUTORIAL_SEQUENCES } from "./config/tutorialSequences";
 import { File } from "./services/ApiService";
 import httpService from "./services/HttpService";
+import TutorialOverlay from "./components/Tutorial/TutorialOverlay.tsx";
 
 const TUTORIAL_SEQUENCE_ID = "smerge-tutorial";
 
@@ -177,15 +177,13 @@ const TutorialView: React.FC = () => {
         height: "100%",
       }}
     >
-      {tutorialRoot && createPortal(
-        <TutorialManager
-          isActive={isActive}
-          currentStep={currentStep}
+      {tutorialRoot && isActive && createPortal(
+        <TutorialOverlay
+          step={currentStep}
           progress={progress}
           isLastStep={isLastStep}
-          onNextStep={nextStep}
-          onCloseTutorial={completeTutorial}
-          onNodeDoubleClick={handleNodeDoubleClick}
+          onNext={nextStep}
+          onClose={completeTutorial}
         />,
         tutorialRoot
       )}
