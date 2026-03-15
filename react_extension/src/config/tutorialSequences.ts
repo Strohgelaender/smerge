@@ -1,4 +1,4 @@
-import {TutorialSequence} from "../types/tutorial";
+import {TutorialSequence} from "../components/Tutorial/tutorial.ts";
 
 /**
  * Interaktives smerge Tutorial.

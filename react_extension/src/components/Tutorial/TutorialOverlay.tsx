@@ -3,7 +3,7 @@ import { Box, Button, Paper, Typography, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useTranslation } from 'react-i18next';
-import { TutorialStep } from '../../types/tutorial';
+import { TutorialStep } from './tutorial.ts';
 
 interface TutorialOverlayProps {
   step: TutorialStep;
