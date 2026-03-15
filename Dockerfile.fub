@@ -6,13 +6,11 @@ WORKDIR /app
 
 COPY /requirements.txt /app
 RUN mkdir -p /app/snapmerge
-COPY /package.json /app/snapmerge/
 
 RUN pip install -r requirements.txt
 
 
 WORKDIR /app/snapmerge
-RUN npm install
 
 COPY ./secrets /app/secrets/
 
