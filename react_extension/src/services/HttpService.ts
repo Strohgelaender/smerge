@@ -169,7 +169,7 @@ class HttpService {
     };
   }
 
-  getAsync<T>(endpoint: string, suppressNotificationSuccess = false, suppressNotificationFail = false): Promise<T> {
+  getAsync<T>(endpoint: string, suppressNotificationSuccess = true, suppressNotificationFail = false): Promise<T> {
     return new Promise((resolve, reject) => {
       this.get(
         endpoint,
