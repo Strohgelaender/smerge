@@ -135,10 +135,15 @@ This setup also makes it easier to include the `/media` and `/database` folders 
 ### Lets Encrypt
 If you have a public DNS available (for example using a local Raspberry Pi and then DuckDNS), you are able to use Let's Encrypt and Certbot to get a certificate for your server. The production container and the rest will both need one and a self signed is often more trouble if you have access from public already.
 
-### Local Prod
-It is possible to init all needed parts for the certificates without installing Certbot on the local server, only docker-compose is needed. First, change the domain and email inside the `new_init_deploy_certbot.sh` and then run it. The script will change the domains inside the Nginx configs to the given and then start a docker-compose for Certbot with the given domain and email. Once the script has ran once, the normal compose `docker-compose-prod.yml` should be able to build and will handle the rest. First, the React app is built inside a two stage container, then Django with Daphne, the Nginx proxy and finally another Certbot container with an automatic restart that handles renewal for the created certs.
+#### Docker setup
+The `docker-compose-init-certbot.yml` file can be used to start a temporary container with Certbot to get the needed certificates for the Nginx server.
+First, change the domain and email inside the `new_init_deploy_certbot.sh` and then run it.
+Then run the certbot docker compose (`docker-compose -f docker-compose-init-certbot.yml up`) and the certificate should be automatically saved and created.
 
-### FU Prod
+Once the script has ran once, the normal compose `docker-compose-prod.yml` should be able to build and will handle the rest.
+First, the React app is built inside a two stage container, then Django with Daphne, the Nginx proxy and finally another Certbot container with an automatic restart that handles renewal for the created certs.
+
+#### FU Prod
 Since the FU server handles its own certificates, the production compose dose not include the Certbot step and the paths are changed. In addition, the configs have all FU domains already inside and try to include the existing secrets.
 
 
@@ -156,7 +161,7 @@ If the SSH key is not registered in github, the container won't be able to execu
 
 
 # Index
-Rough list of project files with short descriptors as direction guide. Files not listed should be artefacts or not important for the current iteration anymore (for the most part :D).
+Rough list of project files with short descriptors as direction guide. Files not listed should be artifacts or not important for the current iteration anymore (for the most part :D).
 
 
 <details>
@@ -183,151 +188,156 @@ Rough list of project files with short descriptors as direction guide. Files not
 <br>
 
 <details>
-<summary><span style="font-weight: 900;">Django:</summary>
+<summary><span style="font-weight: 900;">Django:</span></summary>
 <br>
 
-| File / Folder | Short description |
-| ---------- | ----------------- |
-| 📁 snapmerge | Base folder for the Django project |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 config | Mostly config root |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 asgi.py | Setup for the asgi server (needed step and "routing" for the SSE in the sync) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 Custom...ware.py | Inserts IDs as object for the SSE part |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 settings_*.py | Configs for different launch settings |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 urls.py | Top level Django url pattern file |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 database | Contains sqlite3 db file (only exists after first run...) |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 home | Main Django and merger logic |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 api | Views for Django REST framework (most React API parts) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 management / commands | Additional commands that can be used in the manage.py |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 addadmin.py | Adds Django site admin user to DB when ran with the given inputs |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 addpage.py | Adds the given domain to the django_site table (needed for the admin panel to work) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 resettok....py | Invalidates pw reset tokens that are to old when ran |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Merger_Two_... | Contains all files used by the new merger |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 generator.py | Barebone generator for very basic Snap! files used by some old test |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 merger_v2_2.py | Newest rendition of the merger |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 merger.py | Old variant of new merger (delete if additional functions not needed anymore) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 testMerg...es.py | Tests for the merger (specific and structural via the `tests/snapfiles` folder) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 migrations | Contains all DB migrations |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 admin.py | Extra table definitions for admin panel |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 ancestors.py | Used by old merger to determine ancestors in segments |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 apps.py | Django app definition for the snapmerge project |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 consumers.py | Endpoint for Server Sent Event setup and messaging |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 dataImport...er.py | Two functions used to auto generate the JS Snap! blocks (triggered on load/reload) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 forms.py | Django form definitions |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 models.py | Django DB entry (table) definitions (Only update DB with this as base and then run the Django migration commands) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 routing.py | Artefact from old sync try with websockets |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 tests.py | Óld direct project related tests |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 urls.py | URL path definitions for most app endpoints |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 views.py | All app endpoints connected to the paths from URLs |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 xmltools.py | old merger utility (still used for sync button injection) |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 media | Contains all static user uploaded / created Snap! files and merge conflict files |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 static | Contains JS, CSS and more static page related files for Django |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 snap | Contains base project and import / export block data |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 blank_proj.xml | Base project on creation if no file was given |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 data...blank.xml | Base Snap! XML for the data import block |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 data_importer.js | JS code for the data importer block (Overwrites Snap! serialize and deserialize functions to enable customData attribute) (hot reload reacts to this file) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 data_impo...xml | Combination of blank and JS code (Auto generated on start or hot reload) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 simple...nk.xml | Base Snap! XML for the sync back block |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 simple...block.js | JS code for the data sync back block (hot reload reacts to this file) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 simple...ock.xml | Combination of blank and JS code (Auto generated on start or hot reload) |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 templates | Contains template bases for all used Django pages |
-| &nbsp;&nbsp;&nbsp;&nbsp;📄 manage.py | Entry and management point of Django app |
+| File / Folder                                                                                | Short description                                                                                                                                          |
+|----------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| 📁 snapmerge                                                                                 | Base folder for the Django project                                                                                                                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 config                                                            | Mostly config root                                                                                                                                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 asgi.py                                   | Setup for the asgi server (needed step and "routing" for the SSE in the sync)                                                                              |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 Custom...ware.py                          | Inserts IDs as object for the SSE part                                                                                                                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 settings_*.py                             | Configs for different launch settings                                                                                                                      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 urls.py                                   | Top level Django url pattern file                                                                                                                          |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 database                                                          | Contains sqlite3 db file (only exists after first run...)                                                                                                  |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 home                                                              | Main Django and merger logic                                                                                                                               |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 api                                       | Views for Django REST framework (most React API parts)                                                                                                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 management / commands                     | Additional commands that can be used in the manage.py                                                                                                      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 addadmin.py       | Adds Django site admin user to DB when ran with the given inputs                                                                                           |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 addpage.py        | Adds the given domain to the django_site table (needed for the admin panel to work)                                                                        |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 resettok....py    | Invalidates pw reset tokens that are to old when ran                                                                                                       |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 tutorial....py    | Cleans up unused tutorial projects once a day                                                                                                              |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Merger_Two_...                            | Contains all files used by the new merger                                                                                                                  |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 generator.py      | Barebone generator for very basic Snap! files used by some old test                                                                                        |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 merger_v2_2.py    | Newest rendition of the merger                                                                                                                             |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 merger.py         | Old variant of new merger (delete if additional functions not needed anymore)                                                                              |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 testMerg...es.py  | Tests for the merger (specific and structural via the `tests/snapfiles` folder)                                                                            |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 migrations                                | Contains all DB migrations                                                                                                                                 |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 admin.py                                  | Extra table definitions for admin panel                                                                                                                    |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 ancestors.py                              | Used by old merger to determine ancestors in segments                                                                                                      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 apps.py                                   | Django app definition for the snapmerge project                                                                                                            |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 consumers.py                              | Endpoint for Server Sent Event setup and messaging                                                                                                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 dataImport...er.py                        | Two functions used to auto generate the JS Snap! blocks (triggered on load/reload)                                                                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 forms.py                                  | Django form definitions                                                                                                                                    |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 models.py                                 | Django DB entry (table) definitions (Only update DB with this as base and then run the Django migration commands)                                          |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 routing.py                                | Artefact from old sync try with websockets                                                                                                                 |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 tests.py                                  | Óld direct project related tests                                                                                                                           |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 urls.py                                   | URL path definitions for most app endpoints                                                                                                                |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 views.py                                  | All app endpoints connected to the paths from URLs                                                                                                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 xmltools.py                               | old merger utility (still used for sync button injection)                                                                                                  |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 media                                                             | Contains all static user uploaded / created Snap! files and merge conflict files                                                                           |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 static                                                            | Contains JS, CSS and more static page related files for Django                                                                                             |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 snap                                      | Contains base project and import / export block data                                                                                                       |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 blank_proj.xml    | Base project on creation if no file was given                                                                                                              |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 data...blank.xml  | Base Snap! XML for the data import block                                                                                                                   |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 data_importer.js  | JS code for the data importer block (Overwrites Snap! serialize and deserialize functions to enable customData attribute) (hot reload reacts to this file) |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 data_impo...xml   | Combination of blank and JS code (Auto generated on start or hot reload)                                                                                   |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 simple...nk.xml   | Base Snap! XML for the sync back block                                                                                                                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 simple...block.js | JS code for the data sync back block (hot reload reacts to this file)                                                                                      |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 simple...ock.xml  | Combination of blank and JS code (Auto generated on start or hot reload)                                                                                   |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 templates                                                         | Contains template bases for Django. Since React acts as the frontend, this is only used for mails.                                                         |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 manage.py                                                         | Entry and management point of Django app                                                                                                                   |
 </details>
 
 <br>
 
 <details>
-<summary><span style="font-weight: 900;">React:</summary>
+<summary><span style="font-weight: 900;">React:</span></summary>
 <br>
 
-| File / Folder | Short description |
-| ---------- | ----------------- |
-| 📁 react_extension | Contains the frontend code for the react extension (Vite) |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 public | Contains publicly accessible files like language or images |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 csnap | Copy of Snap! for diff view (lower strain on Snap's own server... change or update if needed) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 img | Contain the help menu resources |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 locales | Contain the language files, used by i18next |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 src | Contains all React (TypeScript) components (very badly sorted :P) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 assets | Image resources used in some components (internal loaded) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 components | Contains all building blocks of the React app |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 ConflictParts | Contains conflict stepper component and all different divs |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 HelpMenu | Contains definition for help modal components and the content |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 Pages.tsx | Content pages for the help modal |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 models | Should contain all dto's... (fix in future iterations...) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 NodeGraph | Cytoscape / ProjectView specific parts |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 shared | Contain some general used components |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 eventstream | JS files that the django_event_stream package uses for connection / reconnection |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 services | Most of the communication parts for the API |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 shared | shared code parts for the top level of the project |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 Layout.tsx | Menu bar on top of screen and reroute on missing token |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 main.tsx | Main React component with all routes under |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 ProjectView.tsx | Component for the main project view |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 TeacherView.tsx | Component for the teacher view |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 SignIn.tsx | Component for the teacher login view |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 SignUp.tsx | Component for the teacher registration view |
-| &nbsp;&nbsp;&nbsp;&nbsp;📄 index.html | Base and entry point for the React app |
-| &nbsp;&nbsp;&nbsp;&nbsp;📄 package.json | Contains list of all needed node packages |
-| &nbsp;&nbsp;&nbsp;&nbsp;📄 tsconfig.json | linter and compile configs |
-| &nbsp;&nbsp;&nbsp;&nbsp;📄 vite.config.ts | Vite config |
+| File / Folder                                                                                                | Short description                                                                             |
+|--------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
+| 📁 react_extension                                                                                           | Contains the frontend code for the react extension (Vite)                                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 public                                                                            | Contains publicly accessible files like language or images                                    |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 csnap                                                     | Copy of Snap! for diff view (lower strain on Snap's own server... change or update if needed) |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 img                                                       | Contain the help menu resources                                                               |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 locales                                                   | Contain the language files, used by i18next                                                   |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 src                                                                               | Contains all React (TypeScript) components                                                    |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 assets                                                    | Image resources used in some components (internal loaded)                                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 components                                                | Contains all building blocks of the React app                                                 |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 ConflictParts                     | Contains conflict stepper component and all different divs                                    |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 HelpMenu                          | Contains definition for help modal components and the content                                 |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 Pages.tsx | Content pages for the help modal                                                              |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 models                            | Should contain all dto's... (fix in future iterations...)                                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 NodeGraph                         | Cytoscape / ProjectView specific parts                                                        |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 shared                            | Contain some general used components                                                          |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 Tutorial                          | Tutorial Components                                                                           |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 eventstream                                               | JS files that the django_event_stream package uses for connection / reconnection              |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 public                                                    | Contains the react files for the public pages (homepage and co)                               |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 services                                                  | Most of the communication parts for the API                                                   |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 shared                                                    | shared code parts for the top level of the project                                            |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 types                                                     | Contains type defintions not provided by the external dependecies to make the compiler happy  |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 Layout.tsx                                                | Menu bar on top of screen and reroute on missing token                                        |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 main.tsx                                                  | Main React component with all routes under                                                    |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 ProjectView.tsx                                           | Component for the main project view                                                           |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 TeacherView.tsx                                           | Component for the teacher view                                                                |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 SignIn.tsx                                                | Component for the teacher login view                                                          |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 SignUp.tsx                                                | Component for the teacher registration view                                                   |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 TutorialView.tsx                                          | Component for the tutorial, handls switching betwen the graph view and snap                   |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 index.html                                                                        | Base and entry point for the React app                                                        |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 package.json                                                                      | Contains list of all needed node packages                                                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 tsconfig.json                                                                     | linter and compile configs                                                                    |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 vite.config.ts                                                                    | Vite config                                                                                   |
 </details>
 
 <br>
 
 <details>
-<summary><span style="font-weight: 900;">Access Portal:</summary>
+<summary><span style="font-weight: 900;">Access Portal:</span></summary>
 <br>
 
-| File / Folder | Short description |
-| ---------- | ----------------- |
-| 📁 Access_Portal | Top level folder |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 access_portal | Contains all relevant React parts for the Access Portal |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 * | more or less same structure as Django React part |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 Web_Api | Contains Flask API |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 app | Contains the main Flask files |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 models.py | DB object definitions (like in Django) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 routes.py | Contain all "views" to access or set data via the API (logic part) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 gitWorker | Contains code and data for for the current git repo the folder is in |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 instance | Contains sqlite3 DB file |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 activateUser.py | Run to activate a registered user (with our without admin rights) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 rest | most DB parts old and unused... probably |
-| &nbsp;&nbsp;&nbsp;&nbsp;📄 launch.sh | Starts both Flask and React parts in one terminal |
+| File / Folder                                                                        | Short description                                                    |
+|--------------------------------------------------------------------------------------|----------------------------------------------------------------------|
+| 📁 Access_Portal                                                                     | Top level folder                                                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 access_portal                                             | Contains all relevant React parts for the Access Portal              |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 *         | more or less same structure as Django React part                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 Web_Api                                                   | Contains Flask API                                                   |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 app                               | Contains the main Flask files                                        |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 models.py | DB object definitions (like in Django)                               |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 routes.py | Contain all "views" to access or set data via the API (logic part)   |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 gitWorker                         | Contains code and data for for the current git repo the folder is in |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📁 instance                          | Contains sqlite3 DB file                                             |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 activateUser.py                   | Run to activate a registered user (with our without admin rights)    |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 rest                              | most DB parts old and unused... probably                             |
+| &nbsp;&nbsp;&nbsp;&nbsp;📄 launch.sh                                                 | Starts both Flask and React parts in one terminal                    |
 </details>
 
 <br>
 
 <details>
-<summary><span style="font-weight: 900;">Secrets:</summary>
+<summary><span style="font-weight: 900;">Secrets:</span></summary>
 <br>
 
-| File / Folder | Short description |
-| ---------- | ----------------- |
-| 📁 secrets | Top level folder |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 rasp_certs | Contains SSL certificates for the public Nginx server (mostly for Docker) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 fullchain.pem | Public SSL key for Nginx |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 privkey.pem | Private SSL key for Nginx |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 rasp_ssh | Contains SSH certificate stuff for the Access Portal |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 id_rsa | Private key connected to the public (store only inside the container) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 id_rsa.pub | SSH public key (needs to be added to your github repo) |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 known_hosts | Current github public keys for a github webhook with the Access Portal |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 smerge | Contains secret json |
+| File / Folder                                                          | Short description                                                                    |
+|------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
+| 📁 secrets                                                             | Top level folder                                                                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 rasp_certs                                  | Contains SSL certificates for the public Nginx server (mostly for Docker)            |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 fullchain.pem       | Public SSL key for Nginx                                                             |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 privkey.pem         | Private SSL key for Nginx                                                            |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 rasp_ssh                                    | Contains SSH certificate stuff for the Access Portal                                 |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 id_rsa              | Private key connected to the public (store only inside the container)                |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 id_rsa.pub          | SSH public key (needs to be added to your github repo)                               |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 known_hosts         | Current github public keys for a github webhook with the Access Portal               |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 smerge                                      | Contains secret json                                                                 |
 | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 secrets.smerge.json | Contains important Django config parts like sec.key, email host pw and email API key |
 </details>
 
 <br>
 
 <details>
-<summary><span style="font-weight: 900;">Data:</summary>
+<summary><span style="font-weight: 900;">Data:</span></summary>
 <br>
 
-| File / Folder | Short description |
-| ---------- | ----------------- |
-| 📁 data | Top level folder |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 nginx_access | Full config with all routes to Django / React ext. / Flask and Access React |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 nginx_deploy | Configs more specific for compiled / deploy versions |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 init_cert_nginx.conf | Config for the Certbot initialization container |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 nginx_ext.conf | Config for the alpine Nginx server in the React extension container |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 nginx.conf | Config for Django and React with static server for admin panel and Certbot paths |
-| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 nginx.fub.conf | Prod config with fu domain and other config / cert parts set |
-| &nbsp;&nbsp;&nbsp;&nbsp;📁 old_configs | Old Nginx config files |
+| File / Folder                                                           | Short description                                                                |
+|-------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| 📁 data                                                                 | Top level folder                                                                 |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 nginx_access                                 | Full config with all routes to Django / React ext. / Flask and Access React      |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 nginx_deploy                                 | Configs more specific for compiled / deploy versions                             |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 init_cert_nginx.conf | Config for the Certbot initialization container                                  |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 nginx_ext.conf       | Config for the alpine Nginx server in the React extension container              |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 nginx.conf           | Config for Django and React with static server for admin panel and Certbot paths |
+| &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;📄 nginx.fub.conf       | Prod config with fu domain and other config / cert parts set                     |
+| &nbsp;&nbsp;&nbsp;&nbsp;📁 old_configs                                  | Old Nginx config files                                                           |
 
 </details>
 
