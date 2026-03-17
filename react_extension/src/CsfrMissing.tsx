@@ -27,7 +27,6 @@ function CsfrMissing() {
     if (countdown <= 0) {
         location.href = "/open";
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [countdown]);
 
   return (

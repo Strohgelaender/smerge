@@ -29,7 +29,6 @@ const SnapDiv: React.FC<SnapDivProps> = ({ linkLeft, linkRight, desc1, desc2, li
     // const xml1IsFetching = useRef<boolean>(false);
     // const xml2IsFetching = useRef<boolean>(false);
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         setTimeout(loadWorld, 20);
         // if(!xml1IsFetching.current){

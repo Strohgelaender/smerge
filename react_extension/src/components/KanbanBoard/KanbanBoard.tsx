@@ -109,7 +109,6 @@ const ColumnHeader: React.FC<any> = ({ column, board, setBoard, configOpen }) =>
           }}>
             {t("KanbanBoard.cancel")}
           </Button>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           <Button onClick={() => {
             setBoard(changeColumn(board, column, ({ title: title, titleChanged: true } as any)))
             setEditMode(false)
