@@ -201,7 +201,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
     nodeRef.current = [];
   };
 
-  const handleFileOpen = (evt: Cytoscape.EventObject) => {
+  const handleFileOpen = useCallback((evt: Cytoscape.EventObject) => {
     const node = evt.target;
     const nodeId = node.data("id");
 
@@ -225,7 +225,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
           node.data("file_url").replace("/media/", "")
       );
     }
-  };
+  }, [embedded, onNodeDoubleClick]);
 
   const ranFirstAgain = useRef(false);
   // changed by eventUpdate if whole layout was pushed by others
@@ -304,7 +304,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       };
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, layout, isLoading, embedded]);
+  }, [data, layout, isLoading, embedded, handleFileOpen]);
 
   // const getSelectedNodes = () => {
   //     const selectedNodes = cy.current?.$('node:selected');

@@ -33,8 +33,7 @@ const TutorialView: React.FC = () => {
   // Snap-State
   const [snapFileName, setSnapFileName] = useState<string | null>(null);
   const [snapReady, setSnapReady] = useState(false);
-  const snapFrameRef = useRef<HTMLIFrameElement | null>(null);
-  const snapTaskHookedRef = useRef(false);
+
   // true falls gerade ein API-Request zum cleanup läuft, um doppelte calls zu vermeiden
   const cleanupTriggeredRef = useRef(false);
 
@@ -73,9 +72,9 @@ const TutorialView: React.FC = () => {
 
     setCurrentStepIndex(0);
     setIsActive(true);
-  };
+  }
 
-  async function completeTutorial () {
+  async function completeTutorial() {
     if (projectId && !cleanupTriggeredRef.current) {
       cleanupTriggeredRef.current = true;
       await cleanupTutorialProject(projectId);
@@ -84,10 +83,10 @@ const TutorialView: React.FC = () => {
     setIsActive(false);
     setCurrentStepIndex(0);
     setSnapReady(false);
-    snapTaskHookedRef.current = false;
+
     // Zurück zur Homepage
     navigate("/");
-  };
+  }
 
   async function nextStep() {
     if (!tutorialSequence) return;
@@ -110,7 +109,7 @@ const TutorialView: React.FC = () => {
     } else {
       setCurrentStepIndex(nextIndex);
     }
-  };
+  }
 
   // Tutorial starten
   async function initTutorial() {
@@ -151,15 +150,9 @@ const TutorialView: React.FC = () => {
 
   // Klick auf Projekt-Node intercepten und im Tutorial weiter machen
   function handleNodeDoubleClick(nodeId: string) {
-    console.log("Tutorial: Node double-clicked:", nodeId, currentStep);
-
-    // TODO TODD TODO
-    // if (currentStep?.id === "open_snap") {
-      snapTaskHookedRef.current = false;
-      setSnapReady(false);
-      // setViewMode("snap");
-      setCurrentStepIndex(3);
-      // }
+    if (currentStep?.id === "open_snap") {
+      nextStep();
+    }
   }
 
   if (loading) {
@@ -259,7 +252,6 @@ const TutorialView: React.FC = () => {
               </Box>
             )}
             <iframe
-              ref={snapFrameRef}
               src={snapSrc}
               title="Tutorial Snap Editor"
               onLoad={() => setSnapReady(true)}
