@@ -25,6 +25,8 @@ const compat = new FlatCompat({
 });
 
 module.exports = defineConfig([{
+    files: ["**/*.ts", "**/*.tsx"],
+
     languageOptions: {
         globals: {
             ...globals.browser,
@@ -50,4 +52,4 @@ module.exports = defineConfig([{
         "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/no-unused-vars": "off",
     },
-}, globalIgnores(["**/dist", "**/.eslintrc.cjs"])]);
+}, globalIgnores(["**/dist", "**/.eslintrc.cjs", "**/eventstream/**"])]);
