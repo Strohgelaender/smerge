@@ -103,8 +103,8 @@ The Django part can be started via the makefile and `make run`.
 To specify a settings file, use the command `python ./snapmerge/manage.py runserver --setting=config.settings_local`.
 Make sure to run the command from inside the top folder (where all compose and the makefile reside).
 
-If you want to use a Django admin user and access the /admin panel, first create a new admin using `python ./snapmerge/manage.py createsuperuser --setting=config.settings_local` and then follow the instructions.
-
+If you want to use a Django admin user and access the /admin panel, you need to set it up first.
+You find the instructions for this below under 'Custom manage.py commands'
 
 ## React
 Navigate to the React folder (`./react_extension`) and run the command `npx vite`. This will start the Vite dev server and handle all reload or serving during development (don't use in prod!).
@@ -552,11 +552,20 @@ Teachers can now register teacher accounts and use them for login. When logged i
 
 Within the teacher view, teachers can now import existing project by providing either project ID or Pin. They can now also duplicate projects.
 
+## 2025-2026
+
+### Finished React-Migration
+
+Smerge now uses a separated Client-Server architecture with React as the frontend and Django as the backend.
+
+### Interactive Tutorial
+
+New user can find a tutorial on the front page that introduces the main features of Smerge and how to use them.
 
 --------------
 
 <details>
-<summary><span style="font-weight: 600; font-size: 32px">Old Readme</summary>
+<summary><span style="font-weight: 600; font-size: 32px">Old Readme</span></summary>
 
 # Smerge
 
