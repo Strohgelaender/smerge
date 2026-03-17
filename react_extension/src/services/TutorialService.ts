@@ -8,6 +8,18 @@ export interface TutorialProjectResponse {
   error?: string;
 }
 
+export interface AddMergeNodeResponse {
+  success: boolean;
+  file_id?: number;
+  project_id?: string;
+  error?: string;
+}
+
+export interface TutorialCleanupResponse {
+  success: boolean;
+  error?: string;
+}
+
 /**
  * Neues Tutorial-Projekt erstellen
  */
@@ -17,8 +29,8 @@ export async function createTutorialProject(): Promise<TutorialProjectResponse |
       '/api/tutorial/create',
       {},
       'POST',
-      true,  // suppressNotificationSuccess
-      false  // suppressNotificationFail
+      true,
+      false
     );
 
     if (response.success) {
@@ -33,6 +45,52 @@ export async function createTutorialProject(): Promise<TutorialProjectResponse |
   }
 }
 
-// TODO Tutorial-Projekt beim beenden löschen
+/**
+ * Fügt einen zweiten Node zum Tutorial-Projekt hinzu, damit der Nutzer einen Merge durchführen kann
+ */
+export async function addTutorialMergeNode(projectId: string): Promise<AddMergeNodeResponse | null> {
+  try {
+    const response = await httpService.postAsync<AddMergeNodeResponse>(
+      `/api/tutorial/project/${projectId}/add_merge_node`,
+      {},
+      'POST',
+      true,
+      false
+    );
 
+    if (response.success) {
+      return response;
+    } else {
+      console.error('Adding merge node failed:', response.error);
+      return null;
+    }
+  } catch (error) {
+    console.error('Error adding merge node:', error);
+    return null;
+  }
+}
 
+/**
+ * Löscht ein Tutorial-Projekt nach Abschluss oder Abbruch.
+ */
+export async function cleanupTutorialProject(projectId: string): Promise<TutorialCleanupResponse | null> {
+  try {
+    const response = await httpService.postAsync<TutorialCleanupResponse>(
+      `/api/tutorial/project/${projectId}/cleanup`,
+      {},
+      'POST',
+      true,
+      true
+    );
+
+    if (response.success) {
+      return response;
+    }
+
+    console.error('Tutorial cleanup failed:', response.error);
+    return null;
+  } catch (error) {
+    console.error('Error cleaning up tutorial project:', error);
+    return null;
+  }
+}

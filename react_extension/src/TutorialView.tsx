@@ -1,17 +1,28 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { lightPageContainer } from "./pages/publicPageStyles.ts";
-import { createTutorialProject } from "./services/TutorialService";
+import { lightPageContainer } from "./public/publicPageStyles.ts";
+import {
+  createTutorialProject,
+  addTutorialMergeNode,
+  cleanupTutorialProject,
+} from "./services/TutorialService";
 import { useNavigate } from "react-router-dom";
 import ProjectView from "./ProjectView.tsx";
 import { TUTORIAL_SEQUENCES } from "./components/Tutorial/tutorialSequences.ts";
 import { File } from "./services/ApiService";
 import httpService from "./services/HttpService";
 import TutorialOverlay from "./components/Tutorial/TutorialOverlay.tsx";
+import {useTranslation} from "react-i18next";
 
 const TUTORIAL_SEQUENCE_ID = "smerge-tutorial";
 
+/**
+ * Student Tutorial Ansicht
+ *
+ * Steuert die Ansicht unter dem Tutorial (z.B. Projekt-Ansicht oder Snap-Editor)
+ * und platziert das Overlay.
+ */
 const TutorialView: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -24,6 +35,8 @@ const TutorialView: React.FC = () => {
   const [snapReady, setSnapReady] = useState(false);
   const snapFrameRef = useRef<HTMLIFrameElement | null>(null);
   const snapTaskHookedRef = useRef(false);
+  // true falls gerade ein API-Request zum cleanup läuft, um doppelte calls zu vermeiden
+  const cleanupTriggeredRef = useRef(false);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,11 +44,14 @@ const TutorialView: React.FC = () => {
 
   const tutorialSequence = TUTORIAL_SEQUENCES[TUTORIAL_SEQUENCE_ID];
 
+  const { t } = useTranslation();
+
   const currentStep = isActive
     ? tutorialSequence?.steps[currentStepIndex] ?? null
     : null;
   const isLastStep = isActive && !!tutorialSequence && currentStepIndex >= tutorialSequence.steps.length - 1;
 
+  // State für Fortschritts-Anzeige
   const progress = {
     current: isActive && tutorialSequence ? currentStepIndex + 1 : 0,
     total: tutorialSequence?.steps.length ?? 0,
@@ -49,7 +65,7 @@ const TutorialView: React.FC = () => {
     return `https://snap.berkeley.edu/snap/snap.html#open:${httpService.baseURL}/action/blockerXML/${snapFileName}`;
   }, [snapFileName]);
 
-  const startTutorial = () => {
+  function startTutorial() {
     if (!tutorialSequence) {
       console.error(`Tutorial sequence not found: ${TUTORIAL_SEQUENCE_ID}`);
       return;
@@ -59,7 +75,12 @@ const TutorialView: React.FC = () => {
     setIsActive(true);
   };
 
-  const completeTutorial = () => {
+  async function completeTutorial () {
+    if (projectId && !cleanupTriggeredRef.current) {
+      cleanupTriggeredRef.current = true;
+      await cleanupTutorialProject(projectId);
+    }
+
     setIsActive(false);
     setCurrentStepIndex(0);
     setSnapReady(false);
@@ -68,52 +89,63 @@ const TutorialView: React.FC = () => {
     navigate("/");
   };
 
-  const nextStep = () => {
+  async function nextStep() {
     if (!tutorialSequence) return;
+
+    // TODO location?
+    // Merge-Tutorial Vorbereiten, wenn vorheriger Teil abgeschlossen.
+    if (currentStep?.id === "view_new_node" && projectId) {
+      console.log("[Tutorial] Adding merge node...");
+      try {
+        await addTutorialMergeNode(projectId);
+      } catch (error) {
+        console.error("[Tutorial] Error adding merge node:", error);
+        setError(t("tutorial.error"));
+      }
+    }
 
     const nextIndex = currentStepIndex + 1;
     if (nextIndex >= tutorialSequence.steps.length) {
       completeTutorial();
-      return;
+    } else {
+      setCurrentStepIndex(nextIndex);
     }
-    setCurrentStepIndex(nextIndex);
   };
 
   // Tutorial starten
-  useEffect(() => {
-    const initTutorial = async () => {
-      try {
-        const result = await createTutorialProject();
+  async function initTutorial() {
+    try {
+      const result = await createTutorialProject();
 
-        if (result && result.success) {
-          setProjectId(result.project_id);
-          setFileId(result.file_id);
+      if (result && result.success) {
+        setProjectId(result.project_id);
+        setFileId(result.file_id);
 
-          const files = await httpService.getAsync<File[]>(
+        const files = await httpService.getAsync<File[]>(
             `/api/project/${result.project_id}/files`
-          );
-          const tutorialFile = files.find((f) => f.id === result.file_id) ?? files[0];
-          if (tutorialFile?.file_url) {
-            setSnapFileName(tutorialFile.file_url.replace('/media/', ''));
-          }
-
-          setLoading(false);
-
-          // Start tutorial after a short delay to ensure ProjectView loads
-          setTimeout(() => {
-            startTutorial();
-          }, 500);
-        } else {
-          setError("Failed to create tutorial project");
-          setLoading(false);
+        );
+        const tutorialFile = files.find((f) => f.id === result.file_id) ?? files[0];
+        if (tutorialFile?.file_url) {
+          setSnapFileName(tutorialFile.file_url.replace('/media/', ''));
         }
-      } catch (err) {
-        console.error("Tutorial initialization error:", err);
-        setError("An error occurred while initializing the tutorial");
+
+        setLoading(false);
+
+        // Kurzer delay damit die Hauptansicht gesehen werden kann
+        setTimeout(() => {
+          startTutorial();
+        }, 500);
+      } else {
+        setError("Failed to create tutorial project");
         setLoading(false);
       }
-    };
-
+    } catch (err) {
+      console.error("Tutorial initialization error:", err);
+      setError("An error occurred while initializing the tutorial");
+      setLoading(false);
+    }
+  }
+  useEffect(() => {
     initTutorial();
   }, []);
 
@@ -152,12 +184,12 @@ const TutorialView: React.FC = () => {
     return (
       <Box sx={{ ...lightPageContainer, p: 4 }}>
         <Typography variant="h5" color="error" gutterBottom>
-          {error || "Failed to load tutorial"}
+          {error || t("tutorial.failedLoad")}
         </Typography>
         <Typography>
-          Please try again or return to the{" "}
+          {t("tutorial.homepage1")}
           <a href="/" onClick={() => navigate("/")}>
-            homepage
+            {t("tutorial.homepage2")}
           </a>
           .
         </Typography>

@@ -280,7 +280,7 @@
     "missingTextHeader": "Missing Token:"
   },
   "MergeButtons": {
-    "selectOnlyTwo": "Only two nodes can be merged at a time with the new merger!",
+    "selectOnlyTwo": "Only two nodes can be merged at a time!",
     "noConflictNodes": "Conflict nodes can't be merged!",
     "selectMinTwo": "Please select more nodes."
   },
@@ -331,6 +331,10 @@
     "skip": "Skip Tutorial",
     "start": "Start Tutorial",
     "name": "Smerge Tutorial",
+    "error": "An error occurred.",
+    "failedLoad": "Failed to load tutorial",
+    "homepage1": "Please try again or return to the ",
+    "homepage2": "homepage",
     "welcome": {
       "title": "Welcome to the interactive Smerge Tutorial!",
       "description": "You will learn how to collaboratively work in Smerge."
@@ -373,7 +377,11 @@
     },
     "merge_select": {
       "title": "Select versions to merge",
-      "description": "Another person has been working on the project and created a new version. Let's merge these two versions to create a new version that includes changes from both. Select the two versions you want to merge and click ‘Merge’."
+      "description": "Another person has been working on the project and created a new version. Let's merge these two versions to create a new version that includes changes from both.\n Hold shift and select the two versions you want to merge."
+    },
+    "merge_click": {
+      "title": "Click the merge button",
+      "description": "Now click the merge button in the bottom right corner to start the merge process."
     }
   }
 }

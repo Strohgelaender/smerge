@@ -38,6 +38,8 @@ router = routers.DefaultRouter()
 urlpatterns = [
     # Tutorial
     path("api/tutorial/create", api_views.CreateTutorialProjectView.as_view()),
+    path("api/tutorial/project/<str:project_id>/add_merge_node", api_views.AddTutorialMergeNodeView.as_view()),
+    path("api/tutorial/project/<str:project_id>/cleanup", api_views.CleanupTutorialProjectView.as_view()),
 
     path("api/teacher_login_token", api_views.CustomAuthToken.as_view()),
     path("api/teacher_registration_token", api_views.RegisterTeacherView.as_view()),

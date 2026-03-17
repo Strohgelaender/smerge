@@ -231,7 +231,7 @@
     "page2": {
       "item0": {
         "header": "Knoten mergen",
-        "footer": "**__Zwei Knoten mergen:\n -Zwei Knoten können ausgewählt und mit einem Klick auf den \"New Smerge\" Button im rechten unteren Eck nach Bestätigung verbunden (gemerged) werden.\n -ACHTUNG: Wenn Sie ein Projekt verwenden, welches vor dem 18.04.24 erstellt wurde, nutzen Sie nur den originalen Merger bis alle zu Mergenden Knoten mindestens einmal neu \"Commited\" wurden. Andernfalls wird der Merger nicht richtig funktionieren!"
+        "footer": "**__Zwei Knoten mergen:\n -Zwei Knoten können ausgewählt und mit einem Klick auf den \"New Merge\" Button im rechten unteren Eck nach Bestätigung verbunden (gemerged) werden.\n -ACHTUNG: Wenn Sie ein Projekt verwenden, welches vor dem 18.04.24 erstellt wurde, nutzen Sie nur den originalen Merger bis alle zu Mergenden Knoten mindestens einmal neu \"Commited\" wurden. Andernfalls wird der Merger nicht richtig funktionieren!"
       },
       "item1": {
         "header": "Mergekonflikte",
@@ -247,7 +247,7 @@
       "header": "Einstellungen",
       "item1": {
         "header": "Grapheinstellungen",
-        "footer": "**__Grapheinstellungsoptionen:\n -Graphposition speichern: speichert das aktuelle Layout und aktualisiert es für alle Benutzer (bei Verwendung der Option \"Servergespeichertes Layout\").\n -Layout: ändert das Graphlayout. Optionen beinhalten:\n  -Dagre: traditionelles hierarchisches Layout; Standardoption. \n  -Servergespeichert: die benutzerdefinierte Option die auf dem Server gespeichert wurde. \n  -Zufällig: platziert die Knoten nach dem Zufallsprinzip.\n  -Gitter: zeigt alle Knoten im Diagramm in einem Gitter an.\n  -Kreis: ordnet die Knoten in einem Kreis an.\n  -Konzentrisch: ordnet die Knoten in konzentrischen Kreisen an.\n  -Breite zuerst: ordnet die Knoten in Ebenen an, entsprechend den Ebenen, die durch eine Breitensuche im Graphen erzeugt werden.\n  -Kraft (Kose): sortiert die Knoten nach einer Implementierung des CoSE-Algorithmus.\n -Zoomgeschwindigkeit ändern: aktualisiert die Zoomgeschwindigkeit.\n -Projektfarben ändern: Ermöglicht die Aktualisierung des Farbschemas für normale Knoten, als Favoriten markierte Knoten und Knoten mit Mergekonflikten.\n -Alte Projektansicht: schaltet auf die alte Smerge-Projekt-Einstellungsansicht um."
+        "footer": "**__Grapheinstellungsoptionen:\n -Graphposition speichern: speichert das aktuelle Layout und aktualisiert es für alle Benutzer (bei Verwendung der Option \"Servergespeichertes Layout\").\n -Layout: ändert das Graphlayout. Optionen beinhalten:\n  -Dagre: traditionelles hierarchisches Layout; Standardoption. \n  -Servergespeichert: die benutzerdefinierte Option die auf dem Server gespeichert wurde. \n  -Zufällig: platziert die Knoten nach dem Zufallsprinzip.\n  -Gitter: zeigt alle Knoten im Diagramm in einem Gitter an.\n  -Kreis: ordnet die Knoten in einem Kreis an.\n  -Konzentrisch: ordnet die Knoten in konzentrischen Kreisen an.\n  -Breite zuerst: ordnet die Knoten in Ebenen an, entsprechend den Ebenen, die durch eine Breitensuche im Graphen erzeugt werden.\n  -Kraft (Kose): sortiert die Knoten nach einer Implementierung des CoSE-Algorithmus.\n -Zoomgeschwindigkeit ändern: aktualisiert die Zoomgeschwindigkeit.\n -Projektfarben ändern: Ermöglicht die Aktualisierung des Farbschemas für normale Knoten, als Favoriten markierte Knoten und Knoten mit Mergekonflikten."
       },
       "item2": {
         "header": "Layouts speichern und laden",
@@ -280,7 +280,7 @@
     "progress": "Hochladen ist zu {{val}} % abgeschlossen"
   },
   "MergeButtons": {
-    "selectOnlyTwo": "Mit dem neuen Merger können jeweils nur zwei Knoten gleichzeitig zusammengeführt werden!",
+    "selectOnlyTwo": "Es können nur jeweils zwei Knoten gleichzeitig zusammengeführt werden!",
     "noConflictNodes": "Konfliktknoten können nicht zusammengeführt werden!",
     "selectMinTwo": "Bitte wählen Sie weitere Knoten aus."
   },
@@ -331,6 +331,10 @@
     "skip": "Tutorial überspringen",
     "start": "Tutorial starten",
     "name": "Smerge Tutorial",
+    "error": "Ein Fehler ist aufgetreten.",
+    "failedLoad": "Das Tutorial konnte nicht geladen werden.",
+    "homepage1": "Bitte versuche es später erneut oder gehe zurück zur ",
+    "homepage2": "Startseite",
     "welcome": {
       "title": "Willkommen zum interaktiven Smerge Tutorial!",
       "description": "Lerne, wie du Smerge kollaborativ arbeiten kannst."
@@ -365,7 +369,7 @@
     },
     "view_new_node": {
       "title": "Dein neuer Knoten",
-      "description": "Deine Änderungen sind auf smerge angekommen. Von hier kannst du jederzeit an dem Projekt weiterarbeiten."
+      "description": "Deine Änderungen sind auf Smerge angekommen. Von hier kannst du jederzeit an dem Projekt weiterarbeiten."
     },
     "merge_intro": {
         "title": "Lass uns mergen!",
@@ -373,7 +377,15 @@
     },
     "merge_select": {
         "title": "Versionen auswählen",
-        "description": "Eine weitere Person hat an dem Projekt gearbeitet und eine neue Version erstellt. Lass uns diese beiden Versionen mergen, um eine neue Version zu erstellen, die die Änderungen von beiden enthält. Wähle die beiden Versionen aus, die du mergen möchtest, und klicke auf 'Merge'."
+        "description": "Eine weitere Person hat an dem Projekt gearbeitet und eine neue Version erstellt. Lass uns diese beiden Versionen mergen, um eine neue Version zu erstellen, die die Änderungen von beiden enthält.\n Halte Shift gedrückt und wähle die beiden Versionen aus, die du zusammenführen möchtest."
+    },
+    "merge_click": {
+      "title": "Merge durchführen",
+      "description": "Klicke auf den 'New Merge' Button unten rechts, um die beiden Versionen zusammenzuführen."
+    },
+    "completion": {
+      "title": "Fertig!",
+      "description": "Du hast erfolgreich zwei Versionen zu einer neuen gemeinamen Version zusammengeführt und kennst damit die Grundlagen von Smerge! Viel Spaß bei deinen eigenen Projekten!"
     }
   }
 }

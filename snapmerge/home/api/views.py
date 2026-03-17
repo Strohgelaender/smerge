@@ -925,3 +925,114 @@ class CreateTutorialProjectView(APIView):
                 "error": str(e)
             }, status=500)
 
+# Tutorial: Neunen Knoten hinzufügen damit Merge geübt werden kann
+class AddTutorialMergeNodeView(APIView):
+
+    def post(self, request, project_id):
+        try:
+            project = Project.objects.get(id=project_id)
+
+            if not project.is_tutorial:
+                return JsonResponse({
+                    "success": False,
+                    "error": "Not a tutorial project"
+                }, status=400)
+
+
+            # Merge Root = neuster Knoten (falls Nutzer mehrere Commits erstellt hat)
+            root_file = (
+                SnapFile.objects.filter(project=project, children__isnull=True)
+                .distinct()
+                .first()
+            )
+
+            if not root_file:
+                return JsonResponse({
+                    "success": False,
+                    "error": "No initial file found"
+                }, status=400)
+
+            # Falls der Lernende noch keine eigene Änderung erzeugt hat,
+            # legen wir eine Kopie als Kind des Root-Files an, damit zwei Branches zum Mergen da sind.
+            if not root_file.ancestors.exists(): # root file ist initialer Knoten ohne ancestors
+                student_copy = SnapFile.create_and_save(
+                    project=project,
+                    description="Tutorial Student Branch",
+                    file="",
+                    ancestors=[root_file]
+                )
+                student_copy.file = str(uuid4()) + ".xml"
+
+                copyfile(
+                    settings.BASE_DIR + root_file.get_media_path(),
+                    settings.BASE_DIR + student_copy.get_media_path(),
+                )
+                student_copy.save()
+                student_copy.xml_job()
+
+
+            # Zweiter Knoten (automatische Änderung für Merge)
+            merge_file = SnapFile.create_and_save(
+                project=project,
+                description="Tutorial Merge",
+                file="",
+                ancestors=[root_file],
+            )
+            merge_file.file = str(uuid4()) + ".xml"
+
+            copyfile(
+                settings.BASE_DIR + "/static/snap/tutorial_base_merge.xml",
+                settings.BASE_DIR + merge_file.get_media_path(),
+            )
+
+            merge_file.save()
+            merge_file.xml_job()
+
+            # Neue nodes im client anzeigen
+            send_event(str(project.id), "message", {"text": "projectChange"})
+
+            return JsonResponse({
+                "success": True,
+                "file_id": merge_file.id,
+                "project_id": str(project.id)
+            })
+
+        except Project.DoesNotExist:
+            return JsonResponse({
+                "success": False,
+                "error": "Project not found"
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                "success": False,
+                "error": str(e)
+            }, status=500)
+
+# Tutorial: Projekt nach Abschluss löschen
+class CleanupTutorialProjectView(APIView):
+
+    def post(self, request, project_id):
+        try:
+            project = Project.objects.get(id=project_id)
+
+            if not project.is_tutorial:
+                return JsonResponse({
+                    "success": False,
+                    "error": "Not a tutorial project"
+                }, status=400)
+
+            project.delete()
+
+            return JsonResponse({"success": True})
+
+        except Project.DoesNotExist:
+            return JsonResponse({
+                "success": False,
+                "error": "Project not found"
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                "success": False,
+                "error": str(e)
+            }, status=500)
+
