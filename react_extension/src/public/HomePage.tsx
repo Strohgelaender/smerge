@@ -1,6 +1,6 @@
 import {Box, Button} from "@mui/material";
 import {useNavigate} from "react-router-dom";
-import {useState, useEffect} from "react";
+import React, {useState, useEffect} from "react";
 import {useTranslation} from "react-i18next";
 import Footer from "../components/shared/Footer";
 import homeIcon from "../assets/home-icon.svg";
@@ -8,51 +8,37 @@ import homeIconDebug from "../assets/home-icon-debug.svg";
 import "./Base.css";
 import "./Home.css";
 import {primaryButtonSx} from "./publicPageStyles.ts";
-
-interface SettingsData {
-    inBeta: boolean;
-    devAdd: string;
-}
+import {AppSettings, fetchAppSettings} from "../services/PublicProjectService.ts";
 
 const HomePage: React.FC = () => {
     const navigate = useNavigate();
     const {t} = useTranslation();
-    const [settings, setSettings] = useState<SettingsData>({inBeta: false, devAdd: ""});
-    const [isLoading, setIsLoading] = useState(true);
+    const [settings, setSettings] = useState<AppSettings>({inBeta: false, devAdd: ""});
 
     // Fetch settings from API
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                // For now, use hardcoded settings from build env
-                // Later we'll create an API endpoint for this
-                const inBeta = import.meta.env.VITE_IN_BETA === "true";
-                const devAdd = import.meta.env.VITE_DEV_ADD || "";
-                setSettings({inBeta, devAdd});
+                const data = await fetchAppSettings();
+                setSettings(data);
             } catch (error) {
                 console.error("Failed to fetch settings", error);
-            } finally {
-                setIsLoading(false);
             }
         };
 
         fetchSettings();
     }, []);
 
-    const handleOpenProject = () => {
+    function handleOpenProject() {
         navigate("/open");
-    };
-
-    const handleCreateProject = () => {
-        navigate("/create");
-    };
-
-    const handleStartTutorial = () => {
-        navigate("/tutorial");
     }
 
-    if (isLoading) {
-        return <div>Loading...</div>;
+    function handleCreateProject() {
+        navigate("/create");
+    }
+
+    function handleStartTutorial() {
+        navigate("/tutorial");
     }
 
     return (

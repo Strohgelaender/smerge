@@ -20,8 +20,7 @@ import {useTranslation} from "react-i18next";
 import {getCurrentUser, logout} from "./services/TeacherAuthService";
 import httpService from "./services/HttpService.ts";
 import {useNavigate} from "react-router-dom";
-
-// function Layout() {
+import {AppSettings, fetchAppSettings} from "./services/PublicProjectService.ts";
 
 const drawerWidth = 240;
 const navItems = [
@@ -65,10 +64,30 @@ const navItems = [
 function Layout() {
     const [mobileOpen, setMobileOpen] = useState(false);
     const [languageAnchorEl, setLanguageAnchorEl] = useState<null | HTMLElement>(null);
+    const [settings, setSettings] = useState<AppSettings>({inBeta: false, devAdd: ""});
 
     const handleDrawerToggle = () => {
         setMobileOpen((prevState) => !prevState);
     };
+
+    // Settings (Beta und dev status)
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const data = await fetchAppSettings();
+                setSettings({inBeta: data.inBeta, devAdd: data.devAdd});
+            } catch (error) {
+                console.error("Failed to fetch settings", error);
+            }
+        };
+
+        fetchSettings();
+    }, []);
+
+    // Titel setzen
+    useEffect(() => {
+        document.title = `SMERGE${settings.devAdd}`;
+    }, [settings.devAdd]);
 
     const {t, i18n} = useTranslation();
     const currentLanguage = i18n.resolvedLanguage?.startsWith("de") ? "de" : "en";
@@ -191,11 +210,7 @@ function Layout() {
                     }}
                 >
                     <a href="/" className="logo">
-                        {document.title.includes("DEV")
-                            ? "SMERGE (DEV)"
-                            : document.title.includes("BETA")
-                                ? "SMERGE (BETA)"
-                                : "SMERGE"}
+                        SMERGE { settings.devAdd ?? ""}
                     </a>
                     <Box
                         sx={{

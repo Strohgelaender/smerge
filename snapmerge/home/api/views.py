@@ -1036,3 +1036,14 @@ class CleanupTutorialProjectView(APIView):
                 "error": str(e)
             }, status=500)
 
+# isBeta und devAdd aus den settings an den Client weitergeben
+class SettingsView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        dev_add = " (DEV)" if settings.DEBUG else " (BETA)" if settings.BETA else ""
+        return Response({
+            "inBeta": settings.BETA,
+            "devAdd": dev_add,
+        })
+

@@ -38,6 +38,11 @@ export interface ResetPasswordResponse {
   project_id: string;
 }
 
+export interface AppSettings {
+  inBeta: boolean;
+  devAdd: string;
+}
+
 export const openProjectPublic = async (
   payload: OpenProjectRequest,
 ): Promise<OpenProjectResponse> => {
@@ -102,5 +107,9 @@ export const resetPasswordPublic = async (
     true,
     true,
   );
+};
+
+export const fetchAppSettings = async (): Promise<AppSettings> => {
+  return httpService.getAsync<AppSettings>("/api/settings", true, true);
 };
 
