@@ -1,4 +1,4 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from ...models import Project
 from django.utils import timezone
 from datetime import timedelta
@@ -30,8 +30,8 @@ class Command(BaseCommand):
             ))
             return
 
-
-        old_tutorial_projects.delete()
+        for project in old_tutorial_projects:
+            project.delete()
 
         self.stdout.write(self.style.SUCCESS(
             f'Successfully deleted {count} tutorial project(s) older than {hours}h.'
