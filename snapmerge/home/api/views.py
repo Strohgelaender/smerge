@@ -905,9 +905,8 @@ class CreateTutorialProjectView(APIView):
             )
             snap_file.file = str(uuid4()) + ".xml"
 
-            # TODO: Ein sinnvolles Tutorial-Projekt erstellen und hier dann einbinden
             copyfile(
-                settings.BASE_DIR + "/static/snap/blank_proj.xml",
+                settings.BASE_DIR + "/static/snap/tutorial_base.xml",
                 settings.BASE_DIR + snap_file.get_media_path(),
                 )
             snap_file.save()
