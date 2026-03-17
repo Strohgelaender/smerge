@@ -54,7 +54,6 @@ const OldSettingControls: React.FC<OldSettingControlsProps> = ({
     });
   }, [projectData]);
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleChange = (event: any) => {
     setValues({
       ...values,

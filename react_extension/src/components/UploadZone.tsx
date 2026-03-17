@@ -49,7 +49,6 @@ function UploadZone(props: UploadZoneProps) {
     borderColor: "green",
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toastId = useRef<any>(null);
 
   const uploadFile = (files: File[]) => {

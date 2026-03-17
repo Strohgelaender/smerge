@@ -59,7 +59,6 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
 
   const cy = useRef<Cytoscape.Core>(null);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { mutate: positionMutate } = useUpdateNodePosition(
     resolvedProjectId ?? "",
     queryClient

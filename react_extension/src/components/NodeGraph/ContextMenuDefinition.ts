@@ -14,7 +14,6 @@ interface ExtendedCollectionStyle extends CollectionStyle {
   map(e: unknown): unknown;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const generateContextMenuSettings: any = (
   projectId: string,
   refresh: () => void,
@@ -92,7 +91,6 @@ const generateContextMenuSettings: any = (
   };
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const generateCanvasContextMenuSettings: any = (
   openUpload: (x: number, y: number) => void
 ) => {
