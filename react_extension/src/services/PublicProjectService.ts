@@ -110,6 +110,6 @@ export const resetPasswordPublic = async (
 };
 
 export const fetchAppSettings = async (): Promise<AppSettings> => {
-  return httpService.getAsync<AppSettings>("/api/settings", true, true);
+  return httpService.getAsync<AppSettings>("/api/public/settings", true, true);
 };
 
