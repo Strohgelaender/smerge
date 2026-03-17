@@ -347,8 +347,9 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         ) {
           // "load-balancing" :P
           setTimeout(() => {
-            // console.log("Reloading data...");
             refresh();
+            // New files might cause a resize to be necessary
+            resize.current = true;
           }, timeout);
         }
       }

@@ -989,7 +989,7 @@ class AddTutorialMergeNodeView(APIView):
             merge_file.xml_job()
 
             # Neue nodes im client anzeigen
-            send_event(str(project.id), "message", {"text": "projectChange"})
+            send_event(str(project.id), "message", {"text": "projectChange resize added"})
 
             return JsonResponse({
                 "success": True,
