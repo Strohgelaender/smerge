@@ -326,6 +326,7 @@
     "step": "Schritt",
     "back": "Zurück",
     "next": "Weiter",
+    "done_continue": "Fertig, Tutorial fortsetzen",
     "finish": "Fertig",
     "skip": "Tutorial überspringen",
     "start": "Tutorial starten",
@@ -335,28 +336,28 @@
       "description": "Lerne, wie du Smerge kollaborativ arbeiten kannst."
     },
     "overview": {
-      "title": "Der Dachsbau",
-      "description": "Dieser Graph zeigt die verschiedenen Versionen des Projekts. Du kannst sehen, wie sich das Projekt im Laufe der Zeit entwickelt hat."
+      "title": "Die Projektübersicht",
+      "description": "Hier kannst du kannst sehen, wie sich dein Projekt im Laufe der Zeit entwickelt hat."
     },
     "open_snap": {
       "title": "Öffne dein Projekt in Snap!",
-      "description": "Um das Projekt zu bearbeiten, doppelklicke auf den Knoten, um dein Snap!-Projekt zu öffnen."
+      "description": "Um das Projekt zu bearbeiten, klicke doppelt auf den blauen Kreis. Dein wird dann in Snap! geöffnet."
     },
     "activate_js": {
       "title": "Aktiviere JavaScript in Snap!",
       "description": "Klicke auf das Zahnrad-Symbol ⚙️ oben rechts in Snap!, um die Einstellungen zu öffnen. Aktiviere dort die Option 'JavaScript extensions'."
     },
     "import_data": {
-      "title": "Importiere deine Daten in Snap!",
+      "title": "Importiere deine Daten",
       "description": "Klicke doppelt auf den Block 'Activate JS and Import Data' um das Projekt zu laden."
     },
     "edit_snap": {
       "title": "Bearbeite dein Projekt",
-      "description": "Jetzt kannst du dein Projekt in Snap! bearbeiten. Mache eine kleine Änderung. TODO Tutorial Projekt und Änderung vorgeben."
+      "description": "Jetzt kannst du dein Projekt in Snap! bearbeiten. Füge neue Blöcke hinzu, ändere bestehende oder experimentiere mit neuen Ideen. Es ist dein Projekt, also lass deiner Kreativität freien Lauf!"
     },
     "post_to_smerge": {
       "title": "Poste deine Änderungen zu Smerge!",
-      "description": "Klicke auf den Block 'Post to Smerge...' im Tab 'Variables', um deine Änderungen zu speichern. Vergiss nicht, eine kurze Beschreibung deiner Änderungen einzugeben!"
+      "description": "Jetzt ist es Zeit, deine Änderungen zu speichern. Öffne den Tab 'Variables' und klicke ganz unten auf Block 'Post to Smerge...'. Vergiss nicht, eine kurze Beschreibung deiner Änderungen einzugeben."
     },
     "back_to_project": {
       "title": "Zurück zum Projekt",
@@ -364,7 +365,7 @@
     },
     "view_new_node": {
       "title": "Dein neuer Knoten",
-      "description": "Deine Änderungen sind im Dachsbau angekommen. Von hier kannst du jederzeit an dem Projekt weiterarbeiten."
+      "description": "Deine Änderungen sind auf smerge angekommen. Von hier kannst du jederzeit an dem Projekt weiterarbeiten."
     },
     "merge_intro": {
         "title": "Lass uns mergen!",

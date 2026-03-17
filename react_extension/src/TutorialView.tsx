@@ -5,7 +5,7 @@ import { lightPageContainer } from "./pages/publicPageStyles.ts";
 import { createTutorialProject } from "./services/TutorialService";
 import { useNavigate } from "react-router-dom";
 import ProjectView from "./ProjectView.tsx";
-import { TUTORIAL_SEQUENCES } from "./config/tutorialSequences";
+import { TUTORIAL_SEQUENCES } from "./components/Tutorial/tutorialSequences.ts";
 import { File } from "./services/ApiService";
 import httpService from "./services/HttpService";
 import TutorialOverlay from "./components/Tutorial/TutorialOverlay.tsx";

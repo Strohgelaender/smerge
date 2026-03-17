@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Box, Button, Paper, Typography, IconButton } from '@mui/material';
+import { Box, Button, Paper, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useTranslation } from 'react-i18next';
@@ -79,7 +79,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
       zIndex: 10_000,
     };
 
-    if (step?.modal) {
+    if (step?.mode === 'modal') {
       // Centered modal
       return {
         ...baseStyle,
@@ -121,9 +121,42 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
     }
   };
 
-  const content = (
+  // Small View: Kleine Anzeige mit Knopf zum Weitermachen, um Platz zur Arbeit zu geben.
+  // Wird z.B. genutzt, wenn der Nutzer am Snap!-Projekt arbeiten soll.
+  if (step?.mode === 'small') {
+    return (
+      <Box
+        sx={{
+          position: 'fixed',
+          top: 12,
+          left: 0,
+          right: 0,
+          zIndex: 10000,
+          display: 'flex',
+          justifyContent: 'center',
+          pointerEvents: 'none',
+        }}
+      >
+        <Button
+          variant="contained"
+          onClick={onNext}
+          endIcon={<ArrowForwardIcon />}
+          sx={{
+            pointerEvents: 'auto',
+            backgroundColor: '#076AAB',
+            color: 'white',
+            '&:hover': { backgroundColor: '#055a8c' },
+          }}
+        >
+          {t('tutorial.done_continue')}
+        </Button>
+      </Box>
+    );
+  }
+
+  return (
     <>
-      {!step?.modal && (
+      {step?.mode !== 'modal' && (
         <>
           {step.actions?.highlight && coords.width > 0 && coords.height > 0 && (
             <Box
@@ -202,8 +235,6 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
       </Paper>
     </>
   );
-
-  return content;
 };
 
 export default TutorialOverlay;

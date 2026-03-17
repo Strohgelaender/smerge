@@ -326,6 +326,7 @@
     "step": "Step",
     "back": "Back",
     "next": "Next",
+    "done_continue": "Done, Continue Tutorial",
     "finish": "Finish",
     "skip": "Skip Tutorial",
     "start": "Start Tutorial",
@@ -335,36 +336,36 @@
       "description": "You will learn how to collaboratively work in Smerge."
     },
     "overview": {
-        "title": "The Badger's Sett",
-        "description": "This Graph shows different versions of the project. You can see how it evolved over time."
+      "title": "The project overview",
+      "description": "You can see how you project has evolved over time."
     },
     "open_snap": {
       "title": "Open your project in Snap!",
-      "description": "Double-click on the node in the graph to open your Snap! project."
+      "description": "To work on the project, double-click the blue circle. It will then open your Snap! project."
     },
     "activate_js": {
       "title": "Activate JavaScript extensions in Snap!",
       "description": "Click on on the gear symbol ⚙️ in the top right of Snap! to open the settings menu. Activate 'JavaScript extensions' there."
     },
     "import_data": {
-      "title": "Import your data into Snap!",
+      "title": "Import your data",
       "description": "Click on the block 'Activate JS and Import Data' to import your data into Snap!."
     },
     "edit_snap": {
       "title": "Edit your project",
-      "description": "Now you can edit your project in Snap!. Make a small change."
+      "description": "Now you can edit your project in Snap!.  Add new blocks, modify existing ones, or experiment with new ideas. It’s your project, so let your creativity run wild!"
     },
     "post_to_smerge": {
       "title": "Post your changes to Smerge",
-      "description": "Click on the block 'Post to Smerge...' in the tab 'Variables' to save your changes. Don't forget to enter a short description of your changes!",
+      "description": "Now its time to save your changes.  Open the “Variables” tab and click the “Post to Smerge...” button at the very bottom. Don't forget to enter a brief description of your changes."
     },
     "back_to_project": {
       "title": "Back to the project",
       "description": "Your changes are now visible in the project. Click next to see the new version you just created."
     },
     "view_new_node": {
-      "title": "View your new node!",
-      "description": "Your changes have been received at the badger's sett. From here, you can continue working on the project at any time."
+      "title": "View your new node",
+      "description": "Your changes have been received by smerge. From here, you can continue working on the project at any time."
     },
     "merge_intro": {
       "title": "Let's merge!",

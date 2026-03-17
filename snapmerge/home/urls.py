@@ -36,6 +36,7 @@ def run_tutorial_cleanup():
 router = routers.DefaultRouter()
 
 urlpatterns = [
+    # Tutorial
     path("api/tutorial/create", api_views.CreateTutorialProjectView.as_view()),
 
     path("api/teacher_login_token", api_views.CustomAuthToken.as_view()),

@@ -1,4 +1,4 @@
-import {TutorialSequence} from "../components/Tutorial/tutorial.ts";
+import {TutorialSequence} from "./tutorial.ts";
 
 /**
  * Interaktives smerge Tutorial.
@@ -13,14 +13,14 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             title: 'tutorial.welcome.title',
             description: 'tutorial.welcome.description',
             view: 'graph',
-            modal: true
+            mode: 'modal'
         },
         {
             id: 'explain_overview',
             title: 'tutorial.overview.title',
             description: 'tutorial.overview.description',
             view: 'graph',
-            modal: true
+            mode: 'modal'
         },
         {
             id: 'open_snap',
@@ -44,14 +44,14 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             title: 'tutorial.activate_js.title',
             description: 'tutorial.activate_js.description',
             view: 'snap',
-            modal: true
+            mode: 'modal'
         },
         {
             id: 'import_data_instructions',
             title: 'tutorial.import_data.title',
             description: 'tutorial.import_data.description',
             view: 'snap',
-            modal: true
+            mode: 'modal'
 
         },
         {
@@ -59,32 +59,43 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             title: 'tutorial.edit_snap.title',
             description: 'tutorial.edit_snap.description',
             view: 'snap',
-            modal: true
+            mode: 'modal'
+        },
+        {
+            id: 'edit_small',
+            view: 'snap',
+            mode: 'small'
         },
         {
             id: 'post_to_smerge',
             title: 'tutorial.post_to_smerge.title',
             description: 'tutorial.post_to_smerge.description',
             view: 'snap',
-            modal: true
-        }, {
+            mode: 'modal'
+        },
+        {
+            id: 'post_small',
+            view: 'snap',
+            mode: 'small'
+        },
+        {
             id: 'back_to_project',
             title: 'tutorial.back_to_project.title',
             description: 'tutorial.back_to_project.description',
             view: 'snap',
-            modal: true
+            mode: 'modal'
         }, {
             id: 'view_new_node',
             title: 'tutorial.view_new_node.title',
             description: 'tutorial.view_new_node.description',
             view: 'graph',
-            modal: true
+            mode: 'modal'
         }, {
             id: 'merge_intro',
             title: 'tutorial.merge_intro.title',
             description: 'tutorial.merge_intro.description',
             view: 'graph',
-            modal: true
+            mode: 'modal'
         },
         {
             id: 'merge_select',
