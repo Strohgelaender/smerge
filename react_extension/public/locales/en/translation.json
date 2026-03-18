@@ -274,6 +274,14 @@
     "pin_copied": "PIN copied!",
     "open_project": "Open project"
   },
+  "ProjectCardContextMenu": {
+    "duplicate": "Duplicate",
+    "delete": "Delete",
+    "delete_project_title": "Delete project",
+    "delete_project_description": "Please enter the project password to permanently delete the project. Keep this empty if no password was set during creation.",
+    "password_label": "Password",
+    "delete_button": "Delete"
+  },
   "AddProjectDialog": {
     "tooltip": "Add new project",
     "title": "Create a new project",

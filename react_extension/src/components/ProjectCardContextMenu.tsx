@@ -1,13 +1,12 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ContentCut from '@mui/icons-material/ContentCut';
 import ContentPaste from '@mui/icons-material/ContentPaste';
-import Cloud from '@mui/icons-material/Cloud';
 import Menu from '@mui/material/Menu';
 import ProjectDto from './models/ProjectDto';
 import {duplicateProject, postDeleteProject} from '../services/ProjectService';
@@ -25,6 +24,7 @@ const ProjectCardContextMenu = (props: {
     deleteProjectFromState: (arg0: ProjectDto) => void
 }) => {
 
+    const { t } = useTranslation();
     const ITEM_HEIGHT = 48;
 
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -97,27 +97,27 @@ const ProjectCardContextMenu = (props: {
                     <ListItemIcon>
                         <ContentCut fontSize="small"/>
                     </ListItemIcon>
-                    <ListItemText>Duplicate</ListItemText>
+                    <ListItemText>{t('ProjectCardContextMenu.duplicate')}</ListItemText>
                 </MenuItem>
                 <MenuItem onClick={handleDeleteButtonClick}>
                     <ListItemIcon>
                         <ContentPaste fontSize="small"/>
                     </ListItemIcon>
-                    <ListItemText>Delete</ListItemText>
+                    <ListItemText>{t('ProjectCardContextMenu.delete')}</ListItemText>
                 </MenuItem>
             </Menu>
 
             <Dialog open={deleteDialogOpen} aria-labelledby="delete-project-dialog-title">
-                <DialogTitle id="delete-project-dialog-title">Projekt löschen</DialogTitle>
+                <DialogTitle id="delete-project-dialog-title">{t('ProjectCardContextMenu.delete_project_title')}</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Bitte gib das Projekt-Passwort ein, um das Projekt dauerhaft zu löschen.
+                        {t('ProjectCardContextMenu.delete_project_description')}
                     </DialogContentText>
                     <TextField
                         autoFocus
                         margin="dense"
                         id="project-password"
-                        label="Passwort"
+                        label={t('ProjectCardContextMenu.password_label')}
                         type="password"
                         fullWidth
                         variant="standard"
@@ -127,7 +127,7 @@ const ProjectCardContextMenu = (props: {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={confirmDelete} color="error">
-                        Löschen
+                        {t('ProjectCardContextMenu.delete_button')}
                     </Button>
                 </DialogActions>
             </Dialog>
