@@ -270,6 +270,13 @@
     "tooltip": "Add new project",
     "title": "Create a new project",
     "description": "Enter a name for the new project.",
+    "name_label": "Name",
+    "description_optional": "Description (optional)",
+    "start_description_optional": "Start file description (optional)",
+    "file_optional": "File (optional)",
+    "no_file": "No file selected",
+    "start_file_help_1": "If you do not upload a file, a standard blank Snap! project will be your starting point.",
+    "start_file_help_2": "Want to continue working on your project in Smerge or provide your students with a template? Upload your starting file here.",
     "cancel": "Cancel",
     "create": "Create"
   },

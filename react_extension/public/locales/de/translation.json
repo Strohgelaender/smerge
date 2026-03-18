@@ -270,6 +270,13 @@
     "tooltip": "Neues Projekt hinzufügen",
     "title": "Neues Projekt erstellen",
     "description": "Gib einen Namen für das neue Projekt ein.",
+    "name_label": "Name",
+    "description_optional": "Beschreibung (optional)",
+    "start_description_optional": "Beschreibung der Startdatei (optional)",
+    "file_optional": "Datei (optional)",
+    "no_file": "Keine Datei ausgewählt",
+    "start_file_help_1": "Wenn du keine Datei hochlädst, wird ein Standard-Blanko-Snap!-Projekt als Startpunkt verwendet.",
+    "start_file_help_2": "Willst du an deinem Projekt in Smerge weiterarbeiten oder deinen Schülerinnen und Schülern eine Vorlage geben? Lade hier deine Startdatei hoch.",
     "cancel": "Abbrechen",
     "create": "Erstellen"
   },

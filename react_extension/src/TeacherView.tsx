@@ -1,4 +1,4 @@
-import {Grid, Accordion, AccordionSummary, AccordionDetails, Fab, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Box, IconButton} from "@mui/material";
+import {Grid, Accordion, AccordionSummary, AccordionDetails, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Box, IconButton} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -27,10 +27,12 @@ const TeacherView: React.FC = () => {
 
     const [isLoading, setLoading] = useState<boolean>(true)
 
+    // Class name editing state
     const [editingSchoolclassId, setEditingSchoolclassId] = useState<string | null>(null);
     const [editingSchoolclassName, setEditingSchoolclassName] = useState<string>("");
     const [isSavingSchoolclass, setIsSavingSchoolclass] = useState<boolean>(false);
 
+    // Class delete state
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
     const [schoolclassToDelete, setSchoolclassToDelete] = useState<{schoolclass: SchoolclassDto, projects: ProjectDto[]} | null>(null);
     const [isDeletingSchoolclass, setIsDeletingSchoolclass] = useState<boolean>(false);
@@ -57,17 +59,25 @@ const TeacherView: React.FC = () => {
 
 
     function addProjectToState(project: ProjectDto) {
-        const stateCopy = projectsOfSchoolclasses;
-        const schoolClassIndex = projectsOfSchoolclasses.findIndex(item => item.schoolclass.id == project.schoolclass);
-        stateCopy[schoolClassIndex].projects = stateCopy[schoolClassIndex].projects.concat([project]);
-        setProjectsOfSchoolclasses(stateCopy);
+        // Fügt das Projekt dem korrekten Array hinzu.
+        // Die Syntax ist so komplex, damit so zuverlässig die React Change-Detection getriggerd wird.
+        setProjectsOfSchoolclasses((prev) =>
+            prev.map((entry) =>
+                entry.schoolclass.id === project.schoolclass
+                    ? { ...entry, projects: [...entry.projects, project] }
+                    : entry
+            )
+        );
     }
 
     function deleteProjectFromState(project: ProjectDto) {
-        const stateCopy = projectsOfSchoolclasses;
-        const schoolClassIndex = projectsOfSchoolclasses.findIndex(item => item.schoolclass.id == project.schoolclass);
-        stateCopy[schoolClassIndex].projects = stateCopy[schoolClassIndex].projects.filter(item => item.id != project.id);
-        setProjectsOfSchoolclasses(stateCopy);
+        setProjectsOfSchoolclasses((prev) =>
+            prev.map((entry) =>
+                entry.schoolclass.id === project.schoolclass
+                    ? { ...entry, projects: entry.projects.filter((p) => p.id !== project.id) }
+                    : entry
+            )
+        );
     }
 
     function renameProjectInState(projectId: string, name: string) {
@@ -184,7 +194,7 @@ const TeacherView: React.FC = () => {
         }, index: number) => {
             const isEditingThisClass = editingSchoolclassId === item.schoolclass.id;
 
-            return <Accordion expanded={index === 0} key={item.schoolclass.id}>
+            return <Accordion key={item.schoolclass.id}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon/>}
                     aria-controls="panel2-content"
@@ -218,7 +228,7 @@ const TeacherView: React.FC = () => {
                         )}
                     </Box>
                     {!isEditingThisClass && (
-                        <Box sx={{display: 'flex', gap: 0.5, ml: 2}} onClick={(e) => e.stopPropagation()}>
+                        <Box sx={{display: 'flex', gap: 0.5, ml: 2}}>
                             <IconButton
                                 size="small"
                                 onClick={() => startEditingSchoolclass(item.schoolclass)}

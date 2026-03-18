@@ -46,24 +46,45 @@ export const getProjectUnhideAll = async (projectId: string) => {
     }
 };
 
-export const createProject = async (name: string, schoolclassId: string | null) => {
-    const res = await httpService.postAsync<ProjectDto>(
-        `/api/projects`, {name: name, schoolclass: schoolclassId}
-    );
-    if (res) {
+export interface CreateTeacherProjectPayload {
+    name: string;
+    schoolclassId: string | null;
+    description?: string;
+    startDescription?: string;
+    file?: File | null;
+}
+
+export const createProject = async (payload: CreateTeacherProjectPayload) => {
+    try {
+        const formData = new FormData();
+        formData.append("name", payload.name);
+        formData.append("description", payload.description ?? "");
+        formData.append("start_description", payload.startDescription ?? "");
+        if (payload.schoolclassId) {
+            formData.append("schoolclass", payload.schoolclassId);
+        }
+        if (payload.file) {
+            formData.append("file", payload.file);
+        }
+
+        const res = await httpService.postFormAsync<ProjectDto>(
+            `/api/projects`,
+            formData,
+            "POST"
+        );
+
         toast.success(`Creation successful.`, {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
         });
         return res;
-    }
-    else {
+    } catch {
         toast.error('Creation failed', {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
-        })
+        });
     }
 };
 

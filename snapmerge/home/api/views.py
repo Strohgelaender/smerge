@@ -49,6 +49,41 @@ def sanitize_token(token):
     return sanitized_token
 
 
+def _validate_uploaded_snap_xml(uploaded_file):
+    if not isinstance(uploaded_file, UploadedFile):
+        raise ValueError(_("No valid xml."))
+    try:
+        ET.fromstring(uploaded_file.read())
+        uploaded_file.seek(0)
+    except ET.ParseError as exc:
+        raise ValueError(_("No valid xml.")) from exc
+
+
+def _create_initial_snap_file(project, uploaded_file, start_description):
+    if uploaded_file:
+        _validate_uploaded_snap_xml(uploaded_file)
+        snap_file = SnapFile.create_and_save(
+            file=uploaded_file,
+            project=project,
+            description=start_description or uploaded_file.name,
+        )
+    else:
+        snap_file = SnapFile.create_and_save(
+            project=project,
+            description="blank project",
+            file="",
+        )
+        snap_file.file = str(uuid4()) + ".xml"
+        copyfile(
+            settings.BASE_DIR + "/static/snap/blank_proj.xml",
+            settings.BASE_DIR + snap_file.get_media_path(),
+        )
+        snap_file.save()
+
+    snap_file.xml_job()
+    return snap_file
+
+
 # class ListSnapFilesView(generics.ListAPIView):
 #     """
 #     API endpoint that obtains a list of files that correspond to a given project.
@@ -239,24 +274,36 @@ class ProjectCreationFromTeacherView(generics.CreateAPIView):
         return context
 
     def post(self, request, *args, **kwargs):
-        projectPin = generate_unique_PIN()
-        projectdata = {**request.data, 'pin': projectPin}
-        serializer = self.get_serializer(data=projectdata, context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
-        proj_instance = Project.objects.get(pin=projectPin)
-        snap_description = "blank project"
-        snap_file = SnapFile.create_and_save(
-            project=proj_instance, description=snap_description, file=""
+        name = (request.data.get("name") or "").strip()
+        description = request.data.get("description") or ""
+        start_description = request.data.get("start_description") or ""
+        schoolclassId = request.data.get("schoolclass")
+        schoolclass = get_object_or_404(SchoolClass, id=schoolclassId)
+
+        if not name:
+            return Response({"detail": _("Project name is required.")}, status=400)
+
+        project_pin = generate_unique_PIN()
+
+        project = Project.objects.create(
+            name=name,
+            description=description,
+            pin=project_pin,
+            schoolclass=schoolclass
         )
-        snap_file.file = str(uuid4()) + ".xml"
-        copyfile(
-            settings.BASE_DIR + "/static/snap/blank_proj.xml",
-            settings.BASE_DIR + snap_file.get_media_path(),
-        )
-        snap_file.save()
-        snap_file.xml_job()
-        return Response(serializer.data)
+
+        try:
+            _create_initial_snap_file(
+                project,
+                request.FILES.get("file"),
+                start_description,
+            )
+        except ValueError as exc:
+            project.delete()
+            return Response({"detail": str(exc)}, status=400)
+
+        serializer = self.get_serializer(project)
+        return Response(serializer.data, status=201)
 
 
 class ListSnapFilesView(generics.ListAPIView):
@@ -733,35 +780,15 @@ class PublicProjectCreateView(APIView):
             password=hashPassword(password_plain) if password_plain else "",
         )
 
-        uploaded_file = request.FILES.get("file")
-        if uploaded_file:
-            try:
-                assert isinstance(uploaded_file, UploadedFile)
-                ET.fromstring(uploaded_file.read())
-                uploaded_file.seek(0)
-            except ET.ParseError:
-                project.delete()
-                return Response({"detail": _("No valid xml.")}, status=400)
-
-            snap_file = SnapFile.create_and_save(
-                file=uploaded_file,
-                project=project,
-                description=start_description or uploaded_file.name,
+        try:
+            _create_initial_snap_file(
+                project,
+                request.FILES.get("file"),
+                start_description,
             )
-        else:
-            snap_file = SnapFile.create_and_save(
-                project=project,
-                description="blank project",
-                file="",
-            )
-            snap_file.file = str(uuid4()) + ".xml"
-            copyfile(
-                settings.BASE_DIR + "/static/snap/blank_proj.xml",
-                settings.BASE_DIR + snap_file.get_media_path(),
-            )
-            snap_file.save()
-
-        snap_file.xml_job()
+        except ValueError as exc:
+            project.delete()
+            return Response({"detail": str(exc)}, status=400)
 
         return Response(
             {
