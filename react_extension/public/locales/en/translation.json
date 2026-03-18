@@ -273,6 +273,14 @@
     "cancel": "Cancel",
     "create": "Create"
   },
+  "ImportProjectDialog": {
+    "tooltip": "Import project",
+    "title": "Import existing project",
+    "description": "Enter a project ID or PIN to import a project.",
+    "project_id_label": "Project ID or PIN",
+    "cancel": "Cancel",
+    "import": "Import"
+  },
   "UploadZone": {
     "dropText": "Upload Snap! file as new node.",
     "fileUploadSuccess": "Snap! File Added",

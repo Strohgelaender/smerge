@@ -273,6 +273,14 @@
     "cancel": "Abbrechen",
     "create": "Erstellen"
   },
+  "ImportProjectDialog": {
+    "tooltip": "Projekt importieren",
+    "title": "Bestehendes Projekt importieren",
+    "description": "Gib die Projekt-ID oder PIN ein, um ein Projekt zu importieren.",
+    "project_id_label": "Projekt-ID oder PIN",
+    "cancel": "Abbrechen",
+    "import": "Importieren"
+  },
   "CsfrMissing": {
     "missingText": "Bitte öffnen Sie das Projekt über die Hauptseite und nicht über eine direkte URL.",
     "buttonText": "Zur Hauptseite",
