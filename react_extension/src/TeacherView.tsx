@@ -170,95 +170,96 @@ const TeacherView: React.FC = () => {
         setSchoolclassToDelete(null);
     };
 
-    return <div>
-        {
-            isLoading ? (<div>Loading...</div>) : (
-                projectsOfSchoolclasses.length <= 0 ? (
-                    <div>You do not have any Schoolclasses yet, create one on the bottom right!</div>) : (
-                    projectsOfSchoolclasses.map((item: {
-                        schoolclass: SchoolclassDto,
-                        projects: ProjectDto[]
-                    }, index: number) => {
-                        const isEditingThisClass = editingSchoolclassId === item.schoolclass.id;
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
-                        return <Accordion expanded={index === 0} key={item.schoolclass.id}>
-                            <AccordionSummary
-                                expandIcon={<ExpandMoreIcon/>}
-                                aria-controls="panel2-content"
-                                id="panel2-header"
-                            >
-                                <Box sx={{display: 'flex', alignItems: 'center', gap: 1, flex: 1}}>
-                                    {isEditingThisClass ? (
-                                        <TextField
-                                            value={editingSchoolclassName}
-                                            size="small"
-                                            autoFocus
-                                            disabled={isSavingSchoolclass}
-                                            onChange={(e) => setEditingSchoolclassName(e.target.value)}
-                                            onBlur={saveSchoolclassName}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter") {
-                                                    e.preventDefault();
-                                                    saveSchoolclassName();
-                                                }
-                                                if (e.key === "Escape") {
-                                                    e.preventDefault();
-                                                    cancelEditingSchoolclass();
-                                                }
-                                            }}
-                                            onClick={(e) => e.stopPropagation()}
-                                            sx={{flex: 1}}
-                                        />
-                                    ) : (
-                                        <span>{item.schoolclass.name}</span>
-                                    )}
-                                </Box>
-                                {!isEditingThisClass && (
-                                    <Box sx={{display: 'flex', gap: 0.5, ml: 2}} onClick={(e) => e.stopPropagation()}>
-                                        <IconButton
-                                            size="small"
-                                            onClick={() => startEditingSchoolclass(item.schoolclass)}
-                                        >
-                                            <EditIcon fontSize="small"/>
-                                        </IconButton>
-                                        <IconButton
-                                            size="small"
-                                            color="error"
-                                            onClick={() => openDeleteConfirm(item)}
-                                        >
-                                            <DeleteIcon fontSize="small"/>
-                                        </IconButton>
-                                    </Box>
-                                )}
-                            </AccordionSummary>
-                            <AccordionDetails>
-                                <Grid container spacing="10" alignItems="center" key={item.schoolclass.id}>
-                                    {
-                                        item.projects.map((projectsItem: ProjectDto) => {
-                                            return <Grid item key={projectsItem.id}>
-                                                <ProjectCard
-                                                    addProjectToState={addProjectToState}
-                                                    deleteProjectFromState={deleteProjectFromState}
-                                                    renameProjectInState={renameProjectInState}
-                                                    projectData={projectsItem}
-                                                ></ProjectCard>
-                                            </Grid>
-                                        })
+    if (!projectsOfSchoolclasses?.length) {
+        return <div>You do not have any Schoolclasses yet, create one on the bottom right!</div>;
+    }
+    return <div>
+        {projectsOfSchoolclasses.map((item: {
+            schoolclass: SchoolclassDto,
+            projects: ProjectDto[]
+        }, index: number) => {
+            const isEditingThisClass = editingSchoolclassId === item.schoolclass.id;
+
+            return <Accordion expanded={index === 0} key={item.schoolclass.id}>
+                <AccordionSummary
+                    expandIcon={<ExpandMoreIcon/>}
+                    aria-controls="panel2-content"
+                    id="panel2-header"
+                >
+                    <Box sx={{display: 'flex', alignItems: 'center', gap: 1, flex: 1}}>
+                        {isEditingThisClass ? (
+                            <TextField
+                                value={editingSchoolclassName}
+                                size="small"
+                                autoFocus
+                                disabled={isSavingSchoolclass}
+                                onChange={(e) => setEditingSchoolclassName(e.target.value)}
+                                onBlur={saveSchoolclassName}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        saveSchoolclassName();
                                     }
-                                    <Grid item key={'importButton'}>
-                                        <AddProjectDialog addProjectToState={addProjectToState}
-                                                          schoolClass={item.schoolclass}></AddProjectDialog>
-                                    </Grid>
-                                    <Grid item key={'addButton'}>
-                                        <ImportProjectDialog addProjectToState={addProjectToState}
-                                                             schoolClass={item.schoolclass}></ImportProjectDialog>
-                                    </Grid>
+                                    if (e.key === "Escape") {
+                                        e.preventDefault();
+                                        cancelEditingSchoolclass();
+                                    }
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                                sx={{flex: 1}}
+                            />
+                        ) : (
+                            <span>{item.schoolclass.name}</span>
+                        )}
+                    </Box>
+                    {!isEditingThisClass && (
+                        <Box sx={{display: 'flex', gap: 0.5, ml: 2}} onClick={(e) => e.stopPropagation()}>
+                            <IconButton
+                                size="small"
+                                onClick={() => startEditingSchoolclass(item.schoolclass)}
+                            >
+                                <EditIcon fontSize="small"/>
+                            </IconButton>
+                            <IconButton
+                                size="small"
+                                color="error"
+                                onClick={() => openDeleteConfirm(item)}
+                            >
+                                <DeleteIcon fontSize="small"/>
+                            </IconButton>
+                        </Box>
+                    )}
+                </AccordionSummary>
+                <AccordionDetails>
+                    <Grid container spacing="10" alignItems="center" key={item.schoolclass.id}>
+                        {
+                            item.projects.map((projectsItem: ProjectDto) => {
+                                return <Grid item key={projectsItem.id}>
+                                    <ProjectCard
+                                        addProjectToState={addProjectToState}
+                                        deleteProjectFromState={deleteProjectFromState}
+                                        renameProjectInState={renameProjectInState}
+                                        projectData={projectsItem}
+                                    ></ProjectCard>
                                 </Grid>
-                            </AccordionDetails>
-                        </Accordion>
-                    })
-                )
-            )
+                            })
+                        }
+                        <Grid item key={'importButton'}>
+                            <AddProjectDialog addProjectToState={addProjectToState}
+                                              schoolClass={item.schoolclass}></AddProjectDialog>
+                        </Grid>
+                        <Grid item key={'addButton'}>
+                            <ImportProjectDialog addProjectToState={addProjectToState}
+                                                 schoolClass={item.schoolclass}></ImportProjectDialog>
+                        </Grid>
+                    </Grid>
+                </AccordionDetails>
+            </Accordion>
+        })
         }
 
         {/* Delete Schoolclass Confirmation Dialog */}
@@ -266,8 +267,10 @@ const TeacherView: React.FC = () => {
             <DialogTitle>Delete Schoolclass</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Are you sure you want to delete the schoolclass "<strong>{schoolclassToDelete?.schoolclass.name}</strong>"? <br/>
-                    This will remove <strong>{schoolclassToDelete?.projects.length || 0} project(s)</strong> associated with this class.
+                    Are you sure you want to delete the schoolclass
+                    "<strong>{schoolclassToDelete?.schoolclass.name}</strong>"? <br/>
+                    This will remove <strong>{schoolclassToDelete?.projects.length || 0} project(s)</strong> associated
+                    with this class.
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
