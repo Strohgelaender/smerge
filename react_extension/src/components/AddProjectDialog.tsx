@@ -6,14 +6,16 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import { createProject } from '../services/ProjectService';
 import SchoolclassDto from './models/SchoolclassDto';
 import ProjectDto from './models/ProjectDto';
+import { useTranslation } from 'react-i18next';
 
 const AddProjectDialog = (props: { schoolClass: SchoolclassDto; addProjectToState: (arg0: ProjectDto) => void; }) => {
   const [open, setOpen] = React.useState(false);
+  const { t } = useTranslation();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -23,10 +25,11 @@ const AddProjectDialog = (props: { schoolClass: SchoolclassDto; addProjectToStat
     setOpen(false);
   };
 
-
   return (
     <React.Fragment>
-      <IconButton onClick={handleClickOpen}><AddIcon></AddIcon></IconButton>
+      <Tooltip title={t('AddProjectDialog.tooltip')}>
+        <IconButton onClick={handleClickOpen}><AddIcon /></IconButton>
+      </Tooltip>
       <Dialog
         open={open}
         onClose={handleClose}
@@ -46,10 +49,10 @@ const AddProjectDialog = (props: { schoolClass: SchoolclassDto; addProjectToStat
           },
         }}
       >
-        <DialogTitle>Create new Project</DialogTitle>
+        <DialogTitle>{t('AddProjectDialog.title')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Enter a name for the new Project
+            {t('AddProjectDialog.description')}
           </DialogContentText>
           <TextField
             autoFocus
@@ -64,12 +67,12 @@ const AddProjectDialog = (props: { schoolClass: SchoolclassDto; addProjectToStat
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button type="submit">Create</Button>
+          <Button onClick={handleClose}>{t('AddProjectDialog.cancel')}</Button>
+          <Button type="submit">{t('AddProjectDialog.create')}</Button>
         </DialogActions>
       </Dialog>
     </React.Fragment>
   );
-}
+};
 
 export default AddProjectDialog;

@@ -266,6 +266,13 @@
     "cancel": "Cancel",
     "confirm": "Change"
   },
+  "AddProjectDialog": {
+    "tooltip": "Add new project",
+    "title": "Create a new project",
+    "description": "Enter a name for the new project.",
+    "cancel": "Cancel",
+    "create": "Create"
+  },
   "UploadZone": {
     "dropText": "Upload Snap! file as new node.",
     "fileUploadSuccess": "Snap! File Added",

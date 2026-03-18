@@ -266,6 +266,13 @@
     "cancel": "Abbrechen",
     "confirm": "Ändern"
   },
+  "AddProjectDialog": {
+    "tooltip": "Neues Projekt hinzufügen",
+    "title": "Neues Projekt erstellen",
+    "description": "Gib einen Namen für das neue Projekt ein.",
+    "cancel": "Abbrechen",
+    "create": "Erstellen"
+  },
   "CsfrMissing": {
     "missingText": "Bitte öffnen Sie das Projekt über die Hauptseite und nicht über eine direkte URL.",
     "buttonText": "Zur Hauptseite",

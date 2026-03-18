@@ -190,6 +190,7 @@ const TeacherView: React.FC = () => {
                     aria-controls="panel2-content"
                     id="panel2-header"
                 >
+                    {/* Editable Class name */}
                     <Box sx={{display: 'flex', alignItems: 'center', gap: 1, flex: 1}}>
                         {isEditingThisClass ? (
                             <TextField
@@ -235,6 +236,7 @@ const TeacherView: React.FC = () => {
                     )}
                 </AccordionSummary>
                 <AccordionDetails>
+                    {/* All projects of this class */}
                     <Grid container spacing="10" alignItems="center" key={item.schoolclass.id}>
                         {
                             item.projects.map((projectsItem: ProjectDto) => {
@@ -248,11 +250,11 @@ const TeacherView: React.FC = () => {
                                 </Grid>
                             })
                         }
-                        <Grid item key={'importButton'}>
+                        <Grid item key={'addButton'}>
                             <AddProjectDialog addProjectToState={addProjectToState}
                                               schoolClass={item.schoolclass}></AddProjectDialog>
                         </Grid>
-                        <Grid item key={'addButton'}>
+                        <Grid item key={'importButton'}>
                             <ImportProjectDialog addProjectToState={addProjectToState}
                                                  schoolClass={item.schoolclass}></ImportProjectDialog>
                         </Grid>
