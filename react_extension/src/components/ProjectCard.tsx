@@ -1,5 +1,11 @@
-import { Card, CardActions, CardContent, Button, TextField, Typography } from "@mui/material";
+import { Card, CardActions, CardContent, TextField, Typography, Box, IconButton, Tooltip } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import ProjectDto from "./models/ProjectDto";
 import ProjectCardContextMenu from "./ProjectCardContextMenu";
 import { putProjectNameChange } from "../services/ProjectService";
@@ -14,13 +20,16 @@ const ProjectCard = (props: {
     const [isEditingName, setIsEditingName] = useState<boolean>(false);
     const [draftName, setDraftName] = useState<string>(props.projectData.name);
     const [isSavingName, setIsSavingName] = useState<boolean>(false);
+    const [isPinVisible, setIsPinVisible] = useState<boolean>(false);
+    const { t } = useTranslation();
 
     useEffect(() => {
         setDraftName(props.projectData.name);
     }, [props.projectData.name]);
 
     const handleButtonClick = () => {
-        location.href = location.href.replace('teacher_view', `project_view/${props.projectData.id}`);
+        const projectUrl = window.location.origin + `/project_view/${props.projectData.id}`;
+        window.open(projectUrl, '_blank');
     };
 
     const startEditingName = () => {
@@ -31,6 +40,20 @@ const ProjectCard = (props: {
     const cancelEditingName = () => {
         setDraftName(props.projectData.name);
         setIsEditingName(false);
+    };
+
+    const handleCopyPin = () => {
+        navigator.clipboard.writeText(props.projectData.pin).then(_ => {
+            toast.success(t('ProjectCard.pin_copied'), {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+        });
+    };
+
+    const getMaskedPin = () => {
+        return "*".repeat(props.projectData.pin.length);
     };
 
     const saveName = async () => {
@@ -95,7 +118,41 @@ const ProjectCard = (props: {
                     deleteProjectFromState={props.deleteProjectFromState}
                     projectData={props.projectData}
                 ></ProjectCardContextMenu>
-                <Button size="small" onClick={handleButtonClick}>Open Project</Button>
+                <Box sx={{ display: "flex", alignItems: "center", gap: 0.25, ml: "auto" }}>
+                    {/* PIN-Anzeige */}
+                    <Typography variant="caption" sx={{ fontFamily: "monospace", fontSize: "0.75rem" }}>
+                        {isPinVisible ? props.projectData.pin : getMaskedPin()}
+                    </Typography>
+                    <Tooltip title={isPinVisible ? t('ProjectCard.hide_pin') : t('ProjectCard.show_pin')}>
+                        <IconButton
+                            size="small"
+                            onClick={() => setIsPinVisible(!isPinVisible)}
+                            sx={{ p: "2px" }}
+                        >
+                            {isPinVisible ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t('ProjectCard.copy_pin')}>
+                        <IconButton
+                            size="small"
+                            onClick={handleCopyPin}
+                            sx={{ p: "2px" }}
+                        >
+                            <ContentCopyIcon fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+
+                    {/* Projekt in einem neuen Tab öffnen */}
+                    <Tooltip title={t('ProjectCard.open_project')}>
+                        <IconButton
+                            size="small"
+                            onClick={handleButtonClick}
+                            sx={{ p: "2px" }}
+                        >
+                            <OpenInNewIcon fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+                </Box>
             </CardActions>
         </Card>
     );

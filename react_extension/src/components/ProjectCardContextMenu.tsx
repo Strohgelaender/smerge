@@ -72,6 +72,7 @@ const ProjectCardContextMenu = (props: {
                 aria-expanded={open ? 'true' : undefined}
                 aria-haspopup="true"
                 onClick={handleClick}
+                sx={{ p: "2px" }}
             >
                 <MoreVertIcon/>
             </IconButton>

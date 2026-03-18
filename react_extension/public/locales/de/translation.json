@@ -266,6 +266,14 @@
     "cancel": "Abbrechen",
     "confirm": "Ändern"
   },
+  "ProjectCard": {
+    "pin": "PIN",
+    "show_pin": "PIN anzeigen",
+    "hide_pin": "PIN verbergen",
+    "copy_pin": "PIN kopieren",
+    "pin_copied": "PIN kopiert!",
+    "open_project": "Projekt öffnen"
+  },
   "AddProjectDialog": {
     "tooltip": "Neues Projekt hinzufügen",
     "title": "Neues Projekt erstellen",
