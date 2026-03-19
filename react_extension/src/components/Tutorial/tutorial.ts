@@ -3,9 +3,13 @@
  */
 export interface TutorialStep {
   id: string;
-  title?: string;
-  description?: string;
-  mode?: 'modal' | 'small'; // Modal = zentriert, small = Button "weiter in Tutorial", kein Wert = Neben dem target
+  title?: string; // Translation-Key
+  description?: string; // Translation-Key
+  // Anzeigemodus des Schritts
+  // modal = Zentriert in der mitte
+  // small = kein Text, Button "weiter im Tutorial" über der Navbar. Lässt Platz für Arbeit mit der Seite
+  // kein Wert = In der via target spezifizierten Position
+  mode?: 'modal' | 'small';
   target?: { // Selector, neben dem das tutorial platziert werden soll.
     selector: string;
     position?: 'top' | 'bottom' | 'left' | 'right' | 'top-left';
