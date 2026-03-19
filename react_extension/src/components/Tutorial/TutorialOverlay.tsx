@@ -157,27 +157,6 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
 
   return (
     <>
-      {step?.mode !== 'modal' && (
-        <>
-          {step.actions?.highlight && coords.width > 0 && coords.height > 0 && (
-            <Box
-              sx={{
-                position: 'fixed',
-                top: coords.top,
-                left: coords.left,
-                width: coords.width,
-                height: coords.height,
-                border: '2px solid #076AAB',
-                borderRadius: '6px',
-                boxShadow: '0 0 18px 4px rgba(7, 106, 171, 0.75)',
-                zIndex: 9999,
-                pointerEvents: 'none',
-              }}
-            />
-          )}
-        </>
-      )}
-
       {/* Tooltip/Modal */}
       <Paper
         ref={tooltipRef}

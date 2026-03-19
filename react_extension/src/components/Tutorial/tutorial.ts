@@ -15,10 +15,6 @@ export interface TutorialStep {
     type: 'click' | 'custom';
     condition?: () => boolean;
   };
-  actions?: {
-    highlight?: boolean;
-
-  };
 }
 
 export interface TutorialSequence {
