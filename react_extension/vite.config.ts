@@ -20,6 +20,9 @@ export default defineConfig({
     react(),
     tsconfigPaths(),
   ],
+  build: {
+    sourcemap: true
+  },
   base: "/",
   server: {
     port: 5069,

@@ -415,7 +415,7 @@
     },
     "merge_select": {
         "title": "Versionen auswählen",
-        "description": "Eine weitere Person hat an dem Projekt gearbeitet und eine neue Version erstellt. Lass uns diese beiden Versionen mergen, um eine neue Version zu erstellen, die die Änderungen von beiden enthält.\n Halte Shift gedrückt und wähle die beiden Versionen aus, die du zusammenführen möchtest. Klicke zur Auswahl auf den blauen Kreis."
+        "description": "Eine weitere Person hat an dem Projekt gearbeitet und eine neue Version erstellt. Lass uns diese beiden Versionen mergen, um eine neue Version zu erstellen, welche die Änderungen von beiden enthält.\n Halte Shift gedrückt und wähle die beiden Versionen aus, die du zusammenführen möchtest. Klicke zur Auswahl auf den blauen Kreis."
     },
     "merge_click": {
       "title": "Merge durchführen",

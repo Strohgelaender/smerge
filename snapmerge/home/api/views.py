@@ -77,13 +77,23 @@ def _create_initial_snap_file(project, uploaded_file, start_description):
         snap_file.file = str(uuid4()) + ".xml"
         copyfile(
             settings.BASE_DIR + "/static/snap/blank_proj.xml",
-            settings.BASE_DIR + snap_file.get_media_path(),
+            _get_snap_file_abs_path(snap_file),
         )
         snap_file.save()
 
     snap_file.xml_job()
     return snap_file
 
+
+def _get_snap_file_abs_path(snap_file):
+    return settings.BASE_DIR + snap_file.get_media_path()
+
+
+def _update_snap_file_stats(snap_file):
+    stats = analyze_file(snap_file.get_media_path())
+    snap_file.number_scripts = stats[0]
+    snap_file.number_sprites = stats[1]
+    snap_file.save(update_fields=["number_scripts", "number_sprites"])
 
 # class ListSnapFilesView(generics.ListAPIView):
 #     """

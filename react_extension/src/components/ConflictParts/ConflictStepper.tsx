@@ -135,27 +135,29 @@ const ConflictStepper: React.FC<ConflictStepperProps> = () => {
           autoClose: 2000,
           hideProgressBar: false,
         });
-      } else {
-        if (xhttp.readyState === 4 && xhttp.status >= 400) {
-          console.log(`Conflict ${code} not found.`);
-          if (xhttp.status == 410) {
-            toast.warning(t("ConflictStepper.alreadyResolvedToast"), {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-            });
-            setLoadingConflictText(t("ConflictStepper.alreadyResolved"));
-            setTimeout(() => {
-              window.close();
-            }, 10000);
-          } else {
-            toast.warning(`Merge ${code} failed.`, {
-              position: "top-right",
-              autoClose: 2000,
-              hideProgressBar: false,
-            });
-          }
+      } else if (xhttp.readyState === 4 && xhttp.status >= 400) {
+        console.log(`Conflict ${code} not found.`);
+        if (xhttp.status == 410) {
+          toast.warning(t("ConflictStepper.alreadyResolvedToast"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+          });
+          setLoadingConflictText(t("ConflictStepper.alreadyResolved"));
+          setTimeout(() => {
+            window.close();
+          }, 10000);
+        } else {
+          toast.warning(`Merge ${code} failed.`, {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+          });
         }
+      } else if (xhttp.readyState === 4 && xhttp.status === 303) {
+        // Redirect to next conflict
+        const newLocation = xhttp.responseText;
+        window.location.href = newLocation;
       }
     };
   };
