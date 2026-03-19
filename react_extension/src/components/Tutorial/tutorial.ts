@@ -8,9 +8,8 @@ export interface TutorialStep {
   view: 'graph' | 'snap';
   mode?: 'modal' | 'small'; // Modal = zentriert, small = Button "weiter in Tutorial", kein Wert = Neben dem target
   target?: { // Selector, neben dem das tutorial platziert werden soll.
-    type: 'dom';
     selector: string;
-    position?: 'top' | 'bottom' | 'left' | 'right';
+    position?: 'top' | 'bottom' | 'left' | 'right' | 'top-left';
   };
   validation?: {
     type: 'click' | 'custom';

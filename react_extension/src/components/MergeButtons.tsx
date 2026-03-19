@@ -24,12 +24,15 @@ interface MergeButtonsProps {
   cyRef: React.RefObject<cytoscape.Core | undefined>;
   refresh: () => void;
   projectId: string;
+  // Tutorial-Interceptor:
+  onMergeConfirmed?: () => void;
 }
 
 const MergeButtons: React.FC<MergeButtonsProps> = ({
   cyRef,
   refresh,
   projectId,
+  onMergeConfirmed,
 }) => {
   const fabStyle = {
     position: "absolute",
@@ -110,6 +113,10 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
       }
     }
 
+    // Klick an Tutorial weitergeben
+    if (onMergeConfirmed) {
+      onMergeConfirmed();
+    }
     if (mergeFabColor == "primary") {
       mergeNew(selected);
     } else {

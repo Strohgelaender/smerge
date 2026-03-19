@@ -39,9 +39,11 @@ interface NodeGraphProps {
   setProjectData: React.Dispatch<React.SetStateAction<ProjectDto>>;
   gatherProjectData: () => Promise<void>;
   projectId?: string;
+  // Interceptors für Tutorial
   embedded?: boolean;
   onNodeDoubleClick?: (nodeId: string) => void;
   onSelectedNodesChange?: (nodeIds: string[]) => void;
+  onMergeConfirmed?: () => void;
 }
 
 Cytoscape.use(dagre);
@@ -54,6 +56,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   embedded = false,
   onNodeDoubleClick,
   onSelectedNodesChange,
+  onMergeConfirmed,
 }) => {
   const { projectId: paramProjectId } = useParams();
   const resolvedProjectId = propProjectId || paramProjectId;
@@ -537,7 +540,12 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
         projectData={projectData}
         setProjectData={setProjectData}
       />
-      <MergeButtons cyRef={cy} refresh={refresh} projectId={resolvedProjectId ?? ""} />
+      <MergeButtons
+        cyRef={cy}
+        refresh={refresh}
+        projectId={resolvedProjectId ?? ""}
+        onMergeConfirmed={onMergeConfirmed}
+      />
       <NameDialog
         open={nameDialogOpen}
         setOpen={setNameDialogOpen}

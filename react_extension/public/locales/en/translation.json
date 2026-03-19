@@ -415,11 +415,11 @@
     },
     "merge_select": {
       "title": "Select versions to merge",
-      "description": "Another person has been working on the project and created a new version. Let's merge these two versions to create a new version that includes changes from both.\n Hold shift and select the two versions you want to merge."
+      "description": "Another person has been working on the project and created a new version. Let's merge these two versions to create a new version that includes changes from both.\n Hold shift and select the two versions you want to merge. Click on the blue circle to select a version."
     },
     "merge_click": {
       "title": "Click the merge button",
-      "description": "Now click the merge button in the bottom right corner to start the merge process."
+      "description": "Now click the merge button in the bottom right corner to start the merge process. Confirm the merge with the checkbox button."
     }
   }
 }

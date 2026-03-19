@@ -28,7 +28,6 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             description: 'tutorial.open_snap.description',
             view: 'graph',
             target: {
-                type: 'dom',
                 // Wir wollen die Node im Graphen hervorheben.
                 // Da diese ein canvas ist selecte ich die commitmessage daneben.
                 // nth-child um nicht im Kontextmenü zu landen.
@@ -103,7 +102,6 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             description: 'tutorial.merge_select.description',
             view: 'graph',
             target: {
-                type: 'dom',
                 selector: '.__________cytoscape_container > div:nth-child(2) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) .commitmessage',
                 position: 'top'
             },
@@ -116,9 +114,8 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             description: 'tutorial.merge_click.description',
             view: 'graph',
             target: {
-                type: 'dom',
                 selector: '#mergeButton',
-                position: 'left'
+                position: 'top-left'
             },
             validation: {
                 type: 'click'

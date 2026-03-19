@@ -415,15 +415,15 @@
     },
     "merge_select": {
         "title": "Versionen auswählen",
-        "description": "Eine weitere Person hat an dem Projekt gearbeitet und eine neue Version erstellt. Lass uns diese beiden Versionen mergen, um eine neue Version zu erstellen, die die Änderungen von beiden enthält.\n Halte Shift gedrückt und wähle die beiden Versionen aus, die du zusammenführen möchtest."
+        "description": "Eine weitere Person hat an dem Projekt gearbeitet und eine neue Version erstellt. Lass uns diese beiden Versionen mergen, um eine neue Version zu erstellen, die die Änderungen von beiden enthält.\n Halte Shift gedrückt und wähle die beiden Versionen aus, die du zusammenführen möchtest. Klicke zur Auswahl auf den blauen Kreis."
     },
     "merge_click": {
       "title": "Merge durchführen",
-      "description": "Klicke auf den 'New Merge' Button unten rechts, um die beiden Versionen zusammenzuführen."
+      "description": "Klicke auf den 'New Merge' Button unten rechts, um die beiden Versionen zusammenzuführen. Bestätige deine Auswahl mit dem grünen Haken."
     },
     "completion": {
       "title": "Fertig!",
-      "description": "Du hast erfolgreich zwei Versionen zu einer neuen gemeinamen Version zusammengeführt und kennst damit die Grundlagen von Smerge! Viel Spaß bei deinen eigenen Projekten!"
+      "description": "Du hast erfolgreich zwei Versionen zu einer neuen gemeinsamen Version zusammengeführt und kennst damit die Grundlagen von Smerge! Viel Spaß bei deinen eigenen Projekten!"
     }
   }
 }

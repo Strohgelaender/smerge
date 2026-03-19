@@ -12,9 +12,11 @@ import useFileHover from "./shared/useFileHover";
 interface ProjectViewProps {
   projectId?: string;
   fileId?: number;
+  // Interceptors für Tutorial:
   embedded?: boolean;
   onNodeDoubleClick?: (nodeId: string) => void;
   onSelectedNodesChange?: (nodeIds: string[]) => void;
+  onMergeConfirmed?: () => void;
 }
 
 const ProjectView: React.FC<ProjectViewProps> = ({
@@ -23,6 +25,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({
   embedded = false,
   onNodeDoubleClick,
   onSelectedNodesChange,
+  onMergeConfirmed,
 }) => {
   const { projectId: paramProjectId } = useParams();
   // Tutorial nutzt props statt param um die id zu übergeben.
@@ -64,6 +67,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({
         embedded={embedded}
         onNodeDoubleClick={onNodeDoubleClick}
         onSelectedNodesChange={onSelectedNodesChange}
+        onMergeConfirmed={onMergeConfirmed}
       />
       {!embedded && (
         <>

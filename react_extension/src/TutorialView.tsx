@@ -168,6 +168,12 @@ const TutorialView: React.FC = () => {
     }
   }
 
+  function handleMergeConfirmed() {
+    if (currentStep?.id === "merge_click") {
+      nextStep();
+    }
+  }
+
   if (loading) {
     return (
       <Box
@@ -240,6 +246,7 @@ const TutorialView: React.FC = () => {
             embedded={true}
             onNodeDoubleClick={handleNodeDoubleClick}
             onSelectedNodesChange={setSelectedNodeIds}
+            onMergeConfirmed={handleMergeConfirmed}
           />
         )}
 

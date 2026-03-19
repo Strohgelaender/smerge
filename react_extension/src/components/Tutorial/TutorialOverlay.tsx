@@ -27,40 +27,41 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
   // useEffect für Target-Position
   useEffect(() => {
     const findTarget = () => {
-      let target: HTMLElement | null = null;
-
-      if (step.target?.type === 'dom') {
-        target = document.querySelector(step.target.selector);
-      } // TODO weitere selectors
-
-      console.log("found target for step", step.id, target);
+      if (!step.target) {
+        return;
+      }
+      let target: HTMLElement | null = document.querySelector(step.target.selector);
 
       if (target) {
         const rect = target.getBoundingClientRect();
         const position = step.target.position || 'top';
+
+        const offsetHeight = 20;
+        const offsetWidth = 50;
 
         let top = rect.top;
         let left = rect.left + rect.width / 2;
 
         switch (position) {
           case 'bottom':
-            top = rect.bottom + 20;
+            top = rect.bottom + offsetHeight;
             break;
           case 'top':
-            top = rect.top - 20;
+            top = rect.top - offsetHeight;
             break;
           case 'left':
-            left = rect.left - 20;
+            left = rect.left - offsetWidth;
             top = rect.top + rect.height / 2;
             break;
           case 'right':
-            left = rect.right + 20;
+            left = rect.right + offsetWidth;
             top = rect.top + rect.height / 2;
             break;
+          case 'top-left':
+            left = rect.left - offsetWidth;
+            top = rect.top - offsetHeight;
+            break;
         }
-
-        console.log("calculated coords for step", step.id, { top, left, width: rect.width, height: rect.height });
-
         setCoords({ top, left, width: rect.width, height: rect.height });
       }
     };
