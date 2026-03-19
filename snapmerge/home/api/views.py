@@ -965,33 +965,41 @@ class AddTutorialMergeNodeView(APIView):
                     "error": "Not a tutorial project"
                 }, status=400)
 
-
-            # Merge Root = neuster Knoten (falls Nutzer mehrere Commits erstellt hat)
-            root_file = (
-                SnapFile.objects.filter(project=project, children__isnull=True)
-                .distinct()
+            # Root-Node des Projekts: initialer Knoten ohne Ancestors
+            project_root = (
+                SnapFile.objects.filter(project=project, ancestors__isnull=True)
+                .order_by("timestamp")
                 .first()
             )
 
-            if not root_file:
+            if not project_root:
                 return JsonResponse({
                     "success": False,
                     "error": "No initial file found"
                 }, status=400)
 
+            # Merge Root = neuster Knoten mit Childen (falls Nutzer schon Änderungen gemacht hat)
+            merge_root = (
+                SnapFile.objects.filter(project=project, children__isnull=False)
+                .order_by("-timestamp")
+                .distinct()
+                .first()
+            )
+
             # Falls der Lernende noch keine eigene Änderung erzeugt hat,
             # legen wir eine Kopie als Kind des Root-Files an, damit zwei Branches zum Mergen da sind.
-            if not root_file.ancestors.exists(): # root file ist initialer Knoten ohne ancestors
+            if not merge_root:
+                merge_root = project_root
                 student_copy = SnapFile.create_and_save(
                     project=project,
                     description="Tutorial Student Branch",
                     file="",
-                    ancestors=[root_file]
+                    ancestors=[project_root]
                 )
                 student_copy.file = str(uuid4()) + ".xml"
 
                 copyfile(
-                    settings.BASE_DIR + root_file.get_media_path(),
+                    settings.BASE_DIR + merge_root.get_media_path(),
                     settings.BASE_DIR + student_copy.get_media_path(),
                 )
                 student_copy.save()
@@ -1003,7 +1011,7 @@ class AddTutorialMergeNodeView(APIView):
                 project=project,
                 description="Tutorial Merge",
                 file="",
-                ancestors=[root_file],
+                ancestors=[merge_root],
             )
             merge_file.file = str(uuid4()) + ".xml"
 
