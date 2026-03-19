@@ -102,23 +102,29 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             title: 'tutorial.merge_select.title',
             description: 'tutorial.merge_select.description',
             view: 'graph',
-            // TODO sinvollen selector nutzen!
-            mode: 'modal'
-        }, {
-            id: 'merge_small',
-            view: 'graph',
-            mode: 'small'
+            target: {
+                type: 'dom',
+                selector: '.__________cytoscape_container > div:nth-child(2) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) .commitmessage',
+                position: 'top'
+            },
+            validation: {
+                type: 'click'
+            }
         }, {
             id: 'merge_click',
             title: 'tutorial.merge_click.title',
             description: 'tutorial.merge_click.description',
             view: 'graph',
-            mode: 'modal'
-        }, { // TODO Das geht besser ohne small, selector oben nutzen.
-            id: 'merge_click_small',
-            view: 'graph',
-            mode: 'small'
-        }, {
+            target: {
+                type: 'dom',
+                selector: '#mergeButton',
+                position: 'left'
+            },
+            validation: {
+                type: 'click'
+            }
+        },
+        {
             id: 'completion',
             title: 'tutorial.completion.title',
             description: 'tutorial.completion.description',

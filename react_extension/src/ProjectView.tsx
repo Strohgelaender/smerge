@@ -14,6 +14,7 @@ interface ProjectViewProps {
   fileId?: number;
   embedded?: boolean;
   onNodeDoubleClick?: (nodeId: string) => void;
+  onSelectedNodesChange?: (nodeIds: string[]) => void;
 }
 
 const ProjectView: React.FC<ProjectViewProps> = ({
@@ -21,6 +22,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({
   fileId: propFileId,
   embedded = false,
   onNodeDoubleClick,
+  onSelectedNodesChange,
 }) => {
   const { projectId: paramProjectId } = useParams();
   // Tutorial nutzt props statt param um die id zu übergeben.
@@ -61,6 +63,7 @@ const ProjectView: React.FC<ProjectViewProps> = ({
         projectId={resolvedProjectId}
         embedded={embedded}
         onNodeDoubleClick={onNodeDoubleClick}
+        onSelectedNodesChange={onSelectedNodesChange}
       />
       {!embedded && (
         <>

@@ -230,6 +230,7 @@ const MergeButtons: React.FC<MergeButtonsProps> = ({
 
       <Tooltip title={mergeTooltip}>
         <Fab
+          id="mergeButton"
           disabled={mergeButtonDisabled}
           sx={fabStyle}
           size="large"

@@ -41,6 +41,7 @@ interface NodeGraphProps {
   projectId?: string;
   embedded?: boolean;
   onNodeDoubleClick?: (nodeId: string) => void;
+  onSelectedNodesChange?: (nodeIds: string[]) => void;
 }
 
 Cytoscape.use(dagre);
@@ -52,6 +53,7 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
   projectId: propProjectId,
   embedded = false,
   onNodeDoubleClick,
+  onSelectedNodesChange,
 }) => {
   const { projectId: paramProjectId } = useParams();
   const resolvedProjectId = propProjectId || paramProjectId;
@@ -225,6 +227,24 @@ const NodeGraph: React.FC<NodeGraphProps> = ({
       );
     }
   }, [embedded, onNodeDoubleClick]);
+
+  // Tracker für Node Selections
+  // Wird aktuell nur benötigt, um das Auswählen von Nodes im Tutorial zu tracken
+  useEffect(() => {
+    if (cy.current && onSelectedNodesChange) {
+      const handleSelectionChange = () => {
+        const selectedNodes = cy.current?.$("node:selected");
+        const selectedNodeIds = selectedNodes?.toArray().map((node) => node.data("id")) ?? [];
+        onSelectedNodesChange(selectedNodeIds);
+      };
+
+      cy.current.on("select unselect", handleSelectionChange);
+
+      return () => {
+        cy.current?.removeListener("select unselect", handleSelectionChange);
+      };
+    }
+  }, [onSelectedNodesChange]);
 
   const ranFirstAgain = useRef(false);
   // changed by eventUpdate if whole layout was pushed by others

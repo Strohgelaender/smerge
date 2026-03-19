@@ -29,6 +29,7 @@ const TutorialView: React.FC = () => {
 
   const [projectId, setProjectId] = useState<string | null>(null);
   const [fileId, setFileId] = useState<number | null>(null);
+  const [selectedNodeIds, setSelectedNodeIds] = useState<string[]>([]);
 
   // Snap-State
   const [snapFileName, setSnapFileName] = useState<string | null>(null);
@@ -148,6 +149,18 @@ const TutorialView: React.FC = () => {
     initTutorial();
   }, []);
 
+  // TODO: Cleane Lösung mit Methoden in Step-Definition
+  useEffect(() => {
+    if (
+      isActive &&
+      currentStep?.id === "merge_select" &&
+      selectedNodeIds.length === 2
+    ) {
+      nextStep();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedNodeIds, currentStep?.id, isActive]);
+
   // Klick auf Projekt-Node intercepten und im Tutorial weiter machen
   function handleNodeDoubleClick(nodeId: string) {
     if (currentStep?.id === "open_snap") {
@@ -226,6 +239,7 @@ const TutorialView: React.FC = () => {
             fileId={fileId}
             embedded={true}
             onNodeDoubleClick={handleNodeDoubleClick}
+            onSelectedNodesChange={setSelectedNodeIds}
           />
         )}
 
