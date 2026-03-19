@@ -20,6 +20,7 @@ import base64
 import logging
 
 from ..models import File, SnapFile, Project, MergeConflict, SchoolClass, PasswordResetToken
+from ..xmltools import analyze_file
 from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSerializer, RegistrationSerializer, SchoolClassSerializer
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django_eventstream import send_event
@@ -249,7 +250,7 @@ class DuplicateProject(generics.CreateAPIView):
             for ogfile in originalFiles:
                 filepath_seperated = ogfile.get_media_path().split('.')
                 copy_filepath = filepath_seperated[0] + '_copy.' + filepath_seperated[1]
-                copyfile(settings.BASE_DIR + ogfile.get_media_path(), settings.BASE_DIR + copy_filepath)
+                copyfile(_get_snap_file_abs_path(ogfile), settings.BASE_DIR + copy_filepath)
                 duplicateFile = SnapFile.create_and_save(project=duplicateProject, description=ogfile.description,
                                                          file=copy_filepath.split('/')[-1])
                 duplicateFiles.append(duplicateFile)
@@ -910,8 +911,10 @@ class PublicResetPasswordView(APIView):
         )
 
 # Tutorial Project Creation
+@method_decorator(csrf_exempt, name="dispatch")
 class CreateTutorialProjectView(APIView):
 
+    @method_decorator(ensure_csrf_cookie)
     def post(self, request):
         try:
             project = Project()
@@ -934,8 +937,9 @@ class CreateTutorialProjectView(APIView):
 
             copyfile(
                 settings.BASE_DIR + "/static/snap/tutorial_base.xml",
-                settings.BASE_DIR + snap_file.get_media_path(),
+                _get_snap_file_abs_path(snap_file)
                 )
+            _update_snap_file_stats(snap_file)
             snap_file.save()
             snap_file.xml_job()
 
@@ -965,7 +969,7 @@ class AddTutorialMergeNodeView(APIView):
                     "error": "Not a tutorial project"
                 }, status=400)
 
-            # Root-Node des Projekts: initialer Knoten ohne Ancestors
+            # Root-Node des Projekts: initialer Knoten ohne Parents/Ancestors.
             project_root = (
                 SnapFile.objects.filter(project=project, ancestors__isnull=True)
                 .order_by("timestamp")
@@ -978,18 +982,23 @@ class AddTutorialMergeNodeView(APIView):
                     "error": "No initial file found"
                 }, status=400)
 
-            # Merge Root = neuster Knoten mit Childen (falls Nutzer schon Änderungen gemacht hat)
+            # Student version als Basis des Merges
+            merge_base = (
+                SnapFile.objects.filter(project=project, children__isnull=True)
+                .order_by("-timestamp", "-id")
+                .first()
+            )
+
+            # Merge Root = Ursprungsknoten der Student Changes und Ancestor des neuen erstellten Knotens.
             merge_root = (
                 SnapFile.objects.filter(project=project, children__isnull=False)
                 .order_by("-timestamp")
-                .distinct()
                 .first()
             )
 
             # Falls der Lernende noch keine eigene Änderung erzeugt hat,
             # legen wir eine Kopie als Kind des Root-Files an, damit zwei Branches zum Mergen da sind.
-            if not merge_root:
-                merge_root = project_root
+            if merge_base.id == project_root.id and not project_root.children.exists():
                 student_copy = SnapFile.create_and_save(
                     project=project,
                     description="Tutorial Student Branch",
@@ -997,14 +1006,13 @@ class AddTutorialMergeNodeView(APIView):
                     ancestors=[project_root]
                 )
                 student_copy.file = str(uuid4()) + ".xml"
-
+                student_copy.save(update_fields=["file"])
                 copyfile(
-                    settings.BASE_DIR + merge_root.get_media_path(),
-                    settings.BASE_DIR + student_copy.get_media_path(),
+                    _get_snap_file_abs_path(project_root),
+                    _get_snap_file_abs_path(student_copy),
                 )
-                student_copy.save()
-                student_copy.xml_job()
-
+                _update_snap_file_stats(student_copy)
+                merge_root = project_root
 
             # Zweiter Knoten (automatische Änderung für Merge)
             merge_file = SnapFile.create_and_save(
@@ -1014,14 +1022,14 @@ class AddTutorialMergeNodeView(APIView):
                 ancestors=[merge_root],
             )
             merge_file.file = str(uuid4()) + ".xml"
+            merge_file.save(update_fields=["file"])
 
             copyfile(
-                settings.BASE_DIR + "/static/snap/tutorial_base_merge.xml",
-                settings.BASE_DIR + merge_file.get_media_path(),
+                _get_snap_file_abs_path(merge_base),
+                _get_snap_file_abs_path(merge_file)
             )
 
-            merge_file.save()
-            merge_file.xml_job()
+            _update_snap_file_stats(merge_file)
 
             # Neue nodes im client anzeigen
             send_event(str(project.id), "message", {"text": "projectChange resize added"})
