@@ -31,6 +31,9 @@ const TutorialView: React.FC = () => {
   const [fileId, setFileId] = useState<number | null>(null);
   const [selectedNodeIds, setSelectedNodeIds] = useState<string[]>([]);
 
+  // View Mode (Graph = Projekt-Graph, Snap = eingebetteter Snap-Editor)
+  const [viewMode, setViewMode] = useState<'graph' | 'snap'>('graph');
+
   // Snap-State
   const [snapFileName, setSnapFileName] = useState<string | null>(null);
   const [snapReady, setSnapReady] = useState(false);
@@ -56,8 +59,6 @@ const TutorialView: React.FC = () => {
     current: isActive && tutorialSequence ? currentStepIndex + 1 : 0,
     total: tutorialSequence?.steps.length ?? 0,
   };
-
-  const viewMode = isActive ? (currentStep?.view ?? "graph") : "graph";
 
   // TODO reduce duplication (url constant)!
   const snapSrc = useMemo(() => {
@@ -92,10 +93,18 @@ const TutorialView: React.FC = () => {
   async function nextStep() {
     if (!tutorialSequence) return;
 
-    // TODO location?
-    // Merge-Tutorial Vorbereiten, wenn vorheriger Teil abgeschlossen.
+    // Hier ist code der nach dem Abschluss eines Steps ausgeführt werden soll
+    // z.B. um den view Mode zu wechseln oder um den nächsten Schritt vorzubereiten
+    if (currentStep?.id === 'open_snap') {
+      setViewMode('snap')
+    }
+
+    if (currentStep?.id === 'back_to_project') {
+      setViewMode('graph');
+    }
+
+    // Merge-Tutorial: Extra Knoten erstellen
     if (currentStep?.id === "view_new_node" && projectId) {
-      console.log("[Tutorial] Adding merge node...");
       try {
         await addTutorialMergeNode(projectId);
       } catch (error) {
@@ -104,6 +113,7 @@ const TutorialView: React.FC = () => {
       }
     }
 
+    // Wechsel zum nächsten Schritt
     const nextIndex = currentStepIndex + 1;
     if (nextIndex >= tutorialSequence.steps.length) {
       completeTutorial();

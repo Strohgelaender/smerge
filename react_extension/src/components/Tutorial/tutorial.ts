@@ -5,7 +5,6 @@ export interface TutorialStep {
   id: string;
   title?: string;
   description?: string;
-  view: 'graph' | 'snap';
   mode?: 'modal' | 'small'; // Modal = zentriert, small = Button "weiter in Tutorial", kein Wert = Neben dem target
   target?: { // Selector, neben dem das tutorial platziert werden soll.
     selector: string;
