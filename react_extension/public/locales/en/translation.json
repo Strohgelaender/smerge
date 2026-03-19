@@ -406,7 +406,7 @@
       "description": "Your changes are now visible in the project. Click next to see the new version you just created."
     },
     "view_new_node": {
-      "title": "View your new node",
+      "title": "View your new changes",
       "description": "Your changes have been received by smerge. From here, you can continue working on the project at any time."
     },
     "merge_intro": {

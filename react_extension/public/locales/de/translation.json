@@ -406,7 +406,7 @@
       "description": "Deine Änderungen werden nun im Projekt angezeigt. Klicke auf weiter, um die neue Version zu sehen, die du gerade erstellt hast!"
     },
     "view_new_node": {
-      "title": "Dein neuer Knoten",
+      "title": "Deine Änderungen sind hier",
       "description": "Deine Änderungen sind auf Smerge angekommen. Von hier kannst du jederzeit an dem Projekt weiterarbeiten."
     },
     "merge_intro": {
