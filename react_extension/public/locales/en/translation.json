@@ -304,6 +304,12 @@
     "cancel": "Cancel",
     "import": "Import"
   },
+  "AddSchoolclassDialog": {
+    "title": "Create new schoolclass",
+    "description": "Enter a name for the new schoolclass",
+    "cancel": "Cancel",
+    "create": "Create"
+  },
   "UploadZone": {
     "dropText": "Upload Snap! file as new node.",
     "fileUploadSuccess": "Snap! File Added",
@@ -437,6 +443,10 @@
       "merge_click": {
         "title": "Click the merge button",
         "description": "Now click the merge button in the bottom right corner to start the merge process. Confirm the merge with the checkbox button."
+      },
+      "completion": {
+        "title": "Done!",
+        "description": "You have successfully merged two versions into a new common version and thus know the basics of Smerge! Have fun with your own projects!"
       }
     },
     "teacher_view": {
@@ -447,8 +457,9 @@
       },
       "add_class_button": {
         "title": "Create a new class",
-        "description": "Use this plus button in the bottom right corner to add a new class."
+        "description": "Use this plus button in the bottom right corner to add a new class. Give it a name and click create."
       }
     }
   }
 }
+

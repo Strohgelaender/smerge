@@ -304,6 +304,12 @@
     "cancel": "Abbrechen",
     "import": "Importieren"
   },
+  "AddSchoolclassDialog": {
+    "title": "Neue Klasse erstellen",
+    "description": "Gib einen Namen für die neue Klasse ein",
+    "cancel": "Abbrechen",
+    "create": "Erstellen"
+  },
   "CsfrMissing": {
     "missingText": "Bitte öffnen Sie das Projekt über die Hauptseite und nicht über eine direkte URL.",
     "buttonText": "Zur Hauptseite",
@@ -437,6 +443,10 @@
       "merge_click": {
         "title": "Merge durchführen",
         "description": "Klicke auf den 'New Merge' Button unten rechts, um die beiden Versionen zusammenzuführen. Bestätige deine Auswahl mit dem grünen Haken."
+      },
+      "completion": {
+        "title": "Fertig!",
+        "description": "Du hast erfolgreich zwei Versionen zu einer neuen gemeinsamen Version zusammengeführt und kennst damit die Grundlagen von Smerge! Viel Spaß bei deinen eigenen Projekten!"
       }
     },
 
@@ -448,12 +458,8 @@
       },
       "add_class_button": {
         "title": "Neue Klasse anlegen",
-        "description": "Über diesen Plus-Button unten rechts erstellst du eine neue Klasse."
+        "description": "Über diesen Plus-Button unten rechts erstellst du eine neue Klasse. Gib der Klasse einen Namen und bestätige mit 'Erstellen'."
       }
-    },
-    "completion": {
-      "title": "Fertig!",
-      "description": "Du hast erfolgreich zwei Versionen zu einer neuen gemeinsamen Version zusammengeführt und kennst damit die Grundlagen von Smerge! Viel Spaß bei deinen eigenen Projekten!"
     }
   }
 }

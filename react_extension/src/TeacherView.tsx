@@ -250,6 +250,13 @@ const TeacherView: React.FC = () => {
         setIsTutorialActive(true);
     }
 
+    // Schoolclass creation interceptor für Tutorial
+    function onSchoolclassCreated(schoolclass: SchoolclassDto) {
+        if (currentStep?.id === "explain_add_class_button") {
+            nextTutorialStep();
+        }
+    }
+
     const tutorialRoot = document.getElementById("tutorial-root");
 
     const restartTutorialButton = (
@@ -413,7 +420,9 @@ const TeacherView: React.FC = () => {
         </Dialog>
 
         <AddSchoolclassDialog state={projectsOfSchoolclasses}
-                              setState={setProjectsOfSchoolclasses}></AddSchoolclassDialog>
+                              setState={setProjectsOfSchoolclasses}
+                              onSchoolClassCreated={onSchoolclassCreated}
+        ></AddSchoolclassDialog>
     </div>
     </>
 }

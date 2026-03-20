@@ -137,9 +137,6 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
                 type: 'click'
             }
         }, {
-            id: 'class_name_small',
-            mode: 'small'
-        }, {
             id: 'expand_class',
             title: 'tutorial.teacher_view.expand_class.title',
             description: 'tutorial.teacher_view.expand_class.description',
