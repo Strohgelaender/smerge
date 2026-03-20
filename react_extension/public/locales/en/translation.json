@@ -458,6 +458,14 @@
       "add_class_button": {
         "title": "Create a new class",
         "description": "Use this plus button in the bottom right corner to add a new class. Give it a name and click create."
+      },
+      "expand_class": {
+        "title": "Expand the class",
+        "description": "Click on the arrow to expand the class and see the projects associated with it."
+      },
+      "add_project": {
+        "title": "Add a project to the class",
+        "description": "Click on the plus button to add a new project to the class."
       }
     }
   }

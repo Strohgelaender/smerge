@@ -257,6 +257,12 @@ const TeacherView: React.FC = () => {
         }
     }
 
+    function onAccordionExpanded() {
+        if (currentStep?.id === "expand_class") {
+            nextTutorialStep();
+        }
+    }
+
     const tutorialRoot = document.getElementById("tutorial-root");
 
     const restartTutorialButton = (
@@ -315,7 +321,7 @@ const TeacherView: React.FC = () => {
         }) => {
             const isEditingThisClass = editingSchoolclassId === item.schoolclass.id;
 
-            return <Accordion key={item.schoolclass.id}>
+            return <Accordion key={item.schoolclass.id} className="schoolclass-accordion" onClick={onAccordionExpanded}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon/>}
                     aria-controls="panel2-content"

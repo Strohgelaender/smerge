@@ -30,7 +30,7 @@ const AddProjectDialog = (props: { schoolClass: SchoolclassDto; addProjectToStat
   return (
     <React.Fragment>
       <Tooltip title={t('AddProjectDialog.tooltip')}>
-        <IconButton onClick={handleClickOpen}><AddIcon /></IconButton>
+        <IconButton onClick={handleClickOpen} className="addProjectButton"><AddIcon /></IconButton>
       </Tooltip>
       <Dialog
         open={open}

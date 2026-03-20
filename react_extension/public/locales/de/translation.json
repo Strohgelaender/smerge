@@ -459,6 +459,14 @@
       "add_class_button": {
         "title": "Neue Klasse anlegen",
         "description": "Über diesen Plus-Button unten rechts erstellst du eine neue Klasse. Gib der Klasse einen Namen und bestätige mit 'Erstellen'."
+      },
+      "expand_class": {
+        "title": "Klasse aufklappen",
+        "description": "Klicke auf den Pfeil neben dem Klassennamen, um die Klasse aufzuklappen und die darin enthaltenen Projekte zu sehen."
+      },
+      "add_project": {
+        "title": "Projekt hinzufügen",
+        "description": "Klicke auf den Plus-Button, um ein neues Projekt zu erstellen."
       }
     }
   }

@@ -141,9 +141,8 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
             title: 'tutorial.teacher_view.expand_class.title',
             description: 'tutorial.teacher_view.expand_class.description',
             target: {
-                // TODO
-                selector: '.schoolclass-accordion .accordion-header',
-                position: 'top'
+                selector: '.schoolclass-accordion',
+                position: 'bottom'
             },
             validation: {
                 type: 'click'
@@ -153,8 +152,7 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
             title: 'tutorial.teacher_view.add_project.title',
             description: 'tutorial.teacher_view.add_project.description',
             target: {
-                // TODO
-                selector: '',
+                selector: '.addProjectButton',
                 position: 'bottom'
             },
             validation: {
