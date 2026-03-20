@@ -360,6 +360,9 @@
     "deleteColumn": "Spalte Löschen",
     "save": "Speichern"
   },
+  "TeacherView": {
+    "restartTutorial": "Tutorial neu starten"
+  },
   "tutorial": {
     "step": "Schritt",
     "back": "Zurück",
@@ -373,54 +376,57 @@
     "failedLoad": "Das Tutorial konnte nicht geladen werden.",
     "homepage1": "Bitte versuche es später erneut oder gehe zurück zur ",
     "homepage2": "Startseite",
-    "welcome": {
-      "title": "Willkommen zum interaktiven Smerge Tutorial!",
-      "description": "Lerne, wie du Smerge kollaborativ arbeiten kannst."
-    },
-    "overview": {
-      "title": "Die Projektübersicht",
-      "description": "Hier kannst du kannst sehen, wie sich dein Projekt im Laufe der Zeit entwickelt hat."
-    },
-    "open_snap": {
-      "title": "Öffne dein Projekt in Snap!",
-      "description": "Um das Projekt zu bearbeiten, klicke doppelt auf den blauen Kreis. Dein wird dann in Snap! geöffnet."
-    },
-    "activate_js": {
-      "title": "Aktiviere JavaScript in Snap!",
-      "description": "Klicke auf das Zahnrad-Symbol ⚙️ oben rechts in Snap!, um die Einstellungen zu öffnen. Aktiviere dort die Option 'JavaScript extensions'."
-    },
-    "import_data": {
-      "title": "Importiere deine Daten",
-      "description": "Klicke doppelt auf den Block 'Activate JS and Import Data' um das Projekt zu laden."
-    },
-    "edit_snap": {
-      "title": "Bearbeite dein Projekt",
-      "description": "Jetzt kannst du dein Projekt in Snap! bearbeiten. Füge neue Blöcke hinzu, ändere bestehende oder experimentiere mit neuen Ideen. Es ist dein Projekt, also lass deiner Kreativität freien Lauf!"
-    },
-    "post_to_smerge": {
-      "title": "Poste deine Änderungen zu Smerge!",
-      "description": "Jetzt ist es Zeit, deine Änderungen zu speichern. Öffne den Tab 'Variables' und klicke ganz unten auf Block 'Post to Smerge...'. Vergiss nicht, eine kurze Beschreibung deiner Änderungen einzugeben."
-    },
-    "back_to_project": {
-      "title": "Zurück zum Projekt",
-      "description": "Deine Änderungen werden nun im Projekt angezeigt. Klicke auf weiter, um die neue Version zu sehen, die du gerade erstellt hast!"
-    },
-    "view_new_node": {
-      "title": "Deine Änderungen sind hier",
-      "description": "Deine Änderungen sind auf Smerge angekommen. Von hier kannst du jederzeit an dem Projekt weiterarbeiten."
-    },
-    "merge_intro": {
+    "student_steps": {
+      "welcome": {
+        "title": "Willkommen zum interaktiven Smerge Tutorial!",
+        "description": "Lerne, wie du Smerge kollaborativ arbeiten kannst."
+      },
+      "overview": {
+        "title": "Die Projektübersicht",
+        "description": "Hier kannst du kannst sehen, wie sich dein Projekt im Laufe der Zeit entwickelt hat."
+      },
+      "open_snap": {
+        "title": "Öffne dein Projekt in Snap!",
+        "description": "Um das Projekt zu bearbeiten, klicke doppelt auf den blauen Kreis. Dein wird dann in Snap! geöffnet."
+      },
+      "activate_js": {
+        "title": "Aktiviere JavaScript in Snap!",
+        "description": "Klicke auf das Zahnrad-Symbol ⚙️ oben rechts in Snap!, um die Einstellungen zu öffnen. Aktiviere dort die Option 'JavaScript extensions'."
+      },
+      "import_data": {
+        "title": "Importiere deine Daten",
+        "description": "Klicke doppelt auf den Block 'Activate JS and Import Data' um das Projekt zu laden."
+      },
+      "edit_snap": {
+        "title": "Bearbeite dein Projekt",
+        "description": "Jetzt kannst du dein Projekt in Snap! bearbeiten. Füge neue Blöcke hinzu, ändere bestehende oder experimentiere mit neuen Ideen. Es ist dein Projekt, also lass deiner Kreativität freien Lauf!"
+      },
+      "post_to_smerge": {
+        "title": "Poste deine Änderungen zu Smerge!",
+        "description": "Jetzt ist es Zeit, deine Änderungen zu speichern. Öffne den Tab 'Variables' und klicke ganz unten auf Block 'Post to Smerge...'. Vergiss nicht, eine kurze Beschreibung deiner Änderungen einzugeben."
+      },
+      "back_to_project": {
+        "title": "Zurück zum Projekt",
+        "description": "Deine Änderungen werden nun im Projekt angezeigt. Klicke auf weiter, um die neue Version zu sehen, die du gerade erstellt hast!"
+      },
+      "view_new_node": {
+        "title": "Deine Änderungen sind hier",
+        "description": "Deine Änderungen sind auf Smerge angekommen. Von hier kannst du jederzeit an dem Projekt weiterarbeiten."
+      },
+      "merge_intro": {
         "title": "Lass uns mergen!",
         "description": "Mergen ist der Prozess, bei dem zwei Versionen eines Projekts kombiniert werden, um eine neue Version zu erstellen. Es ist ein wichtiger Teil der Zusammenarbeit in Smerge."
-    },
-    "merge_select": {
+      },
+      "merge_select": {
         "title": "Versionen auswählen",
         "description": "Eine weitere Person hat an dem Projekt gearbeitet und eine neue Version erstellt. Lass uns diese beiden Versionen mergen, um eine neue Version zu erstellen, welche die Änderungen von beiden enthält.\n Halte Shift gedrückt und wähle die beiden Versionen aus, die du zusammenführen möchtest. Klicke zur Auswahl auf den blauen Kreis."
+      },
+      "merge_click": {
+        "title": "Merge durchführen",
+        "description": "Klicke auf den 'New Merge' Button unten rechts, um die beiden Versionen zusammenzuführen. Bestätige deine Auswahl mit dem grünen Haken."
+      }
     },
-    "merge_click": {
-      "title": "Merge durchführen",
-      "description": "Klicke auf den 'New Merge' Button unten rechts, um die beiden Versionen zusammenzuführen. Bestätige deine Auswahl mit dem grünen Haken."
-    },
+
     "teacher_view": {
       "name": "Lehrkraft-Tutorial",
       "welcome": {

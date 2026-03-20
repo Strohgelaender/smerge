@@ -2,6 +2,7 @@ import {Grid, Accordion, AccordionSummary, AccordionDetails, TextField, Dialog, 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ProjectCard from "./components/ProjectCard";
 import {
     getProjectsForSchoolclasses,
@@ -20,6 +21,7 @@ import { createPortal } from "react-dom";
 import TutorialOverlay from "./components/Tutorial/TutorialOverlay";
 import { TUTORIAL_SEQUENCES } from "./components/Tutorial/tutorialSequences";
 import { getTeacherTutorialStatus, setTeacherTutorialCompleted } from "./services/TeacherAuthService";
+import {useTranslation} from "react-i18next";
 
 
 const TeacherView: React.FC = () => {
@@ -55,6 +57,7 @@ const TeacherView: React.FC = () => {
         total: tutorialSequence?.steps.length ?? 0,
     };
 
+    const { t } = useTranslation();
 
     useEffect(() => {
         (async () => {
@@ -242,7 +245,25 @@ const TeacherView: React.FC = () => {
         setCurrentStepIndex(nextStepIndex);
     }
 
+    function restartTeacherTutorial() {
+        setCurrentStepIndex(0);
+        setIsTutorialActive(true);
+    }
+
     const tutorialRoot = document.getElementById("tutorial-root");
+
+    const restartTutorialButton = (
+        <Box sx={{ position: "fixed", left: 16, bottom: 16, zIndex: 1300 }}>
+            <Button
+                variant="contained"
+                size="small"
+                startIcon={<RestartAltIcon />}
+                onClick={restartTeacherTutorial}
+            >
+                {t('TeacherView.restartTutorial')}
+            </Button>
+        </Box>
+    );
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -260,6 +281,7 @@ const TeacherView: React.FC = () => {
                 />,
                 tutorialRoot
             )}
+            {!isTutorialActive && restartTutorialButton}
             <div>
                 You do not have any Schoolclasses yet, create one on the bottom right!
                 <AddSchoolclassDialog state={projectsOfSchoolclasses}
@@ -278,6 +300,7 @@ const TeacherView: React.FC = () => {
             />,
             tutorialRoot
         )}
+        {!isTutorialActive && restartTutorialButton}
         <div>
         {projectsOfSchoolclasses.map((item: {
             schoolclass: SchoolclassDto,
