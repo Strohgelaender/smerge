@@ -52,6 +52,11 @@ def default_kanban_board():
         ]}'''
 
 
+# Teacher user extension
+# Speichern ob Teacher-Tutorial abgeschlossen
+if not hasattr(User, "completed_tutorial"):
+    User.add_to_class("completed_tutorial", models.BooleanField(default=False))
+
 class SchoolClass(models.Model):
     id = models.UUIDField(_("Id"), primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(_("Name"), max_length=100)

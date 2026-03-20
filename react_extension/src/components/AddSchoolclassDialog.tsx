@@ -29,7 +29,7 @@ const AddSchoolclassDialog = (props: { setState: (arg0: any[]) => void; state: a
 
   return (
     <React.Fragment>
-      <Fab sx={fabStyle} onClick={handleClickOpen}><AddIcon></AddIcon></Fab>
+      <Fab id="add-schoolclass-fab" sx={fabStyle} onClick={handleClickOpen}><AddIcon></AddIcon></Fab>
       <Dialog
         open={open}
         onClose={handleClose}

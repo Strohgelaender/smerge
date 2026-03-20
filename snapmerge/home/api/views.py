@@ -170,6 +170,26 @@ class RegisterTeacherView(APIView):
         )
 
 
+class TeacherTutorialStatusView(APIView):
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        return Response({"completed_tutorial": request.user.completed_tutorial}, status=200)
+
+    def patch(self, request, *args, **kwargs):
+        completed_tutorial = request.data.get("completed_tutorial")
+        if not isinstance(completed_tutorial, bool):
+            return Response(
+                {"detail": "completed_tutorial must be a boolean."},
+                status=400,
+            )
+
+        request.user.completed_tutorial = completed_tutorial
+        request.user.save(update_fields=["completed_tutorial"])
+        return Response({"completed_tutorial": request.user.completed_tutorial}, status=200)
+
+
 class SchoolClassesView(generics.CreateAPIView):
     authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]

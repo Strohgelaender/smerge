@@ -421,6 +421,17 @@
       "title": "Merge durchführen",
       "description": "Klicke auf den 'New Merge' Button unten rechts, um die beiden Versionen zusammenzuführen. Bestätige deine Auswahl mit dem grünen Haken."
     },
+    "teacher_view": {
+      "name": "Lehrkraft-Tutorial",
+      "welcome": {
+        "title": "Willkommen in der Lehrkraft-Ansicht",
+        "description": "Hier verwaltest du Klassen und Projekte deiner Lernenden."
+      },
+      "add_class_button": {
+        "title": "Neue Klasse anlegen",
+        "description": "Über diesen Plus-Button unten rechts erstellst du eine neue Klasse."
+      }
+    },
     "completion": {
       "title": "Fertig!",
       "description": "Du hast erfolgreich zwei Versionen zu einer neuen gemeinsamen Version zusammengeführt und kennst damit die Grundlagen von Smerge! Viel Spaß bei deinen eigenen Projekten!"

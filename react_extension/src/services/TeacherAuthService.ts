@@ -45,6 +45,28 @@ export const getCurrentUser = () => {
   return null;
 };
 
+export interface TeacherTutorialStatusResponse {
+  completed_tutorial: boolean;
+}
+
+export const getTeacherTutorialStatus = () => {
+  return axios
+    .get<TeacherTutorialStatusResponse>(API_URL + "teacher/tutorial-status", {
+      headers: authHeader(),
+    })
+    .then((response) => response.data);
+};
+
+export const setTeacherTutorialCompleted = (completed = true) => {
+  return axios
+    .patch<TeacherTutorialStatusResponse>(
+      API_URL + "teacher/tutorial-status",
+      { completed_tutorial: completed },
+      { headers: authHeader() }
+    )
+    .then((response) => response.data);
+};
+
 export default function authHeader() {
   const userStr = localStorage.getItem("user");
   let user = null;

@@ -420,6 +420,17 @@
     "merge_click": {
       "title": "Click the merge button",
       "description": "Now click the merge button in the bottom right corner to start the merge process. Confirm the merge with the checkbox button."
+    },
+    "teacher_view": {
+      "name": "Teacher View Tutorial",
+      "welcome": {
+        "title": "Welcome to the teacher view",
+        "description": "Here you can manage classes and student projects."
+      },
+      "add_class_button": {
+        "title": "Create a new class",
+        "description": "Use this plus button in the bottom right corner to add a new class."
+      }
     }
   }
 }

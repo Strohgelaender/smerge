@@ -16,9 +16,18 @@ import ImportProjectDialog from "./components/ImportProjectDialog";
 import React, {useEffect, useState} from "react";
 import AddSchoolclassDialog from "./components/AddSchoolclassDialog";
 import {toast} from "react-toastify";
+import { createPortal } from "react-dom";
+import TutorialOverlay from "./components/Tutorial/TutorialOverlay";
+import { TUTORIAL_SEQUENCES } from "./components/Tutorial/tutorialSequences";
+import { getTeacherTutorialStatus, setTeacherTutorialCompleted } from "./services/TeacherAuthService";
 
 
 const TeacherView: React.FC = () => {
+    const TEACHER_TUTORIAL_SEQUENCE_ID = "teacher-view-tutorial";
+    const tutorialSequence = TUTORIAL_SEQUENCES[TEACHER_TUTORIAL_SEQUENCE_ID];
+
+    const [isTutorialActive, setIsTutorialActive] = useState<boolean>(false);
+    const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
 
     const [projectsOfSchoolclasses, setProjectsOfSchoolclasses] = useState<{
         schoolclass: SchoolclassDto,
@@ -36,6 +45,15 @@ const TeacherView: React.FC = () => {
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
     const [schoolclassToDelete, setSchoolclassToDelete] = useState<{schoolclass: SchoolclassDto, projects: ProjectDto[]} | null>(null);
     const [isDeletingSchoolclass, setIsDeletingSchoolclass] = useState<boolean>(false);
+
+    const currentStep = isTutorialActive
+        ? tutorialSequence?.steps[currentStepIndex] ?? null
+        : null;
+    const isLastStep = isTutorialActive && !!tutorialSequence && currentStepIndex >= tutorialSequence.steps.length - 1;
+    const progress = {
+        current: isTutorialActive && tutorialSequence ? currentStepIndex + 1 : 0,
+        total: tutorialSequence?.steps.length ?? 0,
+    };
 
 
     useEffect(() => {
@@ -56,6 +74,25 @@ const TeacherView: React.FC = () => {
             }
         })();
     }, []);
+
+    async function loadTutorialState() {
+        try {
+            const tutorialStatus = await getTeacherTutorialStatus();
+            if (!tutorialStatus.completed_tutorial) {
+                setCurrentStepIndex(0);
+                setIsTutorialActive(true);
+            }
+        } catch (error) {
+            console.error("Could not load teacher tutorial status", error);
+        }
+    }
+
+    useEffect(() => {
+        if (isLoading || !tutorialSequence) {
+            return;
+        }
+        loadTutorialState();
+    }, [isLoading, tutorialSequence]);
 
 
     function addProjectToState(project: ProjectDto) {
@@ -180,18 +217,72 @@ const TeacherView: React.FC = () => {
         setSchoolclassToDelete(null);
     };
 
+    async function closeTutorial() {
+        setIsTutorialActive(false);
+        setCurrentStepIndex(0);
+
+        try {
+            await setTeacherTutorialCompleted(true);
+        } catch (error) {
+            console.error("Could not persist teacher tutorial status", error);
+        }
+    }
+
+    function nextTutorialStep() {
+        if (!tutorialSequence) {
+            return;
+        }
+
+        const nextStepIndex = currentStepIndex + 1;
+        if (nextStepIndex >= tutorialSequence.steps.length) {
+            closeTutorial();
+            return;
+        }
+
+        setCurrentStepIndex(nextStepIndex);
+    }
+
+    const tutorialRoot = document.getElementById("tutorial-root");
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
     if (!projectsOfSchoolclasses?.length) {
-        return <div>You do not have any Schoolclasses yet, create one on the bottom right!</div>;
+        return <>
+            {tutorialRoot && isTutorialActive && currentStep && createPortal(
+                <TutorialOverlay
+                    step={currentStep}
+                    progress={progress}
+                    isLastStep={isLastStep}
+                    onNext={nextTutorialStep}
+                    onClose={closeTutorial}
+                />,
+                tutorialRoot
+            )}
+            <div>
+                You do not have any Schoolclasses yet, create one on the bottom right!
+                <AddSchoolclassDialog state={projectsOfSchoolclasses}
+                                      setState={setProjectsOfSchoolclasses}></AddSchoolclassDialog>
+            </div>
+        </>;
     }
-    return <div>
+    return <>
+        {tutorialRoot && isTutorialActive && currentStep && createPortal(
+            <TutorialOverlay
+                step={currentStep}
+                progress={progress}
+                isLastStep={isLastStep}
+                onNext={nextTutorialStep}
+                onClose={closeTutorial}
+            />,
+            tutorialRoot
+        )}
+        <div>
         {projectsOfSchoolclasses.map((item: {
             schoolclass: SchoolclassDto,
             projects: ProjectDto[]
-        }, index: number) => {
+        }) => {
             const isEditingThisClass = editingSchoolclassId === item.schoolclass.id;
 
             return <Accordion key={item.schoolclass.id}>
@@ -301,6 +392,7 @@ const TeacherView: React.FC = () => {
         <AddSchoolclassDialog state={projectsOfSchoolclasses}
                               setState={setProjectsOfSchoolclasses}></AddSchoolclassDialog>
     </div>
+    </>
 }
 
 export default TeacherView;

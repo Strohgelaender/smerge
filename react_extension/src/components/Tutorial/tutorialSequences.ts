@@ -115,10 +115,78 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
     ]
 };
 
+export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
+    id: 'teacher-view-tutorial',
+    name: 'tutorial.teacher_view.name',
+    steps: [
+        {
+            id: 'teacher_welcome',
+            title: 'tutorial.teacher_view.welcome.title',
+            description: 'tutorial.teacher_view.welcome.description',
+            mode: 'modal'
+        },
+        {
+            id: 'explain_add_class_button',
+            title: 'tutorial.teacher_view.add_class_button.title',
+            description: 'tutorial.teacher_view.add_class_button.description',
+            target: {
+                selector: '#add-schoolclass-fab',
+                position: 'top-left'
+            },
+            validation: {
+                type: 'click'
+            }
+        }, {
+            id: 'class_name_small',
+            mode: 'small'
+        }, {
+            id: 'expand_class',
+            title: 'tutorial.teacher_view.expand_class.title',
+            description: 'tutorial.teacher_view.expand_class.description',
+            target: {
+                // TODO
+                selector: '.schoolclass-accordion .accordion-header',
+                position: 'top'
+            },
+            validation: {
+                type: 'click'
+            }
+        }, {
+            id: 'add_project',
+            title: 'tutorial.teacher_view.add_project.title',
+            description: 'tutorial.teacher_view.add_project.description',
+            target: {
+                // TODO
+                selector: '',
+                position: 'bottom'
+            },
+            validation: {
+                type: 'click'
+            }
+        },
+        {
+            id: 'add_project_small',
+            mode: 'small'
+        },
+        {
+            id: 'project_pin_explainer',
+            title: 'tutorial.project_pin_explainer.title',
+            description: 'tutorial.project_pin_explainer.description',
+            mode: 'modal'
+        }, {
+            id: 'teacher_completion',
+            title: 'tutorial.teacher_view.teacher_completion.title',
+            description: 'tutorial.teacher_view.teacher_completion.description',
+            mode: 'modal'
+        }
+    ]
+};
+
 /**
  * Alle verfügbaren tutorial-sequences.
  * Füge neue Tutorials hier ein.
  */
 export const TUTORIAL_SEQUENCES: Record<string, TutorialSequence> = {
-    'smerge-tutorial': SMERGE_TUTORIAL
+    'smerge-tutorial': SMERGE_TUTORIAL,
+    'teacher-view-tutorial': TEACHER_VIEW_TUTORIAL
 };

@@ -44,6 +44,7 @@ urlpatterns = [
     path("api/public/settings", api_views.SettingsView.as_view()),
     path("api/teacher_login_token", api_views.CustomAuthToken.as_view()),
     path("api/teacher_registration_token", api_views.RegisterTeacherView.as_view()),
+    path("api/teacher/tutorial-status", api_views.TeacherTutorialStatusView.as_view()),
     path("api/public/open_project", api_views.PublicProjectOpenView.as_view()),
     path("api/public/create_project", api_views.PublicProjectCreateView.as_view()),
     path("api/public/restore_info", api_views.PublicRestoreInfoView.as_view()),
