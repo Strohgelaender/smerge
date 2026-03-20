@@ -361,7 +361,20 @@
     "save": "Speichern"
   },
   "TeacherView": {
-    "restartTutorial": "Tutorial neu starten"
+    "restartTutorial": "Tutorial neu starten",
+    "loading": "Lädt...",
+    "noSchoolclasses": "Du hast noch keine Klassen. Erstelle eine unten rechts!",
+    "loadError": "Daten konnten nicht geladen werden!",
+    "renameFailed": "Klassenname konnte nicht aktualisiert werden.",
+    "renameSuccess": "Klasse umbenannt.",
+    "deleteFailed": "Klasse konnte nicht gelöscht werden.",
+    "deleteSuccess": "Klasse gelöscht.",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "deleteDialog": {
+      "title": "Klasse löschen",
+      "text": "Möchtest du die Klasse \"{{name}}\" wirklich löschen? Dadurch werden {{count}} Projekt(e) dieser Klasse entfernt."
+    }
   },
   "tutorial": {
     "step": "Schritt",

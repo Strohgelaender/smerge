@@ -68,7 +68,7 @@ const TeacherView: React.FC = () => {
                 setLoading(false);
                 console.log(projectsOfSchoolclasses);
             } catch (error) {
-                toast.error('Could not load data!', {
+                toast.error(t('TeacherView.loadError'), {
                     position: "top-right",
                     autoClose: 3000,
                     hideProgressBar: false,
@@ -157,7 +157,7 @@ const TeacherView: React.FC = () => {
         setIsSavingSchoolclass(false);
 
         if (!res) {
-            toast.error("Failed to update schoolclass name.", {
+            toast.error(t('TeacherView.renameFailed'), {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -174,7 +174,7 @@ const TeacherView: React.FC = () => {
             )
         );
 
-        toast.success("Schoolclass renamed.", {
+        toast.success(t('TeacherView.renameSuccess'), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -197,7 +197,7 @@ const TeacherView: React.FC = () => {
         setIsDeletingSchoolclass(false);
 
         if (!res) {
-            toast.error("Failed to delete schoolclass.", {
+            toast.error(t('TeacherView.deleteFailed'), {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -210,7 +210,7 @@ const TeacherView: React.FC = () => {
             prev.filter((entry) => entry.schoolclass.id !== schoolclassToDelete.schoolclass.id)
         );
 
-        toast.success("Schoolclass deleted.", {
+        toast.success(t('TeacherView.deleteSuccess'), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -266,7 +266,7 @@ const TeacherView: React.FC = () => {
     );
 
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div>{t('TeacherView.loading')}</div>;
     }
 
     if (!projectsOfSchoolclasses?.length) {
@@ -283,7 +283,7 @@ const TeacherView: React.FC = () => {
             )}
             {!isTutorialActive && restartTutorialButton}
             <div>
-                You do not have any Schoolclasses yet, create one on the bottom right!
+                {t('TeacherView.noSchoolclasses')}
                 <AddSchoolclassDialog state={projectsOfSchoolclasses}
                                       setState={setProjectsOfSchoolclasses}></AddSchoolclassDialog>
             </div>
@@ -390,24 +390,24 @@ const TeacherView: React.FC = () => {
 
         {/* Delete Schoolclass Confirmation Dialog */}
         <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)}>
-            <DialogTitle>Delete Schoolclass</DialogTitle>
+            <DialogTitle>{t('TeacherView.deleteDialog.title')}</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Are you sure you want to delete the schoolclass
-                    "<strong>{schoolclassToDelete?.schoolclass.name}</strong>"? <br/>
-                    This will remove <strong>{schoolclassToDelete?.projects.length || 0} project(s)</strong> associated
-                    with this class.
+                    {t('TeacherView.deleteDialog.text', {
+                        name: schoolclassToDelete?.schoolclass.name ?? "",
+                        count: schoolclassToDelete?.projects.length || 0,
+                    })}
                 </DialogContentText>
             </DialogContent>
             <DialogActions>
-                <Button onClick={() => setDeleteConfirmOpen(false)}>Cancel</Button>
+                <Button onClick={() => setDeleteConfirmOpen(false)}>{t('TeacherView.cancel')}</Button>
                 <Button
                     onClick={confirmDeleteSchoolclass}
                     color="error"
                     variant="contained"
                     disabled={isDeletingSchoolclass}
                 >
-                    Delete
+                    {t('TeacherView.delete')}
                 </Button>
             </DialogActions>
         </Dialog>

@@ -361,7 +361,20 @@
     "save": "Save"
   },
   "TeacherView": {
-    "restartTutorial": "Restart Tutorial"
+    "restartTutorial": "Restart Tutorial",
+    "loading": "Loading...",
+    "noSchoolclasses": "You do not have any schoolclasses yet, create one on the bottom right!",
+    "loadError": "Could not load data!",
+    "renameFailed": "Failed to update schoolclass name.",
+    "renameSuccess": "Schoolclass renamed.",
+    "deleteFailed": "Failed to delete schoolclass.",
+    "deleteSuccess": "Schoolclass deleted.",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "deleteDialog": {
+      "title": "Delete schoolclass",
+      "text": "Are you sure you want to delete the schoolclass \"{{name}}\"? This will remove {{count}} project(s) associated with this class."
+    }
   },
   "tutorial": {
     "step": "Step",
