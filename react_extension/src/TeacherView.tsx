@@ -1,19 +1,18 @@
-import {Grid, Accordion, AccordionSummary, AccordionDetails, TextField, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, Box, IconButton} from "@mui/material";
+import {Grid, Accordion, AccordionSummary, AccordionDetails, TextField, Button, Box, IconButton} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ProjectCard from "./components/ProjectCard";
 import {
     getProjectsForSchoolclasses,
     getSchoolclassesOfCurrentUser,
-    updateSchoolclassName,
-    deleteSchoolclass
+    updateSchoolclassName
 } from "./services/SchoolclassService";
 import SchoolclassDto from "./components/models/SchoolclassDto";
 import ProjectDto from "./components/models/ProjectDto";
 import AddProjectDialog from "./components/AddProjectDialog";
 import ImportProjectDialog from "./components/ImportProjectDialog";
+import DeleteSchoolclassDialog from "./components/DeleteSchoolclassDialog";
 import React, {useEffect, useState} from "react";
 import AddSchoolclassDialog from "./components/AddSchoolclassDialog";
 import {toast} from "react-toastify";
@@ -43,11 +42,7 @@ const TeacherView: React.FC = () => {
     const [editingSchoolclassName, setEditingSchoolclassName] = useState<string>("");
     const [isSavingSchoolclass, setIsSavingSchoolclass] = useState<boolean>(false);
 
-    // Class delete state
-    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState<boolean>(false);
-    const [schoolclassToDelete, setSchoolclassToDelete] = useState<{schoolclass: SchoolclassDto, projects: ProjectDto[]} | null>(null);
-    const [isDeletingSchoolclass, setIsDeletingSchoolclass] = useState<boolean>(false);
-
+    // Teacher-Tutorial
     const currentStep = isTutorialActive
         ? tutorialSequence?.steps[currentStepIndex] ?? null
         : null;
@@ -188,40 +183,11 @@ const TeacherView: React.FC = () => {
     };
 
     // Schoolclass delete functions
-    const openDeleteConfirm = (entry: {schoolclass: SchoolclassDto, projects: ProjectDto[]}) => {
-        setSchoolclassToDelete(entry);
-        setDeleteConfirmOpen(true);
-    };
-
-    const confirmDeleteSchoolclass = async () => {
-        if (!schoolclassToDelete) return;
-
-        setIsDeletingSchoolclass(true);
-        const res = await deleteSchoolclass(schoolclassToDelete.schoolclass.id);
-        setIsDeletingSchoolclass(false);
-
-        if (!res) {
-            toast.error(t('TeacherView.deleteFailed'), {
-                position: "top-right",
-                autoClose: 2000,
-                hideProgressBar: false,
-            });
-            return;
-        }
-
+    const handleSchoolclassDeleted = (schoolclassId: string) => {
         // Update state
         setProjectsOfSchoolclasses((prev) =>
-            prev.filter((entry) => entry.schoolclass.id !== schoolclassToDelete.schoolclass.id)
+            prev.filter((entry) => entry.schoolclass.id !== schoolclassId)
         );
-
-        toast.success(t('TeacherView.deleteSuccess'), {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-        });
-
-        setDeleteConfirmOpen(false);
-        setSchoolclassToDelete(null);
     };
 
     async function closeTutorial() {
@@ -372,13 +338,11 @@ const TeacherView: React.FC = () => {
                             >
                                 <EditIcon fontSize="small"/>
                             </IconButton>
-                            <IconButton
-                                size="small"
-                                color="error"
-                                onClick={() => openDeleteConfirm(item)}
-                            >
-                                <DeleteIcon fontSize="small"/>
-                            </IconButton>
+                            <DeleteSchoolclassDialog
+                                schoolclass={item.schoolclass}
+                                projects={item.projects}
+                                onSchoolclassDeleted={handleSchoolclassDeleted}
+                            />
                         </Box>
                     )}
                 </AccordionSummary>
@@ -413,29 +377,6 @@ const TeacherView: React.FC = () => {
         })
         }
 
-        {/* Delete Schoolclass Confirmation Dialog */}
-        <Dialog open={deleteConfirmOpen} onClose={() => setDeleteConfirmOpen(false)}>
-            <DialogTitle>{t('TeacherView.deleteDialog.title')}</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    {t('TeacherView.deleteDialog.text', {
-                        name: schoolclassToDelete?.schoolclass.name ?? "",
-                        count: schoolclassToDelete?.projects.length || 0,
-                    })}
-                </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-                <Button onClick={() => setDeleteConfirmOpen(false)}>{t('TeacherView.cancel')}</Button>
-                <Button
-                    onClick={confirmDeleteSchoolclass}
-                    color="error"
-                    variant="contained"
-                    disabled={isDeletingSchoolclass}
-                >
-                    {t('TeacherView.delete')}
-                </Button>
-            </DialogActions>
-        </Dialog>
 
         <AddSchoolclassDialog state={projectsOfSchoolclasses}
                               setState={setProjectsOfSchoolclasses}
