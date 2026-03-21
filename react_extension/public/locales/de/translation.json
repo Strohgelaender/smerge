@@ -467,6 +467,22 @@
       "add_project": {
         "title": "Projekt hinzufügen",
         "description": "Klicke auf den Plus-Button, um ein neues Projekt zu erstellen."
+      },
+      "add_project_details": {
+        "title": "Projektdetails eingeben",
+        "description": "Gib einen Namen für das Projekt ein und lade optional eine Startdatei hoch, um deinen Lernenden eine Vorlage zu geben. Bestätige mit 'Erstellen'."
+      },
+      "manage_projects": {
+        "title": "Projekte verwalten",
+        "description": "In der Lehrkraft-Ansicht kannst du alle Projekte deiner Klasse zentral verwalten. Du kannst Projekte duplizieren, um eine Ausgangsbasis für verschiedene Gruppen zu schaffen, oder Projekte löschen, wenn sie nicht mehr benötigt werden."
+      },
+      "project_pin_explainer": {
+        "title": "Projekte an Lernende weitergeben",
+        "description": "Jedes Projekt hat eine eindeutige PIN, die du an deine Lernenden weitergeben kannst, damit sie auf das Projekt zugreifen können. Klicke auf 'PIN anzeigen', um die PIN sichtbar zu machen, oder kopiere die PIN direkt in die Zwischenablage."
+      },
+      "teacher_completion": {
+        "title": "Fertig!",
+        "description": "Du bist jetzt bereit, Smerge in deinem Unterricht einzusetzen! Viel Spaß beim Unterrichten und bei der Zusammenarbeit mit deinen Lernenden!"
       }
     }
   }

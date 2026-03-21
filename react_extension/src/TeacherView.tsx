@@ -99,6 +99,10 @@ const TeacherView: React.FC = () => {
 
 
     function addProjectToState(project: ProjectDto) {
+        // Tutorial
+        if (isTutorialActive && currentStep?.id === 'add_project_details') {
+            nextTutorialStep();
+        }
         // Fügt das Projekt dem korrekten Array hinzu.
         // Die Syntax ist so komplex, damit so zuverlässig die React Change-Detection getriggerd wird.
         setProjectsOfSchoolclasses((prev) =>
@@ -263,6 +267,12 @@ const TeacherView: React.FC = () => {
         }
     }
 
+    function onAddButtonClick() {
+        if (currentStep?.id === "add_project") {
+            nextTutorialStep();
+        }
+    }
+
     const tutorialRoot = document.getElementById("tutorial-root");
 
     const restartTutorialButton = (
@@ -389,7 +399,9 @@ const TeacherView: React.FC = () => {
                         }
                         <Grid item key={'addButton'}>
                             <AddProjectDialog addProjectToState={addProjectToState}
-                                              schoolClass={item.schoolclass}></AddProjectDialog>
+                                              schoolClass={item.schoolclass}
+                                              onButtonClick={onAddButtonClick}
+                            ></AddProjectDialog>
                         </Grid>
                         <Grid item key={'importButton'}>
                             <ImportProjectDialog addProjectToState={addProjectToState}

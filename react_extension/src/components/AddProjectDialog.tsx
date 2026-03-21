@@ -13,12 +13,22 @@ import SchoolclassDto from './models/SchoolclassDto';
 import ProjectDto from './models/ProjectDto';
 import { useTranslation } from 'react-i18next';
 
-const AddProjectDialog = (props: { schoolClass: SchoolclassDto; addProjectToState: (arg0: ProjectDto) => void; }) => {
+interface AddProjectDialogProps {
+  schoolClass: SchoolclassDto;
+  addProjectToState: (arg0: ProjectDto) => void;
+  // Tutorial
+  onButtonClick?: () => void;
+}
+
+const AddProjectDialog = (props: AddProjectDialogProps) => {
   const [open, setOpen] = React.useState(false);
   const [file, setFile] = React.useState<File | null>(null);
   const { t } = useTranslation();
 
   const handleClickOpen = () => {
+    if (props.onButtonClick) {
+      props.onButtonClick();
+    }
     setOpen(true);
   };
 
@@ -61,7 +71,7 @@ const AddProjectDialog = (props: { schoolClass: SchoolclassDto; addProjectToStat
           },
         }}
       >
-        <DialogTitle>{t('AddProjectDialog.title')}</DialogTitle>
+        <DialogTitle id="addProjectTitle">{t('AddProjectDialog.title')}</DialogTitle>
         <DialogContent>
           <DialogContentText>
             {t('AddProjectDialog.description')}

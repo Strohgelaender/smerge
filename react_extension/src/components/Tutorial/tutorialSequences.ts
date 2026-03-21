@@ -160,13 +160,27 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
             }
         },
         {
-            id: 'add_project_small',
-            mode: 'small'
+            id: 'add_project_details',
+            title: 'tutorial.teacher_view.add_project_details.title',
+            description: 'tutorial.teacher_view.add_project_details.description',
+            target: {
+                selector: '#addProjectTitle',
+                position: 'top'
+            },
+            validation: {
+                type: 'click'
+            }
+        },
+        {
+            id: 'manage_projects',
+            title: 'tutorial.teacher_view.manage_projects.title',
+            description: 'tutorial.teacher_view.manage_projects.description',
+            mode: 'modal'
         },
         {
             id: 'project_pin_explainer',
-            title: 'tutorial.project_pin_explainer.title',
-            description: 'tutorial.project_pin_explainer.description',
+            title: 'tutorial.teacher_view.project_pin_explainer.title',
+            description: 'tutorial.teacher_view.project_pin_explainer.description',
             mode: 'modal'
         }, {
             id: 'teacher_completion',
