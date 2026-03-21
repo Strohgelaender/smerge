@@ -153,7 +153,7 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
             description: 'tutorial.teacher_view.add_project.description',
             target: {
                 selector: '.addProjectButton',
-                position: 'bottom'
+                position: 'right'
             },
             validation: {
                 type: 'click'
@@ -164,7 +164,7 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
             title: 'tutorial.teacher_view.add_project_details.title',
             description: 'tutorial.teacher_view.add_project_details.description',
             target: {
-                selector: '#addProjectTitle',
+                selector: '#addProjectDescription',
                 position: 'top'
             },
             validation: {

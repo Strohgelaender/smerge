@@ -73,7 +73,7 @@ const AddProjectDialog = (props: AddProjectDialogProps) => {
       >
         <DialogTitle id="addProjectTitle">{t('AddProjectDialog.title')}</DialogTitle>
         <DialogContent>
-          <DialogContentText>
+          <DialogContentText id="addProjectDescription">
             {t('AddProjectDialog.description')}
           </DialogContentText>
           <TextField
