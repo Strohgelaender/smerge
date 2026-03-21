@@ -14,10 +14,10 @@ export interface TutorialStep {
     selector: string;
     position?: 'top' | 'bottom' | 'left' | 'right' | 'top-left';
   };
-  validation?: {
-    type: 'click' | 'custom';
-    condition?: () => boolean;
-  };
+  // Darf der Nutzer selbst auf weiter klicken
+  // Nutze false um auf eine Interaktion zu warten (z.B. Klick auf einen Button) bevor der nächste Schritt angezeigt wird.
+  // In diesem Fall muss sich die Komponente selbst zum nächsten Schritt wechseln.
+  allowNext: boolean;
 }
 
 export interface TutorialSequence {

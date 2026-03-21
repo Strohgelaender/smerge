@@ -12,13 +12,15 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
             id: 'welcome',
             title: 'tutorial.student_steps.welcome.title',
             description: 'tutorial.student_steps.welcome.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         },
         {
             id: 'explain_overview',
             title: 'tutorial.student_steps.overview.title',
             description: 'tutorial.student_steps.overview.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         },
         {
             id: 'open_snap',
@@ -31,57 +33,65 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
                 selector: '.__________cytoscape_container > div:nth-child(2) .commitmessage',
                 position: 'top'
             },
-            validation: {
-                type: 'click' // Klick auf die Node im Graphen
-            },
+            // Klick auf die Node im Graphen
+            allowNext: false
         },
         {
             id: 'activate_js_instructions',
             title: 'tutorial.student_steps.activate_js.title',
             description: 'tutorial.student_steps.activate_js.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         },
         {
             id: 'import_data_instructions',
             title: 'tutorial.student_steps.import_data.title',
             description: 'tutorial.student_steps.import_data.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         },
         {
             id: 'edit_snap',
             title: 'tutorial.student_steps.edit_snap.title',
             description: 'tutorial.student_steps.edit_snap.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         },
         {
             id: 'edit_small',
-            mode: 'small'
+            mode: 'small',
+            allowNext: true
         },
         {
             id: 'post_to_smerge',
             title: 'tutorial.student_steps.post_to_smerge.title',
             description: 'tutorial.student_steps.post_to_smerge.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         },
         {
             id: 'post_small',
-            mode: 'small'
+            mode: 'small',
+            allowNext: true
         },
         {
             id: 'back_to_project',
             title: 'tutorial.student_steps.back_to_project.title',
             description: 'tutorial.student_steps.back_to_project.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         }, {
             id: 'view_new_node',
             title: 'tutorial.student_steps.view_new_node.title',
             description: 'tutorial.student_steps.view_new_node.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         }, {
             id: 'merge_intro',
             title: 'tutorial.student_steps.merge_intro.title',
             description: 'tutorial.student_steps.merge_intro.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         },
         {
             id: 'merge_select',
@@ -91,9 +101,7 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
                 selector: '.__________cytoscape_container > div:nth-child(2) > div:nth-child(4) > div:nth-child(3) > div:nth-child(1) .commitmessage',
                 position: 'top'
             },
-            validation: {
-                type: 'click'
-            }
+            allowNext: false
         }, {
             id: 'merge_click',
             title: 'tutorial.student_steps.merge_click.title',
@@ -102,15 +110,14 @@ export const SMERGE_TUTORIAL: TutorialSequence = {
                 selector: '#mergeButton',
                 position: 'top-left'
             },
-            validation: {
-                type: 'click'
-            }
+            allowNext: false
         },
         {
             id: 'completion',
             title: 'tutorial.student_steps.completion.title',
             description: 'tutorial.student_steps.completion.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         }
     ]
 };
@@ -123,7 +130,8 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
             id: 'teacher_welcome',
             title: 'tutorial.teacher_view.welcome.title',
             description: 'tutorial.teacher_view.welcome.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         },
         {
             id: 'explain_add_class_button',
@@ -133,9 +141,7 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
                 selector: '#add-schoolclass-fab',
                 position: 'top-left'
             },
-            validation: {
-                type: 'click'
-            }
+            allowNext: false
         }, {
             id: 'expand_class',
             title: 'tutorial.teacher_view.expand_class.title',
@@ -144,9 +150,7 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
                 selector: '.schoolclass-accordion',
                 position: 'bottom'
             },
-            validation: {
-                type: 'click'
-            }
+            allowNext: false
         }, {
             id: 'add_project',
             title: 'tutorial.teacher_view.add_project.title',
@@ -155,9 +159,7 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
                 selector: '.addProjectButton',
                 position: 'right'
             },
-            validation: {
-                type: 'click'
-            }
+            allowNext: false
         },
         {
             id: 'add_project_details',
@@ -167,26 +169,27 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
                 selector: '#addProjectDescription',
                 position: 'top'
             },
-            validation: {
-                type: 'click'
-            }
+            allowNext: false
         },
         {
             id: 'manage_projects',
             title: 'tutorial.teacher_view.manage_projects.title',
             description: 'tutorial.teacher_view.manage_projects.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         },
         {
             id: 'project_pin_explainer',
             title: 'tutorial.teacher_view.project_pin_explainer.title',
             description: 'tutorial.teacher_view.project_pin_explainer.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         }, {
             id: 'teacher_completion',
             title: 'tutorial.teacher_view.teacher_completion.title',
             description: 'tutorial.teacher_view.teacher_completion.description',
-            mode: 'modal'
+            mode: 'modal',
+            allowNext: true
         }
     ]
 };

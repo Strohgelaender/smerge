@@ -200,7 +200,7 @@ export const TutorialOverlay: React.FC<TutorialOverlayProps> = ({
           <Button
             variant="contained"
             size="small"
-            disabled={!!step.validation}
+            disabled={!step.allowNext}
             endIcon={<ArrowForwardIcon />}
             onClick={onNext}
             sx={{
