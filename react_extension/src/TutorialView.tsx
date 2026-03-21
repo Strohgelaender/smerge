@@ -159,7 +159,6 @@ const TutorialView: React.FC = () => {
     initTutorial();
   }, []);
 
-  // TODO: Cleane Lösung mit Methoden in Step-Definition
   useEffect(() => {
     if (
       isActive &&
