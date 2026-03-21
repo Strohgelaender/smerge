@@ -757,6 +757,11 @@ class SchoolClassUpdateView(generics.UpdateAPIView):
         if instance.teacher != request.user:
             return Response(data="Unauthorized", status=403)
 
+        # Delete all projects in this schoolclass
+        projects = Project.objects.filter(schoolclass=instance)
+        for project in projects:
+            project.delete()
+
         instance.delete()
         return Response(data="Schoolclass deleted", status=200)
 
