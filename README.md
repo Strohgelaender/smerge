@@ -412,12 +412,18 @@ The task deletes all password reset tokens that are older than one week.
 The default task can be disabled by setting the following in the Django settings:
 ```DISABLE_TOKEN_INVALIDATION = True```
 
-
 If you have disabled the automatically scheduled invalidation task within Django you can still invalidate tokens via a Django management command.
 The same command gets executed for the scheduled task.
 
 For more information execute:
-```python snapmerge/manage.py  resettokencleanup --h --settings=config.settings_local```
+```python snapmerge/manage.py resettokencleanup --h --settings=config.settings_local```
+
+## Tutorial Cleanup Task
+Similarly, a Tasks to delete unneeded tutorial projects is added and automatically executed once per day.
+
+You can also control this tasks by setting the  ``DISABLE_TUTORIAL_CLEANUP = True`` setting and run it manually with the management command:
+
+```python snapmerge/manage.py tutorialcleanup --settings=config.settings_local```
 
 
 ## Good to know:
