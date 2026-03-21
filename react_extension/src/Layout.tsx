@@ -53,7 +53,7 @@ const navItems = [
         display: !!getCurrentUser(),
         name: getCurrentUser() ? "main.nav_logout" : "",
         foo: () => {
-            if (window.location.href.includes("/ext") && getCurrentUser()) {
+            if (getCurrentUser()) {
                 logout();
                 window.location.href = window.location.origin + "/teacher_login";
             }

@@ -82,13 +82,21 @@ export default function SignIn(props: { disableCustomTheme?: boolean }) {
     });
     TeacherAuthService.login(String(username), String(password)).then(
       (response) => {
-        console.log(response.message);
+        console.log(response?.message);
         //navigate("/teacher_view/");
         location.href = "/teacher_view/";
       },
       (error) => {
         console.log(error);
-        toast.error(error, {
+        const responseData = error?.response?.data;
+
+        let errorMessage = 'Login failed';
+        const nonFieldErrors = responseData?.non_field_errors;
+        if (Array.isArray(nonFieldErrors) && nonFieldErrors.length > 0) {
+            errorMessage = nonFieldErrors[0];
+        }
+
+        toast.error(errorMessage, {
           position: "top-right",
           autoClose: 3000,
           hideProgressBar: false,

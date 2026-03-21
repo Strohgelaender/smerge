@@ -104,6 +104,12 @@ def _update_snap_file_stats(snap_file):
 #     lookup_field = 'project'
 #     permission_classes = [permissions.AllowAny]
 
+@method_decorator(ensure_csrf_cookie, name="dispatch")
+class CsrfCookieView(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        return Response({"detail": "CSRF cookie set"})
 
 class CustomAuthToken(ObtainAuthToken):
 
@@ -119,7 +125,6 @@ class CustomAuthToken(ObtainAuthToken):
             'user_id': user.pk,
             'email': user.email
         })
-
 
 class RegisterTeacherView(APIView):
     """Registration View"""

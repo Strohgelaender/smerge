@@ -42,6 +42,7 @@ urlpatterns = [
     path("api/tutorial/project/<str:project_id>/cleanup", api_views.CleanupTutorialProjectView.as_view()),
 
     path("api/public/settings", api_views.SettingsView.as_view()),
+    path("api/auth/csrf", api_views.CsrfCookieView.as_view()),
     path("api/teacher_login_token", api_views.CustomAuthToken.as_view()),
     path("api/teacher_registration_token", api_views.RegisterTeacherView.as_view()),
     path("api/teacher/tutorial-status", api_views.TeacherTutorialStatusView.as_view()),
