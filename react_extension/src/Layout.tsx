@@ -108,7 +108,6 @@ function Layout() {
     };
 
     // check if csfr token was set and redirect to missing page if not
-
     // Pages to skip csrf check for
     const publicPages = ["/", "/howto", "/impressum", "/open", "/create", "/tutorial", "/restore_info", "/reset_password", "/csfr_missing"];
     const navigate = useNavigate();
