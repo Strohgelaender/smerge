@@ -67,6 +67,7 @@ class HttpService {
   ) {
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, this.baseURL + endpoint, true);
+    xhttp.withCredentials = true;
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
@@ -139,6 +140,7 @@ class HttpService {
   ) {
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, this.baseURL + endpoint, true);
+    xhttp.withCredentials = true;
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
@@ -205,6 +207,7 @@ class HttpService {
   ) {
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", this.baseURL + endpoint, true);
+    xhttp.withCredentials = true;
     this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
     xhttp.send();
@@ -255,6 +258,7 @@ class HttpService {
     return new Promise((resolve, reject) => {
       const xhttp = new XMLHttpRequest();
       xhttp.open(method, this.baseURL + endpoint, true);
+      xhttp.withCredentials = true;
       this.setCsrfHeader(xhttp);
       addAuthHeader(xhttp);
 
