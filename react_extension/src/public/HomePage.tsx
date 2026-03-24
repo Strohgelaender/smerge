@@ -7,7 +7,7 @@ import homeIcon from "../assets/home-icon.svg";
 import homeIconDebug from "../assets/home-icon-debug.svg";
 import "./Base.css";
 import "./Home.css";
-import {primaryButtonSx} from "./publicPageStyles.ts";
+import {lightPageContainer, primaryButtonSx} from "./publicPageStyles.ts";
 import {AppSettings, fetchAppSettings} from "../services/PublicProjectService.ts";
 
 const HomePage: React.FC = () => {
@@ -42,15 +42,7 @@ const HomePage: React.FC = () => {
     }
 
     return (
-        <Box
-            sx={{
-                minHeight: "100%",
-                display: "flex",
-                flexDirection: "column",
-                backgroundColor: "white",
-                color: "black",
-            }}
-        >
+        <Box sx={ lightPageContainer }>
             <Box className="vertical-center" sx={{textAlign: "center"}}>
                 <Box sx={{marginBottom: "2em"}}>
                     {settings.inBeta ? (
