@@ -1,5 +1,6 @@
 //  /api/project/46926613-3cca-439d-a4f3-9897753b9940
 import { toast } from "react-toastify";
+import i18next from "i18next";
 import ProjectDto from "../components/models/ProjectDto";
 import httpService from "./HttpService";
 
@@ -37,7 +38,7 @@ export const getProjectUnhideAll = async (projectId: string) => {
     );
 
     if (res) {
-        toast.success(`Unhide successful.`, {
+        toast.success(i18next.t("toast.project.unhideSuccess"), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -73,14 +74,14 @@ export const createProject = async (payload: CreateTeacherProjectPayload) => {
             "POST"
         );
 
-        toast.success(`Creation successful.`, {
+        toast.success(i18next.t("toast.project.creationSuccess"), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
         });
         return res;
     } catch {
-        toast.error('Creation failed', {
+        toast.error(i18next.t("toast.project.creationError"), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -97,7 +98,7 @@ export const importProjectToSchoolclass = async (projectId: string, project: Pro
         true
     );
     if (res) {
-        toast.success(`Import successful.`, {
+        toast.success(i18next.t("toast.project.importSuccess"), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -105,7 +106,7 @@ export const importProjectToSchoolclass = async (projectId: string, project: Pro
         return res;
     }
     else {
-        toast.error('Import failed', {
+        toast.error(i18next.t("toast.project.importError"), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -131,7 +132,7 @@ export const postDeleteProject = async (
         );
         // console.log(res);
         if (res) {
-            toast.success(`Project Deleted.`, {
+            toast.success(i18next.t("toast.project.deleteSuccess"), {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -142,14 +143,14 @@ export const postDeleteProject = async (
         if (err.status < 400) {
             // Redirect = Success
             onRedirect();
-            toast.success(`Project Deleted!`, {
+            toast.success(i18next.t("toast.project.deleteSuccess"), {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
             });
             return true;
         } else {
-            toast.error(`Wrong Password.`, {
+            toast.error(i18next.t("toast.project.wrongPassword"), {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -179,7 +180,7 @@ export const postPasswordChange = async (
         );
 
         if (res) {
-            toast.success(`Password Changed.`, {
+            toast.success(i18next.t("toast.project.passwordChangeSuccess"), {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -187,7 +188,7 @@ export const postPasswordChange = async (
             return res;
         }
     } catch (err) {
-        toast.error(`Wrong Password.`, {
+        toast.error(i18next.t("toast.project.wrongPassword"), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -212,7 +213,7 @@ export const postProjectSettingsChange = async (
         // console.log("In project settings:");
         // console.log(res);
         if (res) {
-            toast.success(`Project updated.`, {
+            toast.success(i18next.t("toast.project.projectUpdateSuccess"), {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -220,7 +221,7 @@ export const postProjectSettingsChange = async (
             return res;
         }
     } catch (err) {
-        toast.error(`Wrong Password.`, {
+        toast.error(i18next.t("toast.project.wrongPassword"), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -245,7 +246,7 @@ export const putKanbanChange = async (
             return res;
         }
     } catch (err) {
-        toast.error(`Failed to update Kanbanboard`, {
+        toast.error(i18next.t("toast.project.kanbanUpdateError"), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -276,7 +277,7 @@ export const putColorChange = async (
         );
 
         if (res) {
-            toast.success(`Colors Changed.`, {
+            toast.success(i18next.t("toast.project.colorsChangeSuccess"), {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -304,7 +305,7 @@ export const putLabelChange = async (fileId: string, label: string) => {
         );
 
         if (res) {
-            toast.success(`Label Changed.`, {
+            toast.success(i18next.t("toast.project.labelChangeSuccess"), {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -328,7 +329,7 @@ export const putProjectNameChange = async (projectId: string, name: string) => {
         );
 
         if (res) {
-            toast.success(`Project name updated.`, {
+            toast.success(i18next.t("toast.project.projectNameUpdateSuccess"), {
                 position: "top-right",
                 autoClose: 2000,
                 hideProgressBar: false,
@@ -336,7 +337,7 @@ export const putProjectNameChange = async (projectId: string, name: string) => {
             return res;
         }
     } catch (err) {
-        toast.error(`Failed to update project name.`, {
+        toast.error(i18next.t("toast.project.projectNameUpdateError"), {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,

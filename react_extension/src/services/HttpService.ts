@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { getCurrentUser } from "./TeacherAuthService";
+import i18next from "i18next";
 
 class HttpService {
   public csrftoken: string;
@@ -79,7 +80,7 @@ class HttpService {
         onSuccess(xhttp);
         if (suppressNotificationSuccess) return;
 
-        toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
+        toast.success(i18next.t("toast.http.success", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -90,7 +91,7 @@ class HttpService {
         onFail(xhttp);
         if (suppressNotificationFail) return;
 
-        toast.error(`Post ${endpoint} failed (${xhttp.status}).`, {
+        toast.error(i18next.t("toast.http.error", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -152,7 +153,7 @@ class HttpService {
         onSuccess(xhttp);
         if (suppressNotificationSuccess) return;
 
-        toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
+        toast.success(i18next.t("toast.http.success", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -163,7 +164,7 @@ class HttpService {
         onFail(xhttp);
         if (suppressNotificationFail) return;
 
-        toast.error(`Get ${endpoint} failed (${xhttp.status}).`, {
+        toast.error(i18next.t("toast.http.error", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -218,7 +219,7 @@ class HttpService {
         onSuccess(xhttp);
         if (suppressNotificationSuccess) return;
 
-        toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
+        toast.success(i18next.t("toast.http.success", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -229,7 +230,7 @@ class HttpService {
         onFail(xhttp);
         if (suppressNotificationFail) return;
 
-        toast.error(`Get ${endpoint} failed (${xhttp.status}).`, {
+        toast.error(i18next.t("toast.http.error", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,

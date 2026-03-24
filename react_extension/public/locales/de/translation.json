@@ -485,5 +485,33 @@
         "description": "Du bist jetzt bereit, Smerge in deinem Unterricht einzusetzen! Viel Spaß beim Unterrichten und bei der Zusammenarbeit mit deinen Lernenden!"
       }
     }
+  },
+  "toast": {
+    "http": {
+      "success": "{{endpoint}} erfolgreich ({{status}})",
+      "error": "{{endpoint}} fehlgeschlagen ({{status}})"
+    },
+    "upload": {
+      "progress": "Hochladen: {{val}}%",
+      "fileUploadSuccess": "Datei erfolgreich hochgeladen",
+      "fileUploadFail": "Datei-Upload fehlgeschlagen"
+    },
+    "project": {
+      "unhideSuccess": "Alle Knoten sichtbar gemacht",
+      "creationSuccess": "Projekt erfolgreich erstellt",
+      "creationError": "Projekterstellung fehlgeschlagen",
+      "importSuccess": "Projekt erfolgreich importiert",
+      "importError": "Projektimport fehlgeschlagen",
+      "deleteSuccess": "Projekt gelöscht",
+      "deleteError": "Projektlöschung fehlgeschlagen",
+      "wrongPassword": "Falsches Passwort",
+      "passwordChangeSuccess": "Passwort geändert",
+      "projectUpdateSuccess": "Projekt aktualisiert",
+      "kanbanUpdateError": "Kanban-Board konnte nicht aktualisiert werden",
+      "colorsChangeSuccess": "Farben geändert",
+      "labelChangeSuccess": "Beschriftung geändert",
+      "projectNameUpdateSuccess": "Projektname aktualisiert",
+      "projectNameUpdateError": "Projektname konnte nicht aktualisiert werden"
+    }
   }
 }
