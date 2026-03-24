@@ -25,7 +25,8 @@ from .serializers import SnapFileSerializer, ProjectSerializer, ProjectColorSeri
 from django.shortcuts import get_object_or_404, get_list_or_404
 from django_eventstream import send_event
 from django.db.models import Q
-from django.views.decorators.csrf import csrf_protect, ensure_csrf_cookie, csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.middleware.csrf import get_token
 from django.utils.decorators import method_decorator
 
 from ..views import check_password, generate_unique_PIN, hashPassword
@@ -95,6 +96,11 @@ def _update_snap_file_stats(snap_file):
     snap_file.number_sprites = stats[1]
     snap_file.save(update_fields=["number_scripts", "number_sprites"])
 
+# Response mit gesetztem CSRF-Cookie
+def _response_with_csrf_cookie(request, data, status_code):
+    get_token(request)
+    return Response(data, status=status_code)
+
 # class ListSnapFilesView(generics.ListAPIView):
 #     """
 #     API endpoint that obtains a list of files that correspond to a given project.
@@ -109,7 +115,7 @@ class CsrfCookieView(APIView):
     permission_classes = [permissions.AllowAny]
 
     def get(self, request, *args, **kwargs):
-        return Response({"detail": "CSRF cookie set"})
+        return _response_with_csrf_cookie(request, {"detail": "CSRF cookie set"}, 200)
 
 class CustomAuthToken(ObtainAuthToken):
 
@@ -771,13 +777,12 @@ class SchoolClassUpdateView(generics.UpdateAPIView):
         return Response(data="Schoolclass deleted", status=200)
 
 
-@method_decorator(csrf_exempt, name="dispatch")
 class PublicProjectOpenView(APIView):
     """Open project by PIN and optional password for public (non-teacher) flow."""
 
+    authentication_classes = []
     permission_classes = [permissions.AllowAny]
 
-    @method_decorator(ensure_csrf_cookie)
     def post(self, request, *args, **kwargs):
         pin = request.data.get("pin", "").strip()
         password = request.data.get("password", "")
@@ -791,18 +796,17 @@ class PublicProjectOpenView(APIView):
             return Response({"detail": _("No such project or wrong password")}, status=403)
 
         if project.password and not check_password(password, project.password):
-            return Response({"detail": _("No such project or wrong password")}, status=403)
+            return _response_with_csrf_cookie(request, {"detail": _("No such project or wrong password")}, 403)
 
-        return Response({"project_id": str(project.id)}, status=200)
+        return _response_with_csrf_cookie(request, {"project_id": str(project.id)}, 200)
 
 
-@method_decorator(csrf_exempt, name="dispatch")
 class PublicProjectCreateView(APIView):
     """Create public project with optional starting Snap file."""
 
+    authentication_classes = []
     permission_classes = [permissions.AllowAny]
 
-    @method_decorator(ensure_csrf_cookie)
     def post(self, request, *args, **kwargs):
         name = (request.data.get("name") or "").strip()
         description = request.data.get("description") or ""
@@ -829,15 +833,16 @@ class PublicProjectCreateView(APIView):
             )
         except ValueError as exc:
             project.delete()
-            return Response({"detail": str(exc)}, status=400)
+            return _response_with_csrf_cookie(request, {"detail": str(exc)}, 400)
 
-        return Response(
+        return _response_with_csrf_cookie(
+            request,
             {
                 "project_id": str(project.id),
                 "pin": project.pin,
                 "password": password_plain,
             },
-            status=201,
+            201,
         )
 
 
@@ -951,10 +956,10 @@ class PublicResetPasswordView(APIView):
         )
 
 # Tutorial Project Creation
-@method_decorator(csrf_exempt, name="dispatch")
 class CreateTutorialProjectView(APIView):
 
-    @method_decorator(ensure_csrf_cookie)
+    authentication_classes = []
+
     def post(self, request):
         try:
             project = Project()
@@ -983,12 +988,12 @@ class CreateTutorialProjectView(APIView):
             snap_file.save()
             snap_file.xml_job()
 
-            return JsonResponse({
+            return _response_with_csrf_cookie(request, {
                 "project_id": str(project.id),
                 "pin": project.pin,
                 "file_id": snap_file.id,
                 "success": True
-            })
+            }, 200)
 
         except Exception as e:
             return JsonResponse({
