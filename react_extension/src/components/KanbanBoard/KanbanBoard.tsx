@@ -36,6 +36,24 @@ const tagColorMap = {
     "Priority: High": {bg: "#F44336", text: "#fff"},
 };
 
+// Available animal icons
+const animalIcons = [
+    "cow-face-icon.svg",
+    "dog-face-color-icon.svg",
+    "fox-face-icon.svg",
+    "giraffe-face-icon.svg",
+    "kangaroo-face-icon.svg",
+    "monkey-face-cartoon-icon.svg",
+    "panda-icon.svg",
+    "raccoon-icon.svg",
+    "sheep-face-icon.svg",
+    "turtle-color-icon.svg",
+];
+
+const getIconUrl = (iconName: string) => {
+    return `/static/icons/animal-icons/${iconName}`;
+};
+
 // Priority order for sorting (lower number = higher priority / appears first)
 const priorityOrder = {
     "Priority: High": 0,
@@ -169,6 +187,8 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
     const [text, setText] = useState(card.description);
     const [author, setAuthor] = useState(card.author ?? "Unknown");
     const [tags, setTags] = useState<string[]>(card.tags ?? []);
+    const [icon, setIcon] = useState<string>(card.icon ?? "");
+    const [showIconPicker, setShowIconPicker] = useState(false);
 
     useEffect(() => {
         setAuthor(card.author ?? "Unknown");
@@ -177,6 +197,10 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
     useEffect(() => {
         setTags(card.tags ?? []);
     }, [card.tags]);
+
+    useEffect(() => {
+        setIcon(card.icon ?? "");
+    }, [card.icon]);
 
 
     const inputRef = useRef(null);
@@ -196,7 +220,7 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
     // Save and send change to backend
     const saveEdit = () => {
         setEditMode(false);
-        setBoard(changeCard(board, card.id, {description: text, author, tags}))
+        setBoard(changeCard(board, card.id, {description: text, author, tags, icon}))
     };
 
     // When someone is typing only update locally
@@ -253,38 +277,143 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
         }}>
             <div style={{pointerEvents: editMode ? 'auto' : 'none', flex: 1}}>
                 {editMode ? (
-                    <Box sx={{px: 1.5, pt: 1, pb: 0.5, display: 'flex', alignItems: 'center', gap: 0.5}}>
-                        <Typography sx={{fontSize: '0.8rem', fontWeight: 600, color: '#323232'}}>
-                            Author:
-                        </Typography>
-                        <TextField
-                            size="small"
-                            value={author}
-                            onChange={(e) => setAuthor(e.target.value)}
-                            placeholder="Author"
-                            inputProps={{maxLength: 50}}
+                    <Box sx={{px: 1.5, pt: 1, pb: 0.5, display: 'flex', alignItems: 'center', gap: 1}}>
+                        {/* Circular icon selector */}
+                        <Box
+                            onClick={() => setShowIconPicker(true)}
                             sx={{
-                                flex: 1,
-                                '& .MuiInputBase-input': {color: '#323232', fontSize: '0.8rem', fontWeight: 600},
-                                '& .MuiOutlinedInput-notchedOutline': {border: '1px solid #999'},
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '50%',
+                                border: '2px solid #076AAB',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                cursor: 'pointer',
+                                backgroundColor: '#f0f0f0',
+                                flexShrink: 0,
+                                '&:hover': {
+                                    backgroundColor: '#e0e0e0',
+                                }
                             }}
-                        />
+                        >
+                            {icon ? (
+                                <img 
+                                    src={getIconUrl(icon)} 
+                                    alt="card-icon" 
+                                    style={{height: '40px', width: '40px', objectFit: 'contain'}}
+                                />
+                            ) : (
+                                <Typography sx={{fontSize: '0.7rem', textAlign: 'center', color: '#999'}}>
+                                    +Icon
+                                </Typography>
+                            )}
+                        </Box>
+
+                        {/* Author field */}
+                        <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5, flex: 1}}>
+                            <Typography sx={{fontSize: '0.8rem', fontWeight: 600, color: '#323232', whiteSpace: 'nowrap'}}>
+                                Author:
+                            </Typography>
+                            <TextField
+                                size="small"
+                                value={author}
+                                onChange={(e) => setAuthor(e.target.value)}
+                                placeholder="Author"
+                                inputProps={{maxLength: 50}}
+                                sx={{
+                                    flex: 1,
+                                    '& .MuiInputBase-input': {color: '#323232', fontSize: '0.8rem', fontWeight: 600},
+                                    '& .MuiOutlinedInput-notchedOutline': {border: '1px solid #999'},
+                                }}
+                            />
+                        </Box>
                     </Box>
                 ) : (
-                    <Typography
-                        sx={{
-                            px: 1.5,
-                            pt: 1,
-                            pb: 0.5,
-                            fontSize: "0.8rem",
-                            fontWeight: 600,
-                            color: "#323232",
-                            lineHeight: 1.2,
-                        }}
-                    >
-                        Author: {author}
-                    </Typography>
+                    <Box sx={{px: 1.5, pt: 1, pb: 0.5, display: 'flex', alignItems: 'center', gap: 1}}>
+                        {/* Circular icon display */}
+                        <Box
+                            sx={{
+                                width: '50px',
+                                height: '50px',
+                                borderRadius: '50%',
+                                border: '2px solid #ddd',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: '#f9f9f9',
+                                flexShrink: 0,
+                            }}
+                        >
+                            {icon && (
+                                <img 
+                                    src={getIconUrl(icon)} 
+                                    alt="card-icon" 
+                                    style={{height: '40px', width: '40px', objectFit: 'contain'}}
+                                />
+                            )}
+                        </Box>
+
+                        {/* Author display */}
+                        <Box sx={{display: 'flex', flexDirection: 'column', flex: 1}}>
+                            <Typography sx={{fontSize: '0.7rem', color: '#999'}}>
+                                Author
+                            </Typography>
+                            <Typography
+                                sx={{
+                                    fontSize: "0.8rem",
+                                    fontWeight: 600,
+                                    color: "#323232",
+                                    lineHeight: 1.2,
+                                }}
+                            >
+                                {author}
+                            </Typography>
+                        </Box>
+                    </Box>
                 )}
+
+                <Dialog open={showIconPicker} onClose={() => setShowIconPicker(false)}>
+                    <Box sx={{p: 2, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 1}}>
+                        {animalIcons.map((iconName) => (
+                            <Box 
+                                key={iconName}
+                                onClick={() => {
+                                    setIcon(iconName);
+                                    setShowIconPicker(false);
+                                }}
+                                sx={{
+                                    p: 1,
+                                    cursor: 'pointer',
+                                    border: icon === iconName ? '2px solid #076AAB' : '1px solid #ccc',
+                                    borderRadius: 1,
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    '&:hover': {
+                                        backgroundColor: '#f0f0f0'
+                                    }
+                                }}
+                            >
+                                <img 
+                                    src={getIconUrl(iconName)} 
+                                    alt={iconName}
+                                    style={{height: '50px', width: '50px', objectFit: 'contain'}}
+                                />
+                            </Box>
+                        ))}
+                    </Box>
+                    <Button 
+                        fullWidth 
+                        onClick={() => {
+                            setIcon("");
+                            setShowIconPicker(false);
+                        }}
+                        color="error"
+                    >
+                        Remove Icon
+                    </Button>
+                </Dialog>
 
                 <TextField
                     multiline
