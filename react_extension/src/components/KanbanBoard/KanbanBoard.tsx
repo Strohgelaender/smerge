@@ -199,21 +199,23 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
         }}>
             <div style={{pointerEvents: editMode ? 'auto' : 'none', flex: 1}}>
                 {editMode ? (
-                    <TextField
-                        size="small"
-                        value={author}
-                        onChange={(e) => setAuthor(e.target.value)}
-                        placeholder="Author"
-                        inputProps={{maxLength: 50}}
-                        sx={{
-                            px: 1.5,
-                            pt: 1,
-                            pb: 0.5,
-                            width: '100%',
-                            '& .MuiInputBase-input': {color: '#323232', fontSize: '0.8rem', fontWeight: 600},
-                            '& .MuiOutlinedInput-notchedOutline': {border: '1px solid #999'},
-                        }}
-                    />
+                    <Box sx={{px: 1.5, pt: 1, pb: 0.5, display: 'flex', alignItems: 'center', gap: 0.5}}>
+                        <Typography sx={{fontSize: '0.8rem', fontWeight: 600, color: '#323232'}}>
+                            Author:
+                        </Typography>
+                        <TextField
+                            size="small"
+                            value={author}
+                            onChange={(e) => setAuthor(e.target.value)}
+                            placeholder="Author"
+                            inputProps={{maxLength: 50}}
+                            sx={{
+                                flex: 1,
+                                '& .MuiInputBase-input': {color: '#323232', fontSize: '0.8rem', fontWeight: 600},
+                                '& .MuiOutlinedInput-notchedOutline': {border: '1px solid #999'},
+                            }}
+                        />
+                    </Box>
                 ) : (
                     <Typography
                         sx={{
@@ -226,7 +228,7 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
                             lineHeight: 1.2,
                         }}
                     >
-                        {author}
+                        Author: {author}
                     </Typography>
                 )}
                 <TextField
