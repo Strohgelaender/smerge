@@ -1,20 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="3ca6572b-0d3a-4b77-8845-54e7b7e7a9f7" name="Changes" comment="">
+    <list default="true" id="3ca6572b-0d3a-4b77-8845-54e7b7e7a9f7" name="Changes" comment="sort board column by priority">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/nginx_access/ext_nginx.conf" beforeDir="false" afterPath="$PROJECT_DIR$/data/nginx_access/ext_nginx.conf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pycharm.run/Run Django Server.run.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pycharm.run/Run Django Server.run.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/react_extension/src/components/KanbanBoard/KanbanBoard.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/react_extension/src/components/KanbanBoard/KanbanBoard.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/secrets/smerge/sample.secrets.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/config/settings_fub.py" beforeDir="false" afterPath="$PROJECT_DIR$/snapmerge/config/settings_fub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/config/settings_local.py" beforeDir="false" afterPath="$PROJECT_DIR$/snapmerge/config/settings_local.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/home/apps.py" beforeDir="false" afterPath="$PROJECT_DIR$/snapmerge/home/apps.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/snapmerge/home/dataImportHelper.py" beforeDir="false" afterPath="$PROJECT_DIR$/snapmerge/home/dataImportHelper.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="CopilotPersistence">
+    <persistenceIdMap>
+      <entry key="_/Users/ferielsliti/Documents/IDP/smerge" value="2XiHnMCdbgST4iZ38KrOFeYWNB2" />
+    </persistenceIdMap>
+  </component>
+  <component name="CopilotUserSelectedChatMode">
+    <option name="chatModeId" value="Agent" />
+  </component>
+  <component name="CopilotUserSelectedModel">
+    <selectedModels>
+      <entry key="chat-panel" value="Claude Haiku 4.5" />
+      <entry key="agent-panel" value="Claude Haiku 4.5" />
+    </selectedModels>
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -26,17 +57,38 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "SHELLCHECK.PATH": "I do mind",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "IDPS-8-TreePosition",
+    "ai.playground.ignore.import.keys.banner.in.settings": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "/Users/ferielsliti/Documents/IDP/smerge",
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "com.jetbrains.django.DjangoModulesConfigurable",
+    "settings.editor.selected.configurable": "com.intellij.python.django.customization.DjangoModulesConfigurable",
+    "ts.external.directory.path": "/Users/ferielsliti/Documents/IDP/smerge/react_extension/node_modules/typescript/lib",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
+    ]
   }
 }]]></component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.30387.127" />
+        <option value="bundled-python-sdk-3944b0c99280-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.30387.127" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -47,10 +99,63 @@
       <updated>1699105146427</updated>
       <workItem from="1699105147536" duration="230000" />
       <workItem from="1699194800308" duration="247000" />
+      <workItem from="1772972433621" duration="15616000" />
+      <workItem from="1773245040273" duration="78662000" />
+      <workItem from="1774190152482" duration="57216000" />
+      <workItem from="1774475768283" duration="6588000" />
+      <workItem from="1774514537841" duration="6187000" />
     </task>
+    <task id="LOCAL-00001" summary="fix alignment and add author field">
+      <option name="closed" value="true" />
+      <created>1774517523294</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1774517523294</updated>
+    </task>
+    <task id="LOCAL-00002" summary="add author field header">
+      <option name="closed" value="true" />
+      <created>1774518674656</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1774518674656</updated>
+    </task>
+    <task id="LOCAL-00003" summary="add predefined priority tags">
+      <option name="closed" value="true" />
+      <created>1774519192351</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1774519192351</updated>
+    </task>
+    <task id="LOCAL-00004" summary="sort board column by priority">
+      <option name="closed" value="true" />
+      <created>1774519467747</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1774519467747</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="fix alignment and add author field" />
+    <MESSAGE value="add author field header" />
+    <MESSAGE value="add predefined priority tags" />
+    <MESSAGE value="sort board column by priority" />
+    <option name="LAST_COMMIT_MESSAGE" value="sort board column by priority" />
+  </component>
+  <component name="github-copilot-workspace">
+    <instructionFileLocations>
+      <option value=".github/instructions" />
+    </instructionFileLocations>
+    <promptFileLocations>
+      <option value=".github/prompts" />
+    </promptFileLocations>
   </component>
 </project>
