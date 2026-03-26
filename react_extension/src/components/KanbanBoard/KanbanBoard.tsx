@@ -36,6 +36,32 @@ const tagColorMap = {
     "Priority: High": {bg: "#F44336", text: "#fff"},
 };
 
+// Priority order for sorting (lower number = higher priority / appears first)
+const priorityOrder = {
+    "Priority: High": 0,
+    "Priority: Medium": 1,
+    "Priority: Low": 2,
+};
+
+const sortCardsByPriority = (cards: any[]) => {
+    return [...cards].sort((a, b) => {
+        const aPriority = a.tags && a.tags.length > 0 ? priorityOrder[a.tags[0]] ?? 3 : 3;
+        const bPriority = b.tags && b.tags.length > 0 ? priorityOrder[b.tags[0]] ?? 3 : 3;
+        return aPriority - bPriority;
+    });
+};
+
+const sortBoardByPriority = (board: any) => {
+    if (!board.columns) return board;
+    return {
+        ...board,
+        columns: board.columns.map(column => ({
+            ...column,
+            cards: sortCardsByPriority(column.cards)
+        }))
+    };
+};
+
 // Only a limited number of cards and length of text in cards is allowed
 const max_card_length = 200
 const max_card_number = 20
@@ -397,15 +423,17 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({projectData, setProject
             b.version = 0
         }
         b.version += 1
-        putKanbanChange(projectData.id, b);
-        setBoard(b)
+        const sorted_board = sortBoardByPriority(b);
+        putKanbanChange(projectData.id, sorted_board);
+        setBoard(sorted_board)
     }
 
     useEffect(() => {
         if (projectData && projectData.kanban_board) {
             const new_board = JSON.parse(projectData.kanban_board)
-            if (!('version' in board) || new_board.version > board.version) {
-                setBoard(new_board)
+            const sorted_board = sortBoardByPriority(new_board);
+            if (!('version' in board) || sorted_board.version > board.version) {
+                setBoard(sorted_board)
             }
         }
     }, [projectData]);
