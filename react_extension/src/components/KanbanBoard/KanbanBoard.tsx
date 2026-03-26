@@ -50,7 +50,12 @@ const animalIcons = [
     "turtle-color-icon.svg",
 ];
 
+const defaultIcon = "unknown-person-icon.svg";
+
 const getIconUrl = (iconName: string) => {
+    if (iconName === defaultIcon) {
+        return `/static/icons/${iconName}`;
+    }
     return `/static/icons/animal-icons/${iconName}`;
 };
 
@@ -104,8 +109,8 @@ const ColumnHeader: React.FC<any> = ({column, board, setBoard, configOpen}) => {
         }
 
         if (number_of_cards < max_card_number) {
-            // Every card needs an unique id
-            setBoard(addCard(board, column, {id: Math.random()}, {on: 'bottom'}))
+            // Every card needs an unique id and starts with the default icon
+            setBoard(addCard(board, column, {id: Math.random(), icon: defaultIcon}, {on: 'bottom'}))
         } else
             toast.warning(t("KanbanBoard.cardLimit"), {
                 position: "top-right",
@@ -187,7 +192,7 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
     const [text, setText] = useState(card.description);
     const [author, setAuthor] = useState(card.author ?? "Unknown");
     const [tags, setTags] = useState<string[]>(card.tags ?? []);
-    const [icon, setIcon] = useState<string>(card.icon ?? "");
+    const [icon, setIcon] = useState<string>(card.icon ?? defaultIcon);
     const [showIconPicker, setShowIconPicker] = useState(false);
 
     useEffect(() => {
@@ -199,7 +204,7 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
     }, [card.tags]);
 
     useEffect(() => {
-        setIcon(card.icon ?? "");
+        setIcon(card.icon ?? defaultIcon);
     }, [card.icon]);
 
 
@@ -406,7 +411,7 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
                     <Button 
                         fullWidth 
                         onClick={() => {
-                            setIcon("");
+                            setIcon(defaultIcon);
                             setShowIconPicker(false);
                         }}
                         color="error"
