@@ -279,7 +279,8 @@ class DuplicateProject(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         projectId = kwargs.get('id')
         originalProject = get_object_or_404(Project, id=projectId)
-        duplicateProject = Project.objects.create(name=originalProject.name, description=originalProject.description,
+        newName = originalProject.name + " Kopie"
+        duplicateProject = Project.objects.create(name=newName, description=originalProject.description,
                                                   picture=originalProject.picture,
                                                   schoolclass=originalProject.schoolclass,
                                                   password=originalProject.password, pin=generate_unique_PIN(),
