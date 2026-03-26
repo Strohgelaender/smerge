@@ -3,7 +3,7 @@ import {
     removeColumn, changeColumn
 } from "@caldwell619/react-kanban"
 import React, {useState, useEffect, useRef} from "react";
-import {Typography, Button, Box, TextField, Backdrop, Fab, Fade, Stack, IconButton} from "@mui/material";
+import {Typography, Button, Box, TextField, Backdrop, Fab, Fade, Stack, IconButton, Chip} from "@mui/material";
 import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
@@ -22,6 +22,19 @@ interface KanbanBoardProps {
     projectData: ProjectDto;
     setProjectData: React.Dispatch<React.SetStateAction<ProjectDto>>;
 }
+
+// Predefined tags with colors
+const predefinedTags = [
+    {label: "Priority: Low", color: "#4CAF50", textColor: "#fff"},
+    {label: "Priority: Medium", color: "#FF9800", textColor: "#fff"},
+    {label: "Priority: High", color: "#F44336", textColor: "#fff"},
+];
+
+const tagColorMap = {
+    "Priority: Low": {bg: "#4CAF50", text: "#fff"},
+    "Priority: Medium": {bg: "#FF9800", text: "#fff"},
+    "Priority: High": {bg: "#F44336", text: "#fff"},
+};
 
 // Only a limited number of cards and length of text in cards is allowed
 const max_card_length = 200
@@ -129,10 +142,15 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
     const [editMode, setEditMode] = useState(false);
     const [text, setText] = useState(card.description);
     const [author, setAuthor] = useState(card.author ?? "Unknown");
+    const [tags, setTags] = useState<string[]>(card.tags ?? []);
 
     useEffect(() => {
         setAuthor(card.author ?? "Unknown");
     }, [card.author]);
+
+    useEffect(() => {
+        setTags(card.tags ?? []);
+    }, [card.tags]);
 
 
     const inputRef = useRef(null);
@@ -152,7 +170,7 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
     // Save and send change to backend
     const saveEdit = () => {
         setEditMode(false);
-        setBoard(changeCard(board, card.id, {description: text, author}))
+        setBoard(changeCard(board, card.id, {description: text, author, tags}))
     };
 
     // When someone is typing only update locally
@@ -181,6 +199,16 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
         if (card.color)
             setColor(card.color)
     }, [card.color]);
+
+    const toggleTag = (tagLabel: string) => {
+        if (tags.includes(tagLabel)) {
+            // Deselect if already selected
+            setTags([]);
+        } else {
+            // Select only this one (deselect all others)
+            setTags([tagLabel]);
+        }
+    };
 
     const deleteCard = () => {
         const column = board.columns.find(e => e.cards.some(c => c.id === card.id))
@@ -231,6 +259,7 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
                         Author: {author}
                     </Typography>
                 )}
+
                 <TextField
                     multiline
                     minRows={2}
@@ -250,6 +279,43 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
                         '& .MuiOutlinedInput-notchedOutline': {border: 'none'},
                     }}
                 />
+
+                <Box sx={{px: 1.5, py: 0.5, display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                    {editMode ? (
+                        // Edit mode: show all tags as toggleable chips
+                        predefinedTags.map((tag) => (
+                            <Chip
+                                key={tag.label}
+                                label={tag.label}
+                                onClick={() => toggleTag(tag.label)}
+                                variant={tags.includes(tag.label) ? "filled" : "outlined"}
+                                sx={{
+                                    backgroundColor: tags.includes(tag.label) ? tag.color : 'transparent',
+                                    color: tags.includes(tag.label) ? tag.textColor : '#323232',
+                                    borderColor: tags.includes(tag.label) ? 'transparent' : '#999',
+                                    fontSize: '0.75rem',
+                                    cursor: 'pointer',
+                                }}
+                            />
+                        ))
+                    ) : (
+                        // View mode: show only selected tags
+                        tags.length > 0 && tags.map((tag) => {
+                            const tagColor = tagColorMap[tag];
+                            return (
+                                <Chip
+                                    key={tag}
+                                    label={tag}
+                                    sx={{
+                                        backgroundColor: tagColor?.bg,
+                                        color: tagColor?.text,
+                                        fontSize: '0.75rem',
+                                    }}
+                                />
+                            );
+                        })
+                    )}
+                </Box>
             </div>
 
             <Box sx={{display: 'flex', flexDirection: 'column', marginLeft: "auto"}}>
