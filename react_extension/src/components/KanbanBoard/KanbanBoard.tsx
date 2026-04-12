@@ -110,7 +110,7 @@ const ColumnHeader: React.FC<any> = ({column, board, setBoard, configOpen}) => {
 
         if (number_of_cards < max_card_number) {
             // Every card needs an unique id and starts with the default icon
-            setBoard(addCard(board, column, {id: Math.random(), icon: defaultIcon}, {on: 'bottom'}))
+            setBoard(addCard(board, column, {id: Math.random(), icon: defaultIcon, tags: ["Priority: Medium"]}, {on: 'bottom'}))
         } else
             toast.warning(t("KanbanBoard.cardLimit"), {
                 position: "top-right",
@@ -191,7 +191,7 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
     const [editMode, setEditMode] = useState(false);
     const [text, setText] = useState(card.description);
     const [author, setAuthor] = useState(card.author ?? "Unknown");
-    const [tags, setTags] = useState<string[]>(card.tags ?? []);
+    const [tags, setTags] = useState<string[]>(card.tags ?? ["Priority: Medium"]);
     const [icon, setIcon] = useState<string>(card.icon ?? defaultIcon);
     const [showIconPicker, setShowIconPicker] = useState(false);
 
@@ -200,7 +200,7 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
     }, [card.author]);
 
     useEffect(() => {
-        setTags(card.tags ?? []);
+        setTags(card.tags ?? ["Priority: Medium"]);
     }, [card.tags]);
 
     useEffect(() => {
