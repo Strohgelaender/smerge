@@ -195,6 +195,8 @@ const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
     const [tags, setTags] = useState<string[]>(card.tags ?? ["Priority: Medium"]);
     const [icon, setIcon] = useState<string>(card.icon ?? defaultIcon);
     const [showIconPicker, setShowIconPicker] = useState(false);
+    const [authorDropdownOpen, setAuthorDropdownOpen] = useState(false);
+    const authorAutocompleteRef = useRef<any>(null);
 
     useEffect(() => {
         setAuthor(card.author ?? "Unknown");
@@ -323,8 +325,14 @@ const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
                             <Typography sx={{fontSize: '0.8rem', fontWeight: 600, color: '#323232', whiteSpace: 'nowrap'}}>
                                 Author:
                             </Typography>
-                            <TextField
+                            <Autocomplete
+                                ref={authorAutocompleteRef}
                                 size="small"
+                                freeSolo
+                                open={authorDropdownOpen}
+                                onOpen={() => setAuthorDropdownOpen(true)}
+                                onClose={() => setAuthorDropdownOpen(false)}
+                                options={["Unknown", ...authors]}
                                 value={author}
                                 onChange={(event, newValue) => {
                                     setAuthor(newValue || "Unknown");
@@ -345,6 +353,13 @@ const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
                                     />
                                 )}
                             />
+                            <IconButton
+                                size="small"
+                                onClick={() => setAuthorDropdownOpen(!authorDropdownOpen)}
+                                sx={{color: '#323232', padding: '4px'}}
+                            >
+                                <ExpandMoreIcon sx={{fontSize: '1.2rem'}} />
+                            </IconButton>
                         </Box>
                     </Box>
                 ) : (
