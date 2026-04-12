@@ -3,7 +3,8 @@ import {
     removeColumn, changeColumn
 } from "@caldwell619/react-kanban"
 import React, {useState, useEffect, useRef} from "react";
-import {Typography, Button, Box, TextField, Backdrop, Fab, Fade, Stack, IconButton, Chip} from "@mui/material";
+import {Typography, Button, Box, TextField, Backdrop, Fab, Fade, Stack, IconButton, Chip, MenuItem, Autocomplete} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ViewKanbanIcon from "@mui/icons-material/ViewKanban";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
@@ -187,7 +188,7 @@ const ColumnHeader: React.FC<any> = ({column, board, setBoard, configOpen}) => {
     )
 }
 
-const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
+const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
     const [editMode, setEditMode] = useState(false);
     const [text, setText] = useState(card.description);
     const [author, setAuthor] = useState(card.author ?? "Unknown");
@@ -325,14 +326,24 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
                             <TextField
                                 size="small"
                                 value={author}
-                                onChange={(e) => setAuthor(e.target.value)}
-                                placeholder="Author"
-                                inputProps={{maxLength: 50}}
+                                onChange={(event, newValue) => {
+                                    setAuthor(newValue || "Unknown");
+                                }}
+                                inputValue={author}
+                                onInputChange={(event, newInputValue) => {
+                                    setAuthor(newInputValue);
+                                }}
                                 sx={{
                                     flex: 1,
                                     '& .MuiInputBase-input': {color: '#323232', fontSize: '0.8rem', fontWeight: 600},
                                     '& .MuiOutlinedInput-notchedOutline': {border: '1px solid #999'},
                                 }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        placeholder="Select or type author"
+                                    />
+                                )}
                             />
                         </Box>
                     </Box>
@@ -552,6 +563,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({projectData, setProject
     //}
 
     const [board, setBoard] = useState<any>({columns: []})
+    const [authors, setAuthors] = useState<string[]>([]);
 
     // Sets the board and sync with backend
     const updateBoard = (b) => {
@@ -563,6 +575,19 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({projectData, setProject
         putKanbanChange(projectData.id, sorted_board);
         setBoard(sorted_board)
     }
+
+    // Derive authors list from board cards
+    useEffect(() => {
+        const authorsList = new Set<string>();
+        board.columns?.forEach(column => {
+            column.cards?.forEach(card => {
+                if (card.author && card.author !== "Unknown") {
+                    authorsList.add(card.author);
+                }
+            });
+        });
+        setAuthors(Array.from(authorsList).sort());
+    }, [board]);
 
     useEffect(() => {
         if (projectData && projectData.kanban_board) {
@@ -621,7 +646,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({projectData, setProject
                             {configOpen && <AddBoxIcon fontSize="large" sx={{opacity: 0, m: "8px"}}/>}
                             <ControlledBoard
                                 disableColumnDrag={!configOpen}
-                                renderCard={(p: any) => <CardComponent card={p} board={board} setBoard={updateBoard}/>}
+                                renderCard={(p: any) => <CardComponent card={p} board={board} setBoard={updateBoard} authors={authors}/>}
                                 renderColumnHeader={(p: any) => <ColumnHeader column={p} board={board}
                                                                               setBoard={updateBoard}
                                                                               configOpen={configOpen}/>}
