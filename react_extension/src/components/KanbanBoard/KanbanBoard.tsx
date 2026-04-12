@@ -335,7 +335,8 @@ const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
                                 options={["Unknown", ...authors]}
                                 value={author}
                                 onChange={(event, newValue) => {
-                                    setAuthor(newValue || "Unknown");
+                                    setAuthor(newValue || "");
+                                    setAuthorDropdownOpen(false);
                                 }}
                                 inputValue={author}
                                 onInputChange={(event, newInputValue) => {
@@ -355,7 +356,13 @@ const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
                             />
                             <IconButton
                                 size="small"
-                                onClick={() => setAuthorDropdownOpen(!authorDropdownOpen)}
+                                onClick={() => {
+                                    setAuthorDropdownOpen(!authorDropdownOpen);
+                                    // Also focus the input for better UX
+                                    setTimeout(() => {
+                                        authorAutocompleteRef.current?.querySelector('input')?.focus();
+                                    }, 0);
+                                }}
                                 sx={{color: '#323232', padding: '4px'}}
                             >
                                 <ExpandMoreIcon sx={{fontSize: '1.2rem'}} />
