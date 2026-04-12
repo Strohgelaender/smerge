@@ -225,7 +225,9 @@ const CardComponent: React.FC<any> = ({card, board, setBoard}) => {
     // Save and send change to backend
     const saveEdit = () => {
         setEditMode(false);
-        setBoard(changeCard(board, card.id, {description: text, author, tags, icon}))
+        // Reset author to "Unknown" if empty or whitespace
+        const finalAuthor = author && author.trim() !== '' ? author : "Unknown";
+        setBoard(changeCard(board, card.id, {description: text, author: finalAuthor, tags, icon}))
     };
 
     // When someone is typing only update locally
