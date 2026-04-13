@@ -16,6 +16,7 @@ interface ProjectCardProps {
     deleteProjectFromState: (project: ProjectDto) => void,
     renameProjectInState: (projectId: string, name: string) => void,
     commitCount?: number,
+    lastCommitDate?: Date | null,
 }
 
 const ProjectCard: FC<ProjectCardProps> = (props) => {
@@ -117,6 +118,11 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                         {props.commitCount !== undefined && (
                             <Typography variant="caption" sx={{ display: "block", mt: 0.5, color: "text.secondary" }}>
                                 Commits: {props.commitCount}
+                            </Typography>
+                        )}
+                        {props.lastCommitDate !== undefined && props.lastCommitDate && (
+                            <Typography variant="caption" sx={{ display: "block", mt: 0.25, color: "text.secondary" }}>
+                                Last Commit: {props.lastCommitDate.toLocaleDateString()}
                             </Typography>
                         )}
                     </>
