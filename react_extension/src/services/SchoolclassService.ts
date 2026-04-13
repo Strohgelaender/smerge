@@ -17,6 +17,11 @@ export const getProjectsOfSchoolclass = async (schoolclass: SchoolclassDto) => {
     return {schoolclass: schoolclass, projects: result};
 }
 
+export const getCommitCountForProject = async (projectId: string) => {
+    const result = await httpService.getAsync<any[]>(API_URL + `project/${projectId}/files`);
+    return result?.length ?? 0;
+}
+
 export const createSchoolclass = async (name: string) => {
     const result = await httpService.postAsync<SchoolclassDto>(API_URL + `schoolclasses`, {name: name, teacher_id: getCurrentUser().user_id});
     return result ?? null;
