@@ -5,6 +5,7 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ProjectCard from "./components/ProjectCard";
 import {
     getCommitCountForProject,
+    getLastCommitDateForProject,
     getProjectsForSchoolclasses,
     getSchoolclassesOfCurrentUser,
     updateSchoolclassName
@@ -36,6 +37,7 @@ const TeacherView: React.FC = () => {
         projects: ProjectDto[]
     }[]>([]);
     const [projectCommitCounts, setProjectCommitCounts] = useState<Record<string, number>>({});
+    const [projectLastCommitDates, setProjectLastCommitDates] = useState<Record<string, Date | null>>({});
 
     const [isLoading, setLoading] = useState<boolean>(true)
 
@@ -58,13 +60,26 @@ const TeacherView: React.FC = () => {
 
     async function loadCommitCounts(state: { schoolclass: SchoolclassDto, projects: ProjectDto[] }[]) {
         const allProjects = state.flatMap((entry) => entry.projects);
-        const commitEntries = await Promise.all(
+
+        // Fetch both counts and dates in parallel
+        const statsEntries = await Promise.all(
             allProjects.map(async (project) => {
                 const count = await getCommitCountForProject(project.id);
-                return [project.id, count] as const;
+                const lastCommitDate = await getLastCommitDateForProject(project.id);
+                return { projectId: project.id, count, lastCommitDate };
             })
         );
-        setProjectCommitCounts(Object.fromEntries(commitEntries));
+
+        // Separate counts and dates into their respective records
+        const counts = Object.fromEntries(
+            statsEntries.map(s => [s.projectId, s.count])
+        );
+        const dates = Object.fromEntries(
+            statsEntries.map(s => [s.projectId, s.lastCommitDate])
+        );
+
+        setProjectCommitCounts(counts);
+        setProjectLastCommitDates(dates);
     }
 
     useEffect(() => {
@@ -123,6 +138,7 @@ const TeacherView: React.FC = () => {
         );
         // New projects start with no nodes/files yet.
         setProjectCommitCounts((prev) => ({ ...prev, [project.id]: 0 }));
+        setProjectLastCommitDates((prev) => ({ ...prev, [project.id]: null }));
     }
 
     function deleteProjectFromState(project: ProjectDto) {
@@ -134,6 +150,11 @@ const TeacherView: React.FC = () => {
             )
         );
         setProjectCommitCounts((prev) => {
+            const next = { ...prev };
+            delete next[project.id];
+            return next;
+        });
+        setProjectLastCommitDates((prev) => {
             const next = { ...prev };
             delete next[project.id];
             return next;
@@ -242,7 +263,7 @@ const TeacherView: React.FC = () => {
     }
 
     // Schoolclass creation interceptor für Tutorial
-    function onSchoolclassCreated(schoolclass: SchoolclassDto) {
+    function onSchoolclassCreated() {
         if (currentStep?.id === "explain_add_class_button") {
             nextTutorialStep();
         }
@@ -380,6 +401,7 @@ const TeacherView: React.FC = () => {
                                         renameProjectInState={renameProjectInState}
                                         projectData={projectsItem}
                                         commitCount={projectCommitCounts[projectsItem.id]}
+                                        lastCommitDate={projectLastCommitDates[projectsItem.id]}
                                     ></ProjectCard>
                                 </Grid>
                             })
