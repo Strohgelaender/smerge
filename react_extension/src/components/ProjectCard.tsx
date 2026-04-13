@@ -1,5 +1,5 @@
 import { Card, CardActions, CardContent, TextField, Typography, Box, IconButton, Tooltip } from "@mui/material";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -10,12 +10,15 @@ import ProjectDto from "./models/ProjectDto";
 import ProjectCardContextMenu from "./ProjectCardContextMenu";
 import { putProjectNameChange } from "../services/ProjectService";
 
-const ProjectCard = (props: {
+interface ProjectCardProps {
     projectData: ProjectDto,
     addProjectToState: (arg0: ProjectDto) => void,
     deleteProjectFromState: (project: ProjectDto) => void,
-    renameProjectInState: (projectId: string, name: string) => void
-}) => {
+    renameProjectInState: (projectId: string, name: string) => void,
+    commitCount?: number,
+}
+
+const ProjectCard: FC<ProjectCardProps> = (props) => {
 
     const [isEditingName, setIsEditingName] = useState<boolean>(false);
     const [draftName, setDraftName] = useState<string>(props.projectData.name);
