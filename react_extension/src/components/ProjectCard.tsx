@@ -148,7 +148,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                                     style={{ width: '1.8em', height: '1.8em', display: 'inline-block', flexShrink: 0 }}
                                 />
                                 <Typography variant="body2" sx={{ color: "text.secondary", fontSize: '0.95rem' }}>
-                                    Last Commit: {props.lastCommitDate.toLocaleDateString()}
+                                    Last Commit: {props.lastCommitDate.toLocaleString('de-DE', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
                                 </Typography>
                             </Box>
                         )}
