@@ -99,8 +99,8 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
     };
 
     return (
-        <Card variant="outlined" sx={{borderRadius:'10px'}}>
-            <CardContent>
+        <Card variant="outlined" sx={{borderRadius:'10px', minHeight: '220px', minWidth: '280px', display: 'flex', flexDirection: 'column', p: 1.5}}>
+            <CardContent sx={{flex: 1, pb: 1}}>
                 {isEditingName ? (
                     <TextField
                         value={draftName}
@@ -124,7 +124,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                     <>
                         <Typography
                             onClick={startEditingName}
-                            sx={{ cursor: "text", wordBreak: "break-word" }}
+                            sx={{ cursor: "text", wordBreak: "break-word", fontSize: '1.1rem', fontWeight: 600, mb: 1 }}
                         >
                             {props.projectData.name}
                         </Typography>
@@ -155,7 +155,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                     </>
                 )}
             </CardContent>
-            <CardActions>
+            <CardActions sx={{mt: 'auto', pt: 0}}>
                 <ProjectCardContextMenu
                     addProjectToState={props.addProjectToState}
                     deleteProjectFromState={props.deleteProjectFromState}
