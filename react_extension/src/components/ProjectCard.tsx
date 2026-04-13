@@ -107,12 +107,19 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                         }}
                     />
                 ) : (
-                    <Typography
-                        onClick={startEditingName}
-                        sx={{ cursor: "text", wordBreak: "break-word" }}
-                    >
-                        {props.projectData.name}
-                    </Typography>
+                    <>
+                        <Typography
+                            onClick={startEditingName}
+                            sx={{ cursor: "text", wordBreak: "break-word" }}
+                        >
+                            {props.projectData.name}
+                        </Typography>
+                        {props.commitCount !== undefined && (
+                            <Typography variant="caption" sx={{ display: "block", mt: 0.5, color: "text.secondary" }}>
+                                Commits: {props.commitCount}
+                            </Typography>
+                        )}
+                    </>
                 )}
             </CardContent>
             <CardActions>
