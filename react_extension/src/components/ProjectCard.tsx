@@ -10,6 +10,19 @@ import ProjectDto from "./models/ProjectDto";
 import ProjectCardContextMenu from "./ProjectCardContextMenu";
 import { putProjectNameChange } from "../services/ProjectService";
 
+
+
+const lastCommitIcon = "most-recent.svg";
+const numberCommitIcon = "commit-icon.svg";
+
+
+
+// Helper function to get icon URL - same pattern as KanbanBoard
+const getIconUrl = (iconName: string) => {
+    // All icons are in /static/icons/
+    return `/static/icons/${iconName}`;
+};
+
 interface ProjectCardProps {
     projectData: ProjectDto,
     addProjectToState: (arg0: ProjectDto) => void,
@@ -116,14 +129,28 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                             {props.projectData.name}
                         </Typography>
                         {props.commitCount !== undefined && (
-                            <Typography variant="caption" sx={{ display: "block", mt: 0.5, color: "text.secondary" }}>
-                                Commits: {props.commitCount}
-                            </Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mt: 1, mb: 0.5 }}>
+                                <img
+                                    src={getIconUrl(numberCommitIcon)}
+                                    alt="commits"
+                                    style={{ width: '1.8em', height: '1.8em', display: 'inline-block', flexShrink: 0 }}
+                                />
+                                <Typography variant="body2" sx={{ color: "text.secondary", fontSize: '0.95rem' }}>
+                                    Commits: {props.commitCount}
+                                </Typography>
+                            </Box>
                         )}
                         {props.lastCommitDate !== undefined && props.lastCommitDate && (
-                            <Typography variant="caption" sx={{ display: "block", mt: 0.25, color: "text.secondary" }}>
-                                Last Commit: {props.lastCommitDate.toLocaleDateString()}
-                            </Typography>
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mt: 0.5 }}>
+                                <img
+                                    src={getIconUrl(lastCommitIcon)}
+                                    alt="last commit"
+                                    style={{ width: '1.8em', height: '1.8em', display: 'inline-block', flexShrink: 0 }}
+                                />
+                                <Typography variant="body2" sx={{ color: "text.secondary", fontSize: '0.95rem' }}>
+                                    Last Commit: {props.lastCommitDate.toLocaleDateString()}
+                                </Typography>
+                            </Box>
                         )}
                     </>
                 )}
