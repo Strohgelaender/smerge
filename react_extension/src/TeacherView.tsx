@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ProjectCard from "./components/ProjectCard";
 import {
+    getCommitCountForProject,
     getProjectsForSchoolclasses,
     getSchoolclassesOfCurrentUser,
     updateSchoolclassName
@@ -34,6 +35,7 @@ const TeacherView: React.FC = () => {
         schoolclass: SchoolclassDto,
         projects: ProjectDto[]
     }[]>([]);
+    const [projectCommitCounts, setProjectCommitCounts] = useState<Record<string, number>>({});
 
     const [isLoading, setLoading] = useState<boolean>(true)
 
@@ -54,12 +56,24 @@ const TeacherView: React.FC = () => {
 
     const { t } = useTranslation();
 
+    async function loadCommitCounts(state: { schoolclass: SchoolclassDto, projects: ProjectDto[] }[]) {
+        const allProjects = state.flatMap((entry) => entry.projects);
+        const commitEntries = await Promise.all(
+            allProjects.map(async (project) => {
+                const count = await getCommitCountForProject(project.id);
+                return [project.id, count] as const;
+            })
+        );
+        setProjectCommitCounts(Object.fromEntries(commitEntries));
+    }
+
     useEffect(() => {
         (async () => {
             try {
                 const schoolclassesOfUser = await getSchoolclassesOfCurrentUser();
                 const state = await getProjectsForSchoolclasses(schoolclassesOfUser);
                 setProjectsOfSchoolclasses(state);
+                await loadCommitCounts(state);
                 setLoading(false);
                 console.log(projectsOfSchoolclasses);
             } catch (error) {
@@ -107,6 +121,8 @@ const TeacherView: React.FC = () => {
                     : entry
             )
         );
+        // New projects start with no nodes/files yet.
+        setProjectCommitCounts((prev) => ({ ...prev, [project.id]: 0 }));
     }
 
     function deleteProjectFromState(project: ProjectDto) {
@@ -117,6 +133,11 @@ const TeacherView: React.FC = () => {
                     : entry
             )
         );
+        setProjectCommitCounts((prev) => {
+            const next = { ...prev };
+            delete next[project.id];
+            return next;
+        });
     }
 
     function renameProjectInState(projectId: string, name: string) {
@@ -357,6 +378,7 @@ const TeacherView: React.FC = () => {
                                         deleteProjectFromState={deleteProjectFromState}
                                         renameProjectInState={renameProjectInState}
                                         projectData={projectsItem}
+                                        commitCount={projectCommitCounts[projectsItem.id]}
                                     ></ProjectCard>
                                 </Grid>
                             })
