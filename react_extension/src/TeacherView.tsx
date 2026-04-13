@@ -248,8 +248,9 @@ const TeacherView: React.FC = () => {
         }
     }
 
-    function onAccordionExpanded() {
-        if (currentStep?.id === "expand_class") {
+    function onAccordionChange(event: React.SyntheticEvent, isExpanded: boolean) {
+        // Only progress tutorial when accordion is being expanded (not collapsed)
+        if (isExpanded && currentStep?.id === "expand_class") {
             nextTutorialStep();
         }
     }
@@ -318,7 +319,7 @@ const TeacherView: React.FC = () => {
         }) => {
             const isEditingThisClass = editingSchoolclassId === item.schoolclass.id;
 
-            return <Accordion key={item.schoolclass.id} className="schoolclass-accordion" onClick={onAccordionExpanded}>
+            return <Accordion key={item.schoolclass.id} className="schoolclass-accordion" onChange={onAccordionChange} defaultExpanded={true}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon/>}
                     aria-controls="panel2-content"
