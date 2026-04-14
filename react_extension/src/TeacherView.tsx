@@ -6,6 +6,7 @@ import ProjectCard from "./components/ProjectCard";
 import {
     getCommitCountForProject,
     getLastCommitDateForProject,
+    getKanbanCardCountForProject,
     getProjectsForSchoolclasses,
     getSchoolclassesOfCurrentUser,
     updateSchoolclassName
@@ -38,6 +39,8 @@ const TeacherView: React.FC = () => {
     }[]>([]);
     const [projectCommitCounts, setProjectCommitCounts] = useState<Record<string, number>>({});
     const [projectLastCommitDates, setProjectLastCommitDates] = useState<Record<string, Date | null>>({});
+    const [projectOpenCardCounts, setProjectOpenCardCounts] = useState<Record<string, number>>({});
+    const [projectClosedCardCounts, setProjectClosedCardCounts] = useState<Record<string, number>>({});
 
     const [isLoading, setLoading] = useState<boolean>(true)
 
@@ -80,6 +83,23 @@ const TeacherView: React.FC = () => {
 
         setProjectCommitCounts(counts);
         setProjectLastCommitDates(dates);
+
+        // Compute kanban card counts from already-loaded project data (no API call needed)
+        const openCounts = Object.fromEntries(
+            allProjects.map(project => [
+                project.id,
+                getKanbanCardCountForProject(project.kanban_board, 'first')
+            ])
+        );
+        setProjectOpenCardCounts(openCounts);
+
+        const closedCounts = Object.fromEntries(
+            allProjects.map(project => [
+                project.id,
+                getKanbanCardCountForProject(project.kanban_board, 'last')
+            ])
+        );
+        setProjectClosedCardCounts(closedCounts);
     }
 
     useEffect(() => {
@@ -139,6 +159,8 @@ const TeacherView: React.FC = () => {
         // New projects start with no nodes/files yet.
         setProjectCommitCounts((prev) => ({ ...prev, [project.id]: 0 }));
         setProjectLastCommitDates((prev) => ({ ...prev, [project.id]: null }));
+        setProjectOpenCardCounts((prev) => ({ ...prev, [project.id]: getKanbanCardCountForProject(project.kanban_board, 'first') }));
+        setProjectClosedCardCounts((prev) => ({ ...prev, [project.id]: getKanbanCardCountForProject(project.kanban_board, 'last') }));
     }
 
     function deleteProjectFromState(project: ProjectDto) {
@@ -155,6 +177,16 @@ const TeacherView: React.FC = () => {
             return next;
         });
         setProjectLastCommitDates((prev) => {
+            const next = { ...prev };
+            delete next[project.id];
+            return next;
+        });
+        setProjectOpenCardCounts((prev) => {
+            const next = { ...prev };
+            delete next[project.id];
+            return next;
+        });
+        setProjectClosedCardCounts((prev) => {
             const next = { ...prev };
             delete next[project.id];
             return next;
@@ -402,6 +434,8 @@ const TeacherView: React.FC = () => {
                                         projectData={projectsItem}
                                         commitCount={projectCommitCounts[projectsItem.id]}
                                         lastCommitDate={projectLastCommitDates[projectsItem.id]}
+                                        openCardCount={projectOpenCardCounts[projectsItem.id]}
+                                        closedCardCount={projectClosedCardCounts[projectsItem.id]}
                                     ></ProjectCard>
                                 </Grid>
                             })
