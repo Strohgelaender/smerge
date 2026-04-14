@@ -51,6 +51,17 @@ export const getLastCommitDateForProject = async (projectId: string) => {
     return latestDate;
 }
 
+export const getKanbanCardCountForProject = (kanbanBoardJson: string, column: 'first' | 'last'): number => {
+    try {
+        const board = JSON.parse(kanbanBoardJson);
+        if (!board?.columns || board.columns.length === 0) return 0;
+        const targetColumn = column === 'first' ? board.columns[0] : board.columns[board.columns.length - 1];
+        return targetColumn.cards?.length ?? 0;
+    } catch {
+        return 0;
+    }
+};
+
 export const createSchoolclass = async (name: string) => {
     const result = await httpService.postAsync<SchoolclassDto>(API_URL + `schoolclasses`, {name: name, teacher_id: getCurrentUser().user_id});
     return result ?? null;
