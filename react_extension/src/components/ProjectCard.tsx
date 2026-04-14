@@ -14,6 +14,8 @@ import { putProjectNameChange } from "../services/ProjectService";
 
 const lastCommitIcon = "most-recent.svg";
 const numberCommitIcon = "commit-icon.svg";
+const openCardIcon = "open-icon.svg";
+const closedCardIcon = "closed-icon.svg";
 
 
 
@@ -30,6 +32,8 @@ interface ProjectCardProps {
     renameProjectInState: (projectId: string, name: string) => void,
     commitCount?: number,
     lastCommitDate?: Date | null,
+    openCardCount?: number,
+    closedCardCount?: number,
 }
 
 const ProjectCard: FC<ProjectCardProps> = (props) => {
@@ -149,6 +153,42 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                                 />
                                 <Typography variant="body2" sx={{ color: "text.secondary", fontSize: '0.95rem' }}>
                                     Last Commit: {props.lastCommitDate.toLocaleString('de-DE', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                                </Typography>
+                            </Box>
+                        )}
+                        {props.openCardCount !== undefined && (
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mt: 0.5 }}>
+                                <Box sx={{
+                                    width: '1.8em', height: '1.8em', flexShrink: 0,
+                                    borderRadius: '4px', backgroundColor: '#FFFFFF',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                }}>
+                                    <img
+                                        src={getIconUrl(openCardIcon)}
+                                        alt="kanban cards"
+                                        style={{ width: '1.4em', height: '1.4em', display: 'inline-block' }}
+                                    />
+                                </Box>
+                                <Typography variant="body2" sx={{ color: "text.secondary", fontSize: '0.95rem' }}>
+                                    Open: {props.openCardCount}
+                                </Typography>
+                            </Box>
+                        )}
+                        {props.closedCardCount !== undefined && (
+                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mt: 0.5 }}>
+                                <Box sx={{
+                                    width: '1.8em', height: '1.8em', flexShrink: 0,
+                                    borderRadius: '4px', backgroundColor: '#FFFFFF',
+                                    display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                }}>
+                                    <img
+                                        src={getIconUrl(closedCardIcon)}
+                                        alt="closed cards"
+                                        style={{ width: '1.4em', height: '1.4em', display: 'inline-block' }}
+                                    />
+                                </Box>
+                                <Typography variant="body2" sx={{ color: "text.secondary", fontSize: '0.95rem' }}>
+                                    Closed: {props.closedCardCount}
                                 </Typography>
                             </Box>
                         )}
