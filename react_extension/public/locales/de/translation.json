@@ -272,7 +272,8 @@
     "hide_pin": "PIN verbergen",
     "copy_pin": "PIN kopieren",
     "pin_copied": "PIN kopiert!",
-    "open_project": "Projekt öffnen"
+    "open_project": "Projekt öffnen",
+    "view_stats": "Statistiken anzeigen"
   },
   "ProjectCardContextMenu": {
     "duplicate": "Duplizieren",
@@ -381,6 +382,17 @@
       "title": "Klasse löschen",
       "text": "Möchtest du die Klasse \"{{name}}\" wirklich löschen? Dadurch werden {{count}} Projekt(e) dieser Klasse entfernt."
     }
+  },
+  "ProjectStatsPage": {
+    "loading": "Statistiken werden geladen...",
+    "loadError": "Projektstatistiken konnten nicht geladen werden.",
+    "notFound": "Projekt nicht gefunden.",
+    "back": "Zurück",
+    "title": "Projekt Statistiken — {{name}}",
+    "commits": "Commits",
+    "lastCommit": "Letzter Commit",
+    "openCards": "Offene Karten",
+    "closedCards": "Geschlossene Karten"
   },
   "tutorial": {
     "step": "Schritt",

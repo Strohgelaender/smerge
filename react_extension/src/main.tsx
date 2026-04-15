@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import ConflictStepper from "./components/ConflictParts/ConflictStepper.tsx";
 import ProjectView from "./ProjectView.tsx";
+import ProjectStatsPage from "./ProjectStatsPage.tsx";
 import TeacherView from "./TeacherView.tsx";
 import TutorialView from "./TutorialView.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -76,6 +77,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
               <Route path="ext/project_view/:projectId" element={<ProjectView />}/>
               <Route path="project_view/:projectId" element={<ProjectView />}/>
+
+              <Route path="ext/project_stats/:projectId" element={<ProjectStatsPage />}/>
+              <Route path="project_stats/:projectId" element={<ProjectStatsPage />}/>
 
               <Route path="ext/teacher_login" element={<SignIn/>}/>
               <Route path="teacher_login" element={<SignIn/>}/>

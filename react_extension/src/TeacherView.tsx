@@ -4,6 +4,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ProjectCard from "./components/ProjectCard";
 import {
+    getCommitCountForProject,
+    getLastCommitDateForProject,
+    getKanbanCardCountForProject,
     getProjectsForSchoolclasses,
     getSchoolclassesOfCurrentUser,
     updateSchoolclassName
@@ -34,6 +37,10 @@ const TeacherView: React.FC = () => {
         schoolclass: SchoolclassDto,
         projects: ProjectDto[]
     }[]>([]);
+    const [projectCommitCounts, setProjectCommitCounts] = useState<Record<string, number>>({});
+    const [projectLastCommitDates, setProjectLastCommitDates] = useState<Record<string, Date | null>>({});
+    const [projectOpenCardCounts, setProjectOpenCardCounts] = useState<Record<string, number>>({});
+    const [projectClosedCardCounts, setProjectClosedCardCounts] = useState<Record<string, number>>({});
 
     const [isLoading, setLoading] = useState<boolean>(true)
 
@@ -54,12 +61,54 @@ const TeacherView: React.FC = () => {
 
     const { t } = useTranslation();
 
+    async function loadCommitCounts(state: { schoolclass: SchoolclassDto, projects: ProjectDto[] }[]) {
+        const allProjects = state.flatMap((entry) => entry.projects);
+
+        // Fetch both counts and dates in parallel
+        const statsEntries = await Promise.all(
+            allProjects.map(async (project) => {
+                const count = await getCommitCountForProject(project.id);
+                const lastCommitDate = await getLastCommitDateForProject(project.id);
+                return { projectId: project.id, count, lastCommitDate };
+            })
+        );
+
+        // Separate counts and dates into their respective records
+        const counts = Object.fromEntries(
+            statsEntries.map(s => [s.projectId, s.count])
+        );
+        const dates = Object.fromEntries(
+            statsEntries.map(s => [s.projectId, s.lastCommitDate])
+        );
+
+        setProjectCommitCounts(counts);
+        setProjectLastCommitDates(dates);
+
+        // Compute kanban card counts from already-loaded project data (no API call needed)
+        const openCounts = Object.fromEntries(
+            allProjects.map(project => [
+                project.id,
+                getKanbanCardCountForProject(project.kanban_board, 'first')
+            ])
+        );
+        setProjectOpenCardCounts(openCounts);
+
+        const closedCounts = Object.fromEntries(
+            allProjects.map(project => [
+                project.id,
+                getKanbanCardCountForProject(project.kanban_board, 'last')
+            ])
+        );
+        setProjectClosedCardCounts(closedCounts);
+    }
+
     useEffect(() => {
         (async () => {
             try {
                 const schoolclassesOfUser = await getSchoolclassesOfCurrentUser();
                 const state = await getProjectsForSchoolclasses(schoolclassesOfUser);
                 setProjectsOfSchoolclasses(state);
+                await loadCommitCounts(state);
                 setLoading(false);
                 console.log(projectsOfSchoolclasses);
             } catch (error) {
@@ -107,6 +156,11 @@ const TeacherView: React.FC = () => {
                     : entry
             )
         );
+        // New projects start with no nodes/files yet.
+        setProjectCommitCounts((prev) => ({ ...prev, [project.id]: 0 }));
+        setProjectLastCommitDates((prev) => ({ ...prev, [project.id]: null }));
+        setProjectOpenCardCounts((prev) => ({ ...prev, [project.id]: getKanbanCardCountForProject(project.kanban_board, 'first') }));
+        setProjectClosedCardCounts((prev) => ({ ...prev, [project.id]: getKanbanCardCountForProject(project.kanban_board, 'last') }));
     }
 
     function deleteProjectFromState(project: ProjectDto) {
@@ -117,6 +171,26 @@ const TeacherView: React.FC = () => {
                     : entry
             )
         );
+        setProjectCommitCounts((prev) => {
+            const next = { ...prev };
+            delete next[project.id];
+            return next;
+        });
+        setProjectLastCommitDates((prev) => {
+            const next = { ...prev };
+            delete next[project.id];
+            return next;
+        });
+        setProjectOpenCardCounts((prev) => {
+            const next = { ...prev };
+            delete next[project.id];
+            return next;
+        });
+        setProjectClosedCardCounts((prev) => {
+            const next = { ...prev };
+            delete next[project.id];
+            return next;
+        });
     }
 
     function renameProjectInState(projectId: string, name: string) {
@@ -221,14 +295,15 @@ const TeacherView: React.FC = () => {
     }
 
     // Schoolclass creation interceptor für Tutorial
-    function onSchoolclassCreated(schoolclass: SchoolclassDto) {
+    function onSchoolclassCreated() {
         if (currentStep?.id === "explain_add_class_button") {
             nextTutorialStep();
         }
     }
 
-    function onAccordionExpanded() {
-        if (currentStep?.id === "expand_class") {
+    function onAccordionChange(event: React.SyntheticEvent, isExpanded: boolean) {
+        // Only progress tutorial when accordion is being expanded (not collapsed)
+        if (isExpanded && currentStep?.id === "expand_class") {
             nextTutorialStep();
         }
     }
@@ -297,7 +372,7 @@ const TeacherView: React.FC = () => {
         }) => {
             const isEditingThisClass = editingSchoolclassId === item.schoolclass.id;
 
-            return <Accordion key={item.schoolclass.id} className="schoolclass-accordion" onClick={onAccordionExpanded}>
+            return <Accordion key={item.schoolclass.id} className="schoolclass-accordion" onChange={onAccordionChange} defaultExpanded={true}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon/>}
                     aria-controls="panel2-content"
@@ -357,6 +432,10 @@ const TeacherView: React.FC = () => {
                                         deleteProjectFromState={deleteProjectFromState}
                                         renameProjectInState={renameProjectInState}
                                         projectData={projectsItem}
+                                        commitCount={projectCommitCounts[projectsItem.id]}
+                                        lastCommitDate={projectLastCommitDates[projectsItem.id]}
+                                        openCardCount={projectOpenCardCounts[projectsItem.id]}
+                                        closedCardCount={projectClosedCardCounts[projectsItem.id]}
                                     ></ProjectCard>
                                 </Grid>
                             })
