@@ -143,15 +143,6 @@ export const TEACHER_VIEW_TUTORIAL: TutorialSequence = {
             },
             allowNext: false
         }, {
-            id: 'expand_class',
-            title: 'tutorial.teacher_view.expand_class.title',
-            description: 'tutorial.teacher_view.expand_class.description',
-            target: {
-                selector: '.schoolclass-accordion',
-                position: 'bottom'
-            },
-            allowNext: false
-        }, {
             id: 'add_project',
             title: 'tutorial.teacher_view.add_project.title',
             description: 'tutorial.teacher_view.add_project.description',
