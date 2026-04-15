@@ -1,8 +1,10 @@
 import { Card, CardActions, CardContent, TextField, Typography, Box, IconButton, Tooltip } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import BarChartIcon from "@mui/icons-material/BarChart";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
@@ -43,6 +45,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
     const [isSavingName, setIsSavingName] = useState<boolean>(false);
     const [isPinVisible, setIsPinVisible] = useState<boolean>(false);
     const { t } = useTranslation();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setDraftName(props.projectData.name);
@@ -51,6 +54,10 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
     const handleButtonClick = () => {
         const projectUrl = window.location.origin + `/project_view/${props.projectData.id}`;
         window.open(projectUrl, '_blank');
+    };
+
+    const handleStatsClick = () => {
+        navigate(`/project_stats/${props.projectData.id}`);
     };
 
     const startEditingName = () => {
@@ -233,6 +240,17 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                             sx={{ p: "2px" }}
                         >
                             <OpenInNewIcon fontSize="small" />
+                        </IconButton>
+                    </Tooltip>
+
+                    {/* Statistik-Seite öffnen */}
+                    <Tooltip title={t('ProjectCard.view_stats')}>
+                        <IconButton
+                            size="small"
+                            onClick={handleStatsClick}
+                            sx={{ p: "2px" }}
+                        >
+                            <BarChartIcon fontSize="small" />
                         </IconButton>
                     </Tooltip>
                 </Box>
