@@ -188,7 +188,7 @@ const ColumnHeader: React.FC<any> = ({column, board, setBoard, configOpen}) => {
     )
 }
 
-const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
+const CardComponent: React.FC<any> = ({card, board, setBoard, authorIconMap}) => {
     const [editMode, setEditMode] = useState(false);
     const [text, setText] = useState(card.description);
     const [author, setAuthor] = useState(card.author ?? "Unknown");
@@ -222,11 +222,13 @@ const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
     }, [editMode]);
 
     const makeEdit = () => {
+        setAuthorDropdownOpen(false);
         setEditMode(true);
     };
 
     // Save and send change to backend
     const saveEdit = () => {
+        setAuthorDropdownOpen(false);
         setEditMode(false);
         // Reset author to "Unknown" if empty or whitespace
         const finalAuthor = author && author.trim() !== '' ? author : "Unknown";
@@ -292,8 +294,8 @@ const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
                         <Box
                             onClick={() => setShowIconPicker(true)}
                             sx={{
-                                width: '50px',
-                                height: '50px',
+                                width: '40px',
+                                height: '40px',
                                 borderRadius: '50%',
                                 border: '2px solid #076AAB',
                                 display: 'flex',
@@ -308,34 +310,40 @@ const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
                             }}
                         >
                             {icon ? (
-                                <img 
-                                    src={getIconUrl(icon)} 
-                                    alt="card-icon" 
-                                    style={{height: '40px', width: '40px', objectFit: 'contain'}}
+                                <img
+                                    src={getIconUrl(icon)}
+                                    alt="card-icon"
+                                    style={{height: '30px', width: '30px', objectFit: 'contain'}}
                                 />
                             ) : (
-                                <Typography sx={{fontSize: '0.7rem', textAlign: 'center', color: '#999'}}>
+                                <Typography sx={{fontSize: '0.6rem', textAlign: 'center', color: '#999'}}>
                                     +Icon
                                 </Typography>
                             )}
                         </Box>
 
-                        {/* Author field */}
-                        <Box sx={{display: 'flex', alignItems: 'center', gap: 0.5, flex: 1}}>
-                            <Typography sx={{fontSize: '0.8rem', fontWeight: 600, color: '#323232', whiteSpace: 'nowrap'}}>
-                                Author:
-                            </Typography>
-                            <Autocomplete
+                        {/* Author autocomplete — takes all remaining space */}
+                        <Autocomplete
                                 ref={authorAutocompleteRef}
                                 size="small"
                                 freeSolo
                                 open={authorDropdownOpen}
-                                onOpen={() => setAuthorDropdownOpen(true)}
-                                onClose={() => setAuthorDropdownOpen(false)}
-                                options={["Unknown", ...authors]}
+                                onOpen={() => {/* controlled only by button click */}}
+                                onClose={() => {
+                                    setAuthorDropdownOpen(false);
+                                }}
+                                options={["Unknown", ...Object.keys(authorIconMap).sort()]}
                                 value={author}
                                 onChange={(event, newValue) => {
                                     setAuthor(newValue || "");
+                                    // Auto-set icon when selecting an author from the dropdown
+                                    if (newValue) {
+                                        if (newValue === "Unknown") {
+                                            setIcon(defaultIcon);
+                                        } else if (authorIconMap[newValue]) {
+                                            setIcon(authorIconMap[newValue]);
+                                        }
+                                    }
                                     setAuthorDropdownOpen(false);
                                 }}
                                 inputValue={author}
@@ -347,12 +355,32 @@ const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
                                     '& .MuiInputBase-input': {color: '#323232', fontSize: '0.8rem', fontWeight: 600},
                                     '& .MuiOutlinedInput-notchedOutline': {border: '1px solid #999'},
                                 }}
+                                slotProps={{
+                                    popper: { style: { width: 'auto', minWidth: '150px', maxWidth: '300px' } },
+                                }}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
                                         placeholder="Select or type author"
                                     />
                                 )}
+                                renderOption={(props, option) => {
+                                    const optionIcon = option === "Unknown" ? defaultIcon : (authorIconMap[option] ?? defaultIcon);
+                                    return (
+                                        <li {...props} key={option}>
+                                            <Box sx={{display: 'flex', alignItems: 'center', gap: 1, width: '100%'}}>
+                                                <img
+                                                    src={getIconUrl(optionIcon)}
+                                                    alt={option}
+                                                    style={{width: '28px', height: '28px', borderRadius: '50%', objectFit: 'contain', flexShrink: 0}}
+                                                />
+                                                <Typography sx={{fontSize: '0.85rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>
+                                                    {option}
+                                                </Typography>
+                                            </Box>
+                                        </li>
+                                    );
+                                }}
                             />
                             <IconButton
                                 size="small"
@@ -363,11 +391,10 @@ const CardComponent: React.FC<any> = ({card, board, setBoard, authors}) => {
                                         authorAutocompleteRef.current?.querySelector('input')?.focus();
                                     }, 0);
                                 }}
-                                sx={{color: '#323232', padding: '4px'}}
+                                sx={{color: '#323232', padding: '2px', flexShrink: 0}}
                             >
-                                <ExpandMoreIcon sx={{fontSize: '1.2rem'}} />
+                                <ExpandMoreIcon sx={{fontSize: '1rem'}} />
                             </IconButton>
-                        </Box>
                     </Box>
                 ) : (
                     <Box sx={{px: 1.5, pt: 1, pb: 0.5, display: 'flex', alignItems: 'center', gap: 1}}>
@@ -585,7 +612,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({projectData, setProject
     //}
 
     const [board, setBoard] = useState<any>({columns: []})
-    const [authors, setAuthors] = useState<string[]>([]);
+    const [authorIconMap, setAuthorIconMap] = useState<Record<string, string>>({});
 
     // Sets the board and sync with backend
     const updateBoard = (b) => {
@@ -598,17 +625,17 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({projectData, setProject
         setBoard(sorted_board)
     }
 
-    // Derive authors list from board cards
+    // Derive author-icon map from board cards
     useEffect(() => {
-        const authorsList = new Set<string>();
+        const map: Record<string, string> = {};
         board.columns?.forEach(column => {
             column.cards?.forEach(card => {
                 if (card.author && card.author !== "Unknown") {
-                    authorsList.add(card.author);
+                    map[card.author] = card.icon ?? defaultIcon;
                 }
             });
         });
-        setAuthors(Array.from(authorsList).sort());
+        setAuthorIconMap(map);
     }, [board]);
 
     useEffect(() => {
@@ -668,7 +695,7 @@ export const KanbanBoard: React.FC<KanbanBoardProps> = ({projectData, setProject
                             {configOpen && <AddBoxIcon fontSize="large" sx={{opacity: 0, m: "8px"}}/>}
                             <ControlledBoard
                                 disableColumnDrag={!configOpen}
-                                renderCard={(p: any) => <CardComponent card={p} board={board} setBoard={updateBoard} authors={authors}/>}
+                                renderCard={(p: any) => <CardComponent card={p} board={board} setBoard={updateBoard} authorIconMap={authorIconMap}/>}
                                 renderColumnHeader={(p: any) => <ColumnHeader column={p} board={board}
                                                                               setBoard={updateBoard}
                                                                               configOpen={configOpen}/>}
