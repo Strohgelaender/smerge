@@ -1,309 +1,361 @@
 //  /api/project/46926613-3cca-439d-a4f3-9897753b9940
 import { toast } from "react-toastify";
+import i18next from "i18next";
 import ProjectDto from "../components/models/ProjectDto";
 import httpService from "./HttpService";
 
 export const getProjectData = async (projectId: string) => {
-  const res = await httpService.getAsync<Promise<ProjectDto>>(
-    `api/project/${projectId}`
-  );
+    const res = await httpService.getAsync<Promise<ProjectDto>>(
+        `/api/project/${projectId}`
+    );
 
-  if (res) {
-    return res;
-  }
+    if (res) {
+        return res;
+    }
 };
 
 export const duplicateProject = async (projectId: string, ) => {
-  const res = await httpService.postAsync<Promise<ProjectDto>>(
-    `api/project/${projectId}/duplicate`, null
-  );
-  if (res) {
-    return res;
-  }
+    const res = await httpService.postAsync<Promise<ProjectDto>>(
+        `/api/project/${projectId}/duplicate`, null
+    );
+    if (res) {
+        return res;
+    }
 };
 
 export const getProjectDataWithPin = async (projectPin: string) => {
-  const res = await httpService.getAsync<Promise<ProjectDto>>(
-    `api/projects/with_pin/${projectPin}`
-  );
-  if (res) {
-    return res;
-  }
+    const res = await httpService.getAsync<Promise<ProjectDto>>(
+        `/api/projects/with_pin/${projectPin}`
+    );
+    if (res) {
+        return res;
+    }
 };
 
 export const getProjectUnhideAll = async (projectId: string) => {
-  const res = await httpService.getAsync<Promise<unknown>>(
-    `api/project/${projectId}/unhide_all`
-  );
+    const res = await httpService.getAsync<Promise<unknown>>(
+        `/api/project/${projectId}/unhide_all`
+    );
 
-  if (res) {
-    toast.success(`Unhide successful.`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-    });
-    return res;
-  }
+    if (res) {
+        toast.success(i18next.t("toast.project.unhideSuccess"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+        });
+        return res;
+    }
 };
 
-export const createProject = async (name: string, schoolclassId: string | null) => {
-  const res = await httpService.postAsync<ProjectDto>(
-    `api/projects`, {name: name, schoolclass: schoolclassId}
-  );
-  if (res) {
-    toast.success(`Creation successful.`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-    });
-    return res;
-  }
-  else {
-    toast.error('Creation failed', {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-    })
-  }
+export interface CreateTeacherProjectPayload {
+    name: string;
+    schoolclassId: string | null;
+    description?: string;
+    startDescription?: string;
+    file?: File | null;
+}
+
+export const createProject = async (payload: CreateTeacherProjectPayload) => {
+    try {
+        const formData = new FormData();
+        formData.append("name", payload.name);
+        formData.append("description", payload.description ?? "");
+        formData.append("start_description", payload.startDescription ?? "");
+        if (payload.schoolclassId) {
+            formData.append("schoolclass", payload.schoolclassId);
+        }
+        if (payload.file) {
+            formData.append("file", payload.file);
+        }
+
+        const res = await httpService.postFormAsync<ProjectDto>(
+            `/api/projects`,
+            formData,
+            "POST"
+        );
+
+        toast.success(i18next.t("toast.project.creationSuccess"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+        });
+        return res;
+    } catch {
+        toast.error(i18next.t("toast.project.creationError"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+        });
+    }
 };
 
 export const importProjectToSchoolclass = async (projectId: string, project: ProjectDto) => {
-  const res = await httpService.postAsync<ProjectDto>(
-    `api/update/project/${projectId}/import`,
-    { ...project},
-    "PUT",
-    true,
-    true
-  );
-  if (res) {
-    toast.success(`Import successful.`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-    });
-    return res;
-  }
-  else {
-    toast.error('Import failed', {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-    })
-  }
+    const res = await httpService.postAsync<ProjectDto>(
+        `/api/update/project/${projectId}/import`,
+        { ...project},
+        "PUT",
+        true,
+        true
+    );
+    if (res) {
+        toast.success(i18next.t("toast.project.importSuccess"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+        });
+        return res;
+    }
+    else {
+        toast.error(i18next.t("toast.project.importError"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+        })
+    }
 };
 
 export const postDeleteProject = async (
-  projectId: string,
-  password: string,
-  onRedirect = () => {}
+    projectId: string,
+    password: string,
+    onRedirect = () => {}
 ) => {
-  try {
-    const res = await httpService.postAsync<string>(
-      `api/delete/project/${projectId}`,
-      { password: password },
-      "DELETE",
-      true,
-      true,
-      () => {
-        // console.log("Redirect oder so...");
-      }
-    );
-    // console.log(res);
-    if (res) {
-      toast.success(`Project Deleted.`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-      });
-      return res;
+    try {
+        const res = await httpService.postAsync<string>(
+            `/api/delete/project/${projectId}`,
+            { password: password },
+            "DELETE",
+            true,
+            true,
+            () => {
+                // console.log("Redirect oder so...");
+            }
+        );
+        // console.log(res);
+        if (res) {
+            toast.success(i18next.t("toast.project.deleteSuccess"), {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return true;
+        }
+    } catch (err) {
+        if (err.status < 400) {
+            // Redirect = Success
+            onRedirect();
+            toast.success(i18next.t("toast.project.deleteSuccess"), {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return true;
+        } else {
+            toast.error(i18next.t("toast.project.wrongPassword"), {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return false;
+        }
     }
-  } catch (err) {
-    if (err.status < 400) {
-      onRedirect();
-      toast.success(`Project Deleted!`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-      });
-    } else {
-      toast.error(`Wrong Password.`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-      });
-    }
-  }
 };
 
 export const postPasswordChange = async (
-  projectId: string,
-  old_password: string,
-  new_password: string
+    projectId: string,
+    old_password: string,
+    new_password: string
 ) => {
-  const passObj = {
-    "old-password": old_password,
-    "new-password": new_password,
-  };
+    const passObj = {
+        "old-password": old_password,
+        "new-password": new_password,
+    };
 
-  try {
-    const res = await httpService.postAsync<string>(
-      `api/update/password/${projectId}`,
-      passObj,
-      "PUT",
-      true,
-      true
-    );
+    try {
+        const res = await httpService.postAsync<string>(
+            `/api/update/password/${projectId}`,
+            passObj,
+            "PUT",
+            true,
+            true
+        );
 
-    if (res) {
-      toast.success(`Password Changed.`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-      });
-      return res;
+        if (res) {
+            toast.success(i18next.t("toast.project.passwordChangeSuccess"), {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return res;
+        }
+    } catch (err) {
+        toast.error(i18next.t("toast.project.wrongPassword"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+        });
     }
-  } catch (err) {
-    toast.error(`Wrong Password.`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-    });
-  }
 };
 
 export const postProjectSettingsChange = async (
-  projectId: string,
-  project: ProjectDto,
-  password: string
+    projectId: string,
+    project: ProjectDto,
+    password: string
 ) => {
-  try {
-    const res = await httpService.postAsync<ProjectDto>(
-      `api/update/project/${projectId}`,
-      { ...project, password: password },
-      "PUT",
-      true,
-      true
-    );
+    try {
+        const res = await httpService.postAsync<ProjectDto>(
+            `/api/update/project/${projectId}`,
+            { ...project, password: password },
+            "PUT",
+            true,
+            true
+        );
 
-    // console.log("In project settings:");
-    // console.log(res);
-    if (res) {
-      toast.success(`Project updated.`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-      });
-      return res;
+        // console.log("In project settings:");
+        // console.log(res);
+        if (res) {
+            toast.success(i18next.t("toast.project.projectUpdateSuccess"), {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return res;
+        }
+    } catch (err) {
+        toast.error(i18next.t("toast.project.wrongPassword"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+        });
     }
-  } catch (err) {
-    toast.error(`Wrong Password.`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-    });
-  }
 };
 
 export const putKanbanChange = async (
-  projectId: string,
-  board: any,
+    projectId: string,
+    board: any,
 ) => {
-  try {
-    const res = await httpService.postAsync<ProjectDto>(
-      `api/update/kanban/${projectId}`,
-      { kanban_board: JSON.stringify(board) },
-      "PUT",
-      true,
-      true
-    );
+    try {
+        const res = await httpService.postAsync<ProjectDto>(
+            `/api/update/kanban/${projectId}`,
+            { kanban_board: JSON.stringify(board) },
+            "PUT",
+            true,
+            true
+        );
 
-    if (res) {
-      return res;
+        if (res) {
+            return res;
+        }
+    } catch (err) {
+        toast.error(i18next.t("toast.project.kanbanUpdateError"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+        });
     }
-  } catch (err) {
-    toast.error(`Failed to update Kanbanboard`, {
-      position: "top-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-    });
-  }
 };
 
 
 export const putColorChange = async (
-  projectId: string,
-  default_color?: string,
-  favor_color?: string,
-  conflict_color?: string
+    projectId: string,
+    default_color?: string,
+    favor_color?: string,
+    conflict_color?: string
 ) => {
-  const colorObject = {
-    default_color: default_color,
-    favor_color: favor_color,
-    conflict_color: conflict_color,
-  };
+    const colorObject = {
+        default_color: default_color,
+        favor_color: favor_color,
+        conflict_color: conflict_color,
+    };
 
-  try {
-    const res = await httpService.postAsync<string>(
-      `api/update/project_colors/${projectId}`,
-      colorObject,
-      "PUT",
-      true,
-      true
-    );
+    try {
+        const res = await httpService.postAsync<string>(
+            `/api/update/project_colors/${projectId}`,
+            colorObject,
+            "PUT",
+            true,
+            true
+        );
 
-    if (res) {
-      toast.success(`Colors Changed.`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-      });
-      return res;
+        if (res) {
+            toast.success(i18next.t("toast.project.colorsChangeSuccess"), {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return res;
+        }
+    } catch (err) {
+        // console.log("Changing color failed.");
+        // console.log(err);
     }
-  } catch (err) {
-    // console.log("Changing color failed.");
-    // console.log(err);
-  }
 };
 
 export const putLabelChange = async (fileId: string, label: string) => {
-  const labelObject = {
-    label: label,
-  };
+    const labelObject = {
+        label: label,
+    };
 
-  try {
-    const res = await httpService.postAsync<string>(
-      `api/update/node_desc/${fileId}`,
-      labelObject,
-      "PUT",
-      true,
-      true
-    );
+    try {
+        const res = await httpService.postAsync<string>(
+            `/api/update/node_desc/${fileId}`,
+            labelObject,
+            "PUT",
+            true,
+            true
+        );
 
-    if (res) {
-      toast.success(`Label Changed.`, {
-        position: "top-right",
-        autoClose: 2000,
-        hideProgressBar: false,
-      });
-      return res;
+        if (res) {
+            toast.success(i18next.t("toast.project.labelChangeSuccess"), {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return res;
+        }
+    } catch (err) {
+        // console.log("Changing label failed.");
+        // console.log(err);
     }
-  } catch (err) {
-    // console.log("Changing label failed.");
-    // console.log(err);
-  }
+};
+
+export const putProjectNameChange = async (projectId: string, name: string) => {
+    try {
+        const res = await httpService.postAsync<ProjectDto>(
+            `/api/update/project/${projectId}`,
+            { name: name },
+            "PUT",
+            true,
+            true
+        );
+
+        if (res) {
+            toast.success(i18next.t("toast.project.projectNameUpdateSuccess"), {
+                position: "top-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+            });
+            return res;
+        }
+    } catch (err) {
+        toast.error(i18next.t("toast.project.projectNameUpdateError"), {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+        });
+    }
 };
 
 export const getToggleCollapse = async (nodeId: string) => {
-  try {
-    const res = await httpService.getAsyncText<string>(
-      `collapse_node/${nodeId}`
-    );
+    try {
+        const res = await httpService.getAsyncText<string>(
+            `/action/collapse_node/${nodeId}`
+        );
 
-    if (res) {
-      return res;
+        if (res) {
+            return res;
+        }
+    } catch (err) {
+        // console.log("Collapsing node failed.");
+        // console.log(err);
     }
-  } catch (err) {
-    // console.log("Collapsing node failed.");
-    // console.log(err);
-  }
 };
