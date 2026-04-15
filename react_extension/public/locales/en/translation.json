@@ -496,6 +496,35 @@
         "description": "You have successfully created a class and added a project to it. You are now ready to use Smerge in your teaching! Have fun teaching and allowing collaborating between your students!"
       }
     }
+  },
+  "toast": {
+    "http": {
+      "success": "{{endpoint}} succeeded ({{status}})",
+      "error": "{{endpoint}} failed ({{status}})"
+    },
+    "upload": {
+      "progress": "Uploading: {{val}}%",
+      "fileUploadSuccess": "File uploaded successfully",
+      "fileUploadFail": "File upload failed"
+    },
+    "project": {
+      "unhideSuccess": "All nodes made visible",
+      "creationSuccess": "Project created successfully",
+      "creationError": "Project creation failed",
+      "importSuccess": "Project imported successfully",
+      "importError": "Project import failed",
+      "deleteSuccess": "Project deleted",
+      "deleteError": "Project deletion failed",
+      "wrongPassword": "Wrong password",
+      "passwordChangeSuccess": "Password changed",
+      "projectUpdateSuccess": "Project updated",
+      "kanbanUpdateError": "Failed to update Kanban board",
+      "colorsChangeSuccess": "Colors changed",
+      "labelChangeSuccess": "Label changed",
+      "projectNameUpdateSuccess": "Project name updated",
+      "projectNameUpdateError": "Failed to update project name"
+    }
   }
 }
+
 

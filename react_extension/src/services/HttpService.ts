@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { getCurrentUser } from "./TeacherAuthService";
+import i18next from "i18next";
 
 class HttpService {
   public csrftoken: string;
@@ -8,6 +9,7 @@ class HttpService {
   constructor() {
     this.csrftoken = this.getCookie("csrftoken") ?? "";
     this.baseURL = window.location.origin;
+    // this.baseURL = "http://127.0.0.1:8000";
 
     //     this.instance = axios.create({
     //     baseURL: 'http://127.0.0.1/api', // Replace with your API base URL
@@ -67,6 +69,7 @@ class HttpService {
   ) {
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, this.baseURL + endpoint, true);
+    xhttp.withCredentials = true;
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
@@ -77,7 +80,7 @@ class HttpService {
         onSuccess(xhttp);
         if (suppressNotificationSuccess) return;
 
-        toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
+        toast.success(i18next.t("toast.http.success", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -88,7 +91,7 @@ class HttpService {
         onFail(xhttp);
         if (suppressNotificationFail) return;
 
-        toast.error(`Post ${endpoint} failed (${xhttp.status}).`, {
+        toast.error(i18next.t("toast.http.error", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -139,6 +142,7 @@ class HttpService {
   ) {
     const xhttp = new XMLHttpRequest();
     xhttp.open(method, this.baseURL + endpoint, true);
+    xhttp.withCredentials = true;
     xhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
     this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
@@ -149,7 +153,7 @@ class HttpService {
         onSuccess(xhttp);
         if (suppressNotificationSuccess) return;
 
-        toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
+        toast.success(i18next.t("toast.http.success", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -160,7 +164,7 @@ class HttpService {
         onFail(xhttp);
         if (suppressNotificationFail) return;
 
-        toast.error(`Get ${endpoint} failed (${xhttp.status}).`, {
+        toast.error(i18next.t("toast.http.error", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -205,6 +209,7 @@ class HttpService {
   ) {
     const xhttp = new XMLHttpRequest();
     xhttp.open("GET", this.baseURL + endpoint, true);
+    xhttp.withCredentials = true;
     this.setCsrfHeader(xhttp);
     addAuthHeader(xhttp);
     xhttp.send();
@@ -214,7 +219,7 @@ class HttpService {
         onSuccess(xhttp);
         if (suppressNotificationSuccess) return;
 
-        toast.success(`Get ${endpoint} worked (${xhttp.status}).`, {
+        toast.success(i18next.t("toast.http.success", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -225,7 +230,7 @@ class HttpService {
         onFail(xhttp);
         if (suppressNotificationFail) return;
 
-        toast.error(`Get ${endpoint} failed (${xhttp.status}).`, {
+        toast.error(i18next.t("toast.http.error", { endpoint, status: xhttp.status }), {
           position: "top-right",
           autoClose: 2000,
           hideProgressBar: false,
@@ -255,6 +260,7 @@ class HttpService {
     return new Promise((resolve, reject) => {
       const xhttp = new XMLHttpRequest();
       xhttp.open(method, this.baseURL + endpoint, true);
+      xhttp.withCredentials = true;
       this.setCsrfHeader(xhttp);
       addAuthHeader(xhttp);
 

@@ -2,7 +2,7 @@ from .settings_base import *
 import json
 
 URL = "http://127.0.0.1:8000"
-POST_BACK_URL = "http://127.0.0.1"
+POST_BACK_URL = "https://localhost"
 
 # SECRET_KEY = '...'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -11,7 +11,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 COMPRESS_OFFLINE = False
 
 # allow cross for testing...
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = True
 CORS_ORIGIN_ALLOW_ALL = True
 SECURE_REFERRER_POLICY = "unsafe-url"
 CORS_ALLOW_HEADERS = "*"
