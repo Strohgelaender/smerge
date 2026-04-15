@@ -272,7 +272,8 @@
     "hide_pin": "Hide PIN",
     "copy_pin": "Copy PIN",
     "pin_copied": "PIN copied!",
-    "open_project": "Open project"
+    "open_project": "Open project",
+    "view_stats": "View statistics"
   },
   "ProjectCardContextMenu": {
     "duplicate": "Duplicate",
@@ -381,6 +382,17 @@
       "title": "Delete schoolclass",
       "text": "Are you sure you want to delete the schoolclass \"{{name}}\"? This will remove {{count}} project(s) associated with this class."
     }
+  },
+  "ProjectStatsPage": {
+    "loading": "Loading statistics...",
+    "loadError": "Could not load project statistics.",
+    "notFound": "Project not found.",
+    "back": "Back",
+    "title": "Project Statistics — {{name}}",
+    "commits": "Commits",
+    "lastCommit": "Last Commit",
+    "openCards": "Open Cards",
+    "closedCards": "Closed Cards"
   },
   "tutorial": {
     "step": "Step",
