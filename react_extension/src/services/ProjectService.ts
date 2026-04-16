@@ -4,6 +4,95 @@ import i18next from "i18next";
 import ProjectDto from "../components/models/ProjectDto";
 import httpService from "./HttpService";
 
+const API_URL = "/api/";
+
+export const getCommitCountForProject = async (projectId: string) => {
+    const result = await httpService.getAsync<any[]>(API_URL + `project/${projectId}/files`);
+    return result?.length ?? 0;
+}
+
+export const getSpriteCountForProject = async (projectId: string): Promise<number> => {
+    const files = await httpService.getAsync<any[]>(API_URL + `project/${projectId}/files`);
+    if (!files || files.length === 0) return 0;
+
+    // Find the most recent file by timestamp and return its number_sprites
+    const sorted = [...files].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+    return sorted[0].number_sprites ?? 0;
+}
+
+export const getLastCommitDateForProject = async (projectId: string) => {
+    const result = await httpService.getAsync<any[]>(API_URL + `project/${projectId}/files`);
+    if (!result || result.length === 0) return null;
+
+    // Extract the most recent date from files
+    // Try to get timestamp first (Unix timestamp in ms or s), then other date fields
+    const dates = result
+        .map((file: any) => {
+            // Try timestamp field first
+            if (file.timestamp) {
+                // If timestamp is in seconds (10 digits), convert to ms
+                const ts = file.timestamp.toString().length === 10 ? file.timestamp * 1000 : file.timestamp;
+                return new Date(ts);
+            }
+            // Fall back to other date fields
+            return file.updated_at || file.created_at || file.date ? new Date(file.updated_at || file.created_at || file.date) : null;
+        })
+        .filter((date: any) => date != null && !isNaN(date.getTime()));
+
+    if (dates.length === 0) return null;
+    const latestDate = new Date(Math.max(...dates.map(d => d.getTime())));
+
+    return latestDate;
+}
+
+export const getKanbanCardCountForProject = (kanbanBoardJson: string, column: 'first' | 'last'): number => {
+    try {
+        const board = JSON.parse(kanbanBoardJson);
+        if (!board?.columns || board.columns.length === 0) return 0;
+        const targetColumn = column === 'first' ? board.columns[0] : board.columns[board.columns.length - 1];
+        return targetColumn.cards?.length ?? 0;
+    } catch {
+        return 0;
+    }
+};
+
+export const getKanbanStatsPerAuthor = (kanbanBoardJson: string): { columns: string[], authors: { author: string; icon: string; [col: string]: string | number }[] } => {
+    try {
+        const board = JSON.parse(kanbanBoardJson);
+        if (!board?.columns || board.columns.length === 0) return { columns: [], authors: [] };
+
+        const columnTitles: string[] = board.columns.map((col: any) => col.title ?? '');
+        const authorMap: Record<string, { icon: string; counts: Record<string, number> }> = {};
+
+        for (const column of board.columns) {
+            const colTitle = column.title ?? '';
+            for (const card of column.cards ?? []) {
+                const author = card.author || 'Unknown';
+                if (!authorMap[author]) {
+                    authorMap[author] = {
+                        icon: card.icon ?? '',
+                        counts: Object.fromEntries(columnTitles.map(t => [t, 0])),
+                    };
+                }
+                if (card.icon) {
+                    authorMap[author].icon = card.icon;
+                }
+                authorMap[author].counts[colTitle] = (authorMap[author].counts[colTitle] ?? 0) + 1;
+            }
+        }
+
+        const authors = Object.entries(authorMap).map(([author, data]) => ({
+            author,
+            icon: data.icon,
+            ...data.counts,
+        }));
+
+        return { columns: columnTitles, authors };
+    } catch {
+        return { columns: [], authors: [] };
+    }
+};
+
 export const getProjectData = async (projectId: string) => {
     const res = await httpService.getAsync<Promise<ProjectDto>>(
         `/api/project/${projectId}`
