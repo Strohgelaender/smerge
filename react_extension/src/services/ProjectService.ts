@@ -20,6 +20,15 @@ export const getSpriteCountForProject = async (projectId: string): Promise<numbe
     return sorted[0].number_sprites ?? 0;
 }
 
+export const getCommitDatesForProject = async (projectId: string): Promise<Date[]> => {
+    const files = await httpService.getAsync<any[]>(API_URL + `project/${projectId}/files`);
+    if (!files || files.length === 0) return [];
+
+    return files
+        .map((file: any) => new Date(file.timestamp))
+        .filter((d: Date) => !isNaN(d.getTime()));
+}
+
 export const getLastCommitDateForProject = async (projectId: string) => {
     const result = await httpService.getAsync<any[]>(API_URL + `project/${projectId}/files`);
     if (!result || result.length === 0) return null;

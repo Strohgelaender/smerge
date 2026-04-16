@@ -18,8 +18,9 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { getProjectData, getCommitCountForProject, getLastCommitDateForProject, getKanbanCardCountForProject, getKanbanStatsPerAuthor, getSpriteCountForProject } from "./services/ProjectService";
+import { getProjectData, getCommitCountForProject, getLastCommitDateForProject, getKanbanCardCountForProject, getKanbanStatsPerAuthor, getSpriteCountForProject, getCommitDatesForProject } from "./services/ProjectService";
 import ProjectDto from "./components/models/ProjectDto";
+import ActivityHeatmap from "./components/ActivityHeatmap";
 import "./ProjectStatsPage.css";
 
 const getIconUrl = (iconName: string) => {
@@ -40,6 +41,7 @@ const ProjectStatsPage: React.FC = () => {
     const [spriteCount, setSpriteCount] = useState<number>(0);
     const [kanbanColumns, setKanbanColumns] = useState<string[]>([]);
     const [authorStats, setAuthorStats] = useState<any[]>([]);
+    const [commitDates, setCommitDates] = useState<Date[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -47,17 +49,19 @@ const ProjectStatsPage: React.FC = () => {
 
         (async () => {
             try {
-                const [projectData, commits, lastDate, sprites] = await Promise.all([
+                const [projectData, commits, lastDate, sprites, dates] = await Promise.all([
                     getProjectData(projectId),
                     getCommitCountForProject(projectId),
                     getLastCommitDateForProject(projectId),
                     getSpriteCountForProject(projectId),
+                    getCommitDatesForProject(projectId),
                 ]);
                 const proj = (projectData as ProjectDto) ?? null;
                 setProject(proj);
                 setCommitCount(commits);
                 setLastCommitDate(lastDate);
                 setSpriteCount(sprites);
+                setCommitDates(dates);
 
                 if (proj) {
                     setOpenCardCount(getKanbanCardCountForProject(proj.kanban_board, "first"));
@@ -164,6 +168,9 @@ const ProjectStatsPage: React.FC = () => {
                     </CardContent>
                 </Card>
             </Box>
+
+            {/* Activity Heatmap */}
+            <ActivityHeatmap dates={commitDates} />
 
             {/* Cards per Author */}
             <Typography variant="h6" sx={{ mt: 4, mb: 2, fontWeight: 600 }}>

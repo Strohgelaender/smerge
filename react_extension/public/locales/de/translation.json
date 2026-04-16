@@ -408,6 +408,7 @@
     "author": "Autor",
     "total": "Gesamt",
     "sprites": "Anzahl von Sprites",
+    "heatmapTitle": "Commit-Aktivität",
     "noKanbanData": "Keine Kanban-Daten verfügbar."
   },
   "tutorial": {
