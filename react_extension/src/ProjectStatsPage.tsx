@@ -6,15 +6,26 @@ import {
     Card,
     CardContent,
     CircularProgress,
+    Paper,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
     Typography,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
-import { getProjectData } from "./services/ProjectService";
-import { getCommitCountForProject, getLastCommitDateForProject, getKanbanCardCountForProject } from "./services/SchoolclassService";
+import { getProjectData, getCommitCountForProject, getLastCommitDateForProject, getKanbanCardCountForProject, getKanbanStatsPerAuthor, getSpriteCountForProject } from "./services/ProjectService";
 import ProjectDto from "./components/models/ProjectDto";
 import "./ProjectStatsPage.css";
+
+const getIconUrl = (iconName: string) => {
+    if (!iconName || iconName === "unknown-person-icon.svg") return `/static/icons/unknown-person-icon.svg`;
+    return `/static/icons/animal-icons/${iconName}`;
+};
 
 const ProjectStatsPage: React.FC = () => {
     const { projectId } = useParams<{ projectId: string }>();
@@ -26,6 +37,9 @@ const ProjectStatsPage: React.FC = () => {
     const [lastCommitDate, setLastCommitDate] = useState<Date | null>(null);
     const [openCardCount, setOpenCardCount] = useState<number>(0);
     const [closedCardCount, setClosedCardCount] = useState<number>(0);
+    const [spriteCount, setSpriteCount] = useState<number>(0);
+    const [kanbanColumns, setKanbanColumns] = useState<string[]>([]);
+    const [authorStats, setAuthorStats] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
@@ -33,19 +47,25 @@ const ProjectStatsPage: React.FC = () => {
 
         (async () => {
             try {
-                const [projectData, commits, lastDate] = await Promise.all([
+                const [projectData, commits, lastDate, sprites] = await Promise.all([
                     getProjectData(projectId),
                     getCommitCountForProject(projectId),
                     getLastCommitDateForProject(projectId),
+                    getSpriteCountForProject(projectId),
                 ]);
                 const proj = (projectData as ProjectDto) ?? null;
                 setProject(proj);
                 setCommitCount(commits);
                 setLastCommitDate(lastDate);
+                setSpriteCount(sprites);
 
                 if (proj) {
                     setOpenCardCount(getKanbanCardCountForProject(proj.kanban_board, "first"));
                     setClosedCardCount(getKanbanCardCountForProject(proj.kanban_board, "last"));
+
+                    const { columns, authors } = getKanbanStatsPerAuthor(proj.kanban_board);
+                    setKanbanColumns(columns);
+                    setAuthorStats(authors);
                 }
             } catch (error) {
                 toast.error(t("ProjectStatsPage.loadError"), {
@@ -136,7 +156,64 @@ const ProjectStatsPage: React.FC = () => {
                         <Typography variant="h4">{closedCardCount}</Typography>
                     </CardContent>
                 </Card>
+
+                <Card variant="outlined" className="stats-summary-card">
+                    <CardContent>
+                        <Typography variant="overline">{t("ProjectStatsPage.sprites")}</Typography>
+                        <Typography variant="h4">{spriteCount}</Typography>
+                    </CardContent>
+                </Card>
             </Box>
+
+            {/* Cards per Author */}
+            <Typography variant="h6" sx={{ mt: 4, mb: 2, fontWeight: 600 }}>
+                {t("ProjectStatsPage.cardsPerAuthor")}
+            </Typography>
+
+            {authorStats.length > 0 ? (
+                <TableContainer component={Paper}>
+                    <Table size="small">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell sx={{ fontWeight: 600 }}>{t("ProjectStatsPage.author")}</TableCell>
+                                {kanbanColumns.map((col) => (
+                                    <TableCell key={col} align="center" sx={{ fontWeight: 600 }}>{t(col)}</TableCell>
+                                ))}
+                                <TableCell align="center" sx={{ fontWeight: 600 }}>{t("ProjectStatsPage.total")}</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {authorStats.map((row) => {
+                                const total = kanbanColumns.reduce((sum, col) => sum + (Number(row[col]) || 0), 0);
+                                return (
+                                    <TableRow key={row.author} hover>
+                                        <TableCell>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                                <img
+                                                    src={getIconUrl(row.icon)}
+                                                    alt={row.author}
+                                                    style={{ width: 28, height: 28, borderRadius: '50%', objectFit: 'contain' }}
+                                                />
+                                                <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                                    {row.author}
+                                                </Typography>
+                                            </Box>
+                                        </TableCell>
+                                        {kanbanColumns.map((col) => (
+                                            <TableCell key={col} align="center">{Number(row[col]) || 0}</TableCell>
+                                        ))}
+                                        <TableCell align="center" sx={{ fontWeight: 600 }}>{total}</TableCell>
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            ) : (
+                <Typography variant="body2" sx={{ color: "text.secondary" }}>
+                    {t("ProjectStatsPage.noKanbanData")}
+                </Typography>
+            )}
         </Box>
     );
 };
