@@ -384,7 +384,9 @@
     "delete": "Delete",
     "deleteDialog": {
       "title": "Delete schoolclass",
-      "text": "Are you sure you want to delete the schoolclass \"{{name}}\"? This will remove {{count}} project(s) associated with this class."
+      "text": "Are you sure you want to delete the schoolclass \"{{name}}\"? This will remove {{count}} project(s) associated with this class.",
+      "confirm": "To confirm, please enter the name of the schoolclass (\"{{name}}\"):",
+      "label": "Schoolclass name"
     },
     "classStats": {
       "totalProjects": "Total number of projects in this class",

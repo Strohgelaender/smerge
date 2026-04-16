@@ -384,7 +384,9 @@
     "delete": "Löschen",
     "deleteDialog": {
       "title": "Klasse löschen",
-      "text": "Möchtest du die Klasse \"{{name}}\" wirklich löschen? Dadurch werden {{count}} Projekt(e) dieser Klasse entfernt."
+      "text": "Möchtest du die Klasse \"{{name}}\" wirklich löschen? Dadurch werden {{count}} Projekt(e) dieser Klasse entfernt.",
+      "confirm": "Bitte gebe als Bestätigung den Namen der Klasse ein (\"{{name}}\"):",
+      "label": "Klassenname"
     },
     "classStats": {
       "totalProjects": "Gesamtanzahl der Projekte in dieser Klasse",
