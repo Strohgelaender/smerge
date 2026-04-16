@@ -273,7 +273,11 @@
     "copy_pin": "Copy PIN",
     "pin_copied": "PIN copied!",
     "open_project": "Open project",
-    "view_stats": "View statistics"
+    "view_stats": "View statistics",
+    "commits": "Commits",
+    "last_commit": "Last Commit",
+    "open": "Open",
+    "closed": "Closed"
   },
   "ProjectCardContextMenu": {
     "duplicate": "Duplicate",
@@ -381,6 +385,13 @@
     "deleteDialog": {
       "title": "Delete schoolclass",
       "text": "Are you sure you want to delete the schoolclass \"{{name}}\"? This will remove {{count}} project(s) associated with this class."
+    },
+    "classStats": {
+      "totalProjects": "Total number of projects in this class",
+      "projects": "Projects",
+      "lastActivity": "Last activity",
+      "lastActivityTooltip": "Most recent commit across all projects",
+      "noActivity": "No activity yet"
     }
   },
   "ProjectStatsPage": {
@@ -392,7 +403,13 @@
     "commits": "Commits",
     "lastCommit": "Last Commit",
     "openCards": "Open Cards",
-    "closedCards": "Closed Cards"
+    "closedCards": "Closed Cards",
+    "cardsPerAuthor": "Kanban Cards per Author",
+    "author": "Author",
+    "total": "Total",
+    "sprites": "Number of Sprites",
+    "heatmapTitle": "Commit Activity",
+    "noKanbanData": "No kanban data available."
   },
   "tutorial": {
     "step": "Step",
@@ -522,5 +539,4 @@
     }
   }
 }
-
 

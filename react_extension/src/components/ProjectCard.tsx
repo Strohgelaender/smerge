@@ -147,7 +147,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                                     style={{ width: '1.8em', height: '1.8em', display: 'inline-block', flexShrink: 0 }}
                                 />
                                 <Typography variant="body2" sx={{ color: "text.secondary", fontSize: '0.95rem' }}>
-                                    Commits: {props.commitCount}
+                                    {t('ProjectCard.commits')}: {props.commitCount}
                                 </Typography>
                             </Box>
                         )}
@@ -159,7 +159,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                                     style={{ width: '1.8em', height: '1.8em', display: 'inline-block', flexShrink: 0 }}
                                 />
                                 <Typography variant="body2" sx={{ color: "text.secondary", fontSize: '0.95rem' }}>
-                                    Last Commit: {props.lastCommitDate.toLocaleString('de-DE', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                                    {t('ProjectCard.last_commit')}: {props.lastCommitDate.toLocaleString('de-DE', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}
                                 </Typography>
                             </Box>
                         )}
@@ -167,7 +167,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mt: 0.5 }}>
                                 <Box sx={{
                                     width: '1.8em', height: '1.8em', flexShrink: 0,
-                                    borderRadius: '4px', backgroundColor: '#FFFFFF',
+                                    borderRadius: '4px', backgroundColor: '#FF9800',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center'
                                 }}>
                                     <img
@@ -177,7 +177,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                                     />
                                 </Box>
                                 <Typography variant="body2" sx={{ color: "text.secondary", fontSize: '0.95rem' }}>
-                                    Open: {props.openCardCount}
+                                    {t('ProjectCard.open')}: {props.openCardCount}
                                 </Typography>
                             </Box>
                         )}
@@ -185,7 +185,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                             <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mt: 0.5 }}>
                                 <Box sx={{
                                     width: '1.8em', height: '1.8em', flexShrink: 0,
-                                    borderRadius: '4px', backgroundColor: '#FFFFFF',
+                                    borderRadius: '4px', backgroundColor: '#4CAF50',
                                     display: 'flex', alignItems: 'center', justifyContent: 'center'
                                 }}>
                                     <img
@@ -195,7 +195,7 @@ const ProjectCard: FC<ProjectCardProps> = (props) => {
                                     />
                                 </Box>
                                 <Typography variant="body2" sx={{ color: "text.secondary", fontSize: '0.95rem' }}>
-                                    Closed: {props.closedCardCount}
+                                    {t('ProjectCard.closed')}: {props.closedCardCount}
                                 </Typography>
                             </Box>
                         )}

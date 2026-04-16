@@ -273,7 +273,11 @@
     "copy_pin": "PIN kopieren",
     "pin_copied": "PIN kopiert!",
     "open_project": "Projekt öffnen",
-    "view_stats": "Statistiken anzeigen"
+    "view_stats": "Statistiken anzeigen",
+    "commits": "Commits",
+    "last_commit": "Letzter Commit",
+    "open": "Offen",
+    "closed": "Geschlossen"
   },
   "ProjectCardContextMenu": {
     "duplicate": "Duplizieren",
@@ -381,6 +385,13 @@
     "deleteDialog": {
       "title": "Klasse löschen",
       "text": "Möchtest du die Klasse \"{{name}}\" wirklich löschen? Dadurch werden {{count}} Projekt(e) dieser Klasse entfernt."
+    },
+    "classStats": {
+      "totalProjects": "Gesamtanzahl der Projekte in dieser Klasse",
+      "projects": "Projekte",
+      "lastActivity": "Letzte Aktivität",
+      "lastActivityTooltip": "Letzter Commit über alle Projekte",
+      "noActivity": "Noch keine Aktivität"
     }
   },
   "ProjectStatsPage": {
@@ -392,7 +403,13 @@
     "commits": "Commits",
     "lastCommit": "Letzter Commit",
     "openCards": "Offene Karten",
-    "closedCards": "Geschlossene Karten"
+    "closedCards": "Geschlossene Karten",
+    "cardsPerAuthor": "Kanban Karten pro Autor",
+    "author": "Autor",
+    "total": "Gesamt",
+    "sprites": "Anzahl von Sprites",
+    "heatmapTitle": "Commit-Aktivität",
+    "noKanbanData": "Keine Kanban-Daten verfügbar."
   },
   "tutorial": {
     "step": "Schritt",

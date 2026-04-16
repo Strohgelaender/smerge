@@ -1,16 +1,18 @@
-import {Grid, Accordion, AccordionSummary, AccordionDetails, TextField, Button, Box, IconButton} from "@mui/material";
+import {Grid, Accordion, AccordionSummary, AccordionDetails, TextField, Button, Box, IconButton, Chip, Tooltip} from "@mui/material";
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import EditIcon from '@mui/icons-material/Edit';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import ProjectCard from "./components/ProjectCard";
 import {
-    getCommitCountForProject,
-    getLastCommitDateForProject,
-    getKanbanCardCountForProject,
     getProjectsForSchoolclasses,
     getSchoolclassesOfCurrentUser,
     updateSchoolclassName
 } from "./services/SchoolclassService";
+import {
+    getCommitCountForProject,
+    getLastCommitDateForProject,
+    getKanbanCardCountForProject,
+} from "./services/ProjectService";
 import SchoolclassDto from "./components/models/SchoolclassDto";
 import ProjectDto from "./components/models/ProjectDto";
 import AddProjectDialog from "./components/AddProjectDialog";
@@ -365,6 +367,17 @@ const TeacherView: React.FC = () => {
         }) => {
             const isEditingThisClass = editingSchoolclassId === item.schoolclass.id;
 
+            // Class-level stats (computed from already-loaded per-project data)
+            const totalProjects = item.projects.length;
+
+            const classCommitDates = item.projects
+                .map((p) => projectLastCommitDates[p.id])
+                .filter((d): d is Date => d != null);
+            const lastClassActivity = classCommitDates.length > 0
+                ? new Date(Math.max(...classCommitDates.map((d) => d.getTime())))
+                : null;
+
+
             return <Accordion key={item.schoolclass.id} className="schoolclass-accordion" defaultExpanded={true}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon/>}
@@ -395,7 +408,24 @@ const TeacherView: React.FC = () => {
                                 sx={{flex: 1}}
                             />
                         ) : (
-                            <span>{item.schoolclass.name}</span>
+                            <>
+                                <span>{item.schoolclass.name}</span>
+                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, ml: 2 }} onClick={(e) => e.stopPropagation()}>
+                                    <Tooltip title={t('TeacherView.classStats.totalProjects')}>
+                                        <Chip label={`${totalProjects} ${t('TeacherView.classStats.projects')}`} size="small" variant="outlined" />
+                                    </Tooltip>
+                                    <Tooltip title={t('TeacherView.classStats.lastActivityTooltip')}>
+                                        <Chip
+                                            label={lastClassActivity
+                                                ? `${t('TeacherView.classStats.lastActivity')}: ${lastClassActivity.toLocaleDateString('de-DE')}`
+                                                : t('TeacherView.classStats.noActivity')
+                                            }
+                                            size="small"
+                                            variant="outlined"
+                                        />
+                                    </Tooltip>
+                                </Box>
+                            </>
                         )}
                     </Box>
                     {!isEditingThisClass && (
